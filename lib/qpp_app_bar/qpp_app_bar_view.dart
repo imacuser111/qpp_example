@@ -1,66 +1,96 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/qpp_app_bar/qpp_app_bar_model.dart';
-import 'package:qpp_example/qpp_app_bar/qpp_app_bar_view_model.dart';
-import 'package:qpp_example/screen_model.dart';
+import 'package:qpp_example/utils/screen.dart';
 
-AppBar qppAppBar() {
+AppBar qppAppBar(
+    StateNotifierProvider<FullScreenMenuBtnPageStateNotifier, bool>
+        fullScreenMenuBtnPageStateProvider) {
   return AppBar(
     toolbarHeight: 100,
     backgroundColor: const Color(0xff000b2b).withOpacity(0.6),
-    title: const QppAppBarTitle(),
+    title: QppAppBarTitle(fullScreenMenuBtnPageStateProvider),
   );
 }
 
-class QppAppBarTitle extends StatelessWidget {
-  const QppAppBarTitle({super.key});
+class QppAppBarTitle extends ConsumerWidget with QppAppBarTitleExtension {
+  const QppAppBarTitle(this.fullScreenMenuBtnPageStateProvider, {super.key});
+
+  final StateNotifierProvider<FullScreenMenuBtnPageStateNotifier, bool>
+      fullScreenMenuBtnPageStateProvider;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     debugPrint('1231311');
 
     final size = MediaQuery.of(context).size;
-    final viewModel =
-        Provider.of<QppAppBarTitleViewModel>(context, listen: false);
+
+    final notifier = ref.read(fullScreenMenuBtnPageStateProvider.notifier);
+
+    final bool isShowFullScreenMenu =
+        ref.watch(fullScreenMenuBtnPageStateProvider);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      isSmallTypesetting(size.width)
+          ? ()
+          : isShowFullScreenMenu
+              ? notifier.toggle()
+              : ();
+    });
 
     return Row(
       children: [
-        // 左邊間距
-        spacing(size.width, 321),
-        logo(size.width),
+        // 最左邊間距
+        spacing(200),
+        isShowFullScreenMenu ? Container() : logo(),
         // QPP -> Button 間距
-        spacing(size.width, 466),
+        Expanded(flex: 2, child: spacing(466)),
+        // 選單按鈕
         menuRow(size.width),
-        languageDropdownMenu(viewModel),
+        // 語系
+        Padding(
+          padding: const EdgeInsets.only(left: 74),
+          child: languageDropdownMenu(),
+        ),
+        // 三條 or 最右邊間距
+        isShowFullScreenMenu
+            ? spacing(10)
+            : isSmallTypesetting(size.width)
+                ? animationMenuBtn(false, notifier)
+                : spacing(10),
       ],
     );
   }
 }
 
-extension QppAppBarTitleExtension on QppAppBarTitle {
-  // 是否為小排版
-  bool isSmallTypesetting(double width) => width < 800;
+// 是否為小排版
+bool isSmallTypesetting(double width) =>
+    width.determineScreenStyle() != ScreenStyle.desktop;
 
+mixin QppAppBarTitleExtension {
   /// 間距
-  Widget spacing(double screenWidth, double width) {
+  Widget spacing(double width) {
+    double realWidth = width.getRealWidth();
+
     return ConstrainedBox(
-      constraints: BoxConstraints(minWidth: 10, maxWidth: width),
-      child: SizedBox(
-        width: getRealWidth(screenWidth, width),
+      constraints: BoxConstraints(minWidth: 10, maxHeight: realWidth),
+      child: Container(
+        width: realWidth,
       ),
     );
   }
 
   /// QPP Logo
-  Widget logo(double width) {
-    return ConstrainedBox(
+  Widget logo() {
+    return IconButton(
+        icon: ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 100, maxWidth: 148),
       child: Image.asset(
         'desktop-pic-qpp-logo-01.png',
-        width: getRealWidth(width, 148),
+        width: 148.getRealWidth(),
         scale: 46 / 148,
       ),
-    );
+    ), onPressed: () => debugPrint('123'),);
   }
 
   /// 選單按鈕(Row)
@@ -70,7 +100,6 @@ extension QppAppBarTitleExtension on QppAppBarTitle {
     }
 
     return Row(
-      key: key,
       children: MainMenu.values
           .map(
             (e) => TextButton(
@@ -86,62 +115,139 @@ extension QppAppBarTitleExtension on QppAppBarTitle {
   }
 
   /// 語系下拉選單
-  Widget languageDropdownMenu(QppAppBarTitleViewModel viewModel) {
+  Widget languageDropdownMenu() {
     MenuController menuController = MenuController();
 
     // Item
-    List<DropdownMenuItem<String>> items = Language.values
-        .map((e) => DropdownMenuItem(
-              value: e.value,
-              child: Row(
-                children: [
-                  const SizedBox(width: 10),
-                  TextButton(
-                    onPressed: () {
-                      menuController.close();
-                      debugPrint(e.value);
-                      // viewModel.toggleLanguageDropdownMenuState();
-                    },
-                    child: Text(
-                      e.value,
-                      style: const TextStyle(color: Colors.white),
+    List<MouseRegion> items = Language.values
+        .map((e) => MouseRegion(
+              onEnter: (event) => menuController.open(),
+              onExit: (event) => menuController.close(),
+              child: DropdownMenuItem(
+                value: e.value,
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      child: TextButton(
+                        onPressed: () {
+                          menuController.close();
+                          debugPrint(e.value);
+                        },
+                        child: Text(
+                          e.value,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                ],
+                  ],
+                ),
               ),
             ))
         .toList();
 
-    return MenuAnchor(
-      builder: (context, controller, child) {
-        menuController = controller;
-        
-        return IconButton(
-          onPressed: () {
-            controller.isOpen ? controller.close() : controller.open();
-            // viewModel.toggleLanguageDropdownMenuState(listen: false);
-          },
-          icon: const Icon(Icons.language, color: Colors.white),
-        );
-      },
-      menuChildren: items,
-      style: MenuStyle(
-        backgroundColor:
-            MaterialStateProperty.all(const Color(0xff000b2b).withOpacity(0.6)),
+    return MouseRegion(
+      onEnter: (event) => menuController.open(),
+      onExit: (event) => menuController.close(),
+      child: MenuAnchor(
+        builder: (context, controller, child) {
+          menuController = controller;
+
+          return IconButton(
+              onPressed: () {
+                controller.isOpen ? controller.close() : controller.open();
+              },
+              icon: const Row(
+                children: [
+                  Icon(Icons.language, color: Colors.white),
+                  Icon(Icons.keyboard_arrow_down, color: Colors.white)
+                ],
+              ));
+        },
+        menuChildren: items,
+        style: MenuStyle(
+          backgroundColor: MaterialStateProperty.all(
+              const Color(0xff000b2b).withOpacity(0.6)),
+        ),
       ),
     );
   }
 
-  Color getColor(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-      MaterialState.focused,
-    };
-    if (states.any(interactiveStates.contains)) {
-      return Colors.blue;
-    }
-    return Colors.red;
+  /// animationMenuBtn(三條or關閉)
+  Widget animationMenuBtn(
+      bool isClose, FullScreenMenuBtnPageStateNotifier notifier) {
+    return IconButton(
+      onPressed: () => notifier.toggle(),
+      icon: isClose
+          ? const Icon(Icons.close, color: Colors.white)
+          : const Icon(Icons.menu, color: Colors.white),
+    );
+  }
+}
+
+/// 全螢幕選單按鈕
+class FullScreenMenuBtnPage extends ConsumerWidget
+    with QppAppBarTitleExtension {
+  const FullScreenMenuBtnPage(this.fullScreenMenuBtnPageStateProvider,
+      {super.key});
+
+  final StateNotifierProvider<FullScreenMenuBtnPageStateNotifier, bool>
+      fullScreenMenuBtnPageStateProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final notifier = ref.read(fullScreenMenuBtnPageStateProvider.notifier);
+
+    final bool isShowFullScreenMenu =
+        ref.watch(fullScreenMenuBtnPageStateProvider);
+
+    return isShowFullScreenMenu
+        ? Container(
+            color: const Color.fromARGB(255, 23, 57, 117).withOpacity(0.9),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    // 最左邊間距
+                    spacing(321),
+                    logo(),
+                    const Spacer(),
+                    // 三條 or 最右邊間距
+                    animationMenuBtn(true, notifier),
+                    spacing(20),
+                  ],
+                ),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: MainMenu.values
+                        .map(
+                          (e) => TextButton(
+                            onPressed: () => debugPrint(e.value),
+                            child: Padding(
+                              padding: const EdgeInsets.all(25),
+                              child: Text(
+                                e.value,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
+          )
+        : Container();
+  }
+}
+
+/// 全螢幕按鈕選單狀態
+class FullScreenMenuBtnPageStateNotifier extends StateNotifier<bool> {
+  FullScreenMenuBtnPageStateNotifier() : super(false);
+
+  void toggle() {
+    state = !state; // 是否顯示全螢幕選單
   }
 }

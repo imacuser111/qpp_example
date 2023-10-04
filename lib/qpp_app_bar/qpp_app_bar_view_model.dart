@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
+// 
+// class QppAppBarTitleViewModel with ChangeNotifier {
+//   bool isLanguageDropdownMenuOpen = false;
 
-class QppAppBarTitleViewModel with ChangeNotifier {
-  bool isLanguageDropdownMenuOpen = false;
+//   toggleLanguageDropdownMenuState({bool listen = true}) {
+//     isLanguageDropdownMenuOpen = !isLanguageDropdownMenuOpen;
 
-  toggleLanguageDropdownMenuState({bool listen = true}) {
-    isLanguageDropdownMenuOpen = !isLanguageDropdownMenuOpen;
-
-    if (listen) {
-      notifyListeners();
-    }
-  }
-}
+//     if (listen) {
+//       notifyListeners();
+//     }
+//   }
+// }
