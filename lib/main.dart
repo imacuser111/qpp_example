@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/api/core/http_service.dart';
-import 'package:qpp_example/qpp_app_bar/qpp_app_bar_view.dart';
-import 'package:qpp_example/qpp_info_body/view/qpp_info_body_main.dart';
-import 'package:qpp_example/utils/screen.dart';
+import 'package:qpp_example/go_router/router.dart';
+import 'package:qpp_example/qpp_app_bar/view/qpp_app_bar_view.dart';
+import 'package:qpp_example/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() {
-  HttpService service = HttpService.instance;
+// 建立URL策略，用以移除頁出現http://localhost:5654/#/的#字hash
+  usePathUrlStrategy(); // flutter_web_plugins
+
+  HttpService service = HttpService.instance; // dio
   service.initDio();
-  runApp(const MyApp());
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,21 +22,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      routerConfig: router,
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key, required this.title});
+/// 主框架
+class MainFramework extends StatelessWidget {
+  MainFramework({super.key, required this.child});
 
-  final String title;
+  final Widget child;
 
   final StateNotifierProvider<FullScreenMenuBtnPageStateNotifier, bool>
       fullScreenMenuBtnPageStateProvider = StateNotifierProvider((ref) {
@@ -40,32 +46,27 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     debugPrint('MyHomePage build');
 
-    return ProviderScope(
-      child: Stack(
-        children: [
-          Scaffold(
-            extendBodyBehindAppBar: true, // 設定可以在appBar後面擴充body
-            appBar: qppAppBar(fullScreenMenuBtnPageStateProvider),
-            body: Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('desktop_bg_kv.png'),
-                ),
+    return Stack(
+      children: [
+        Scaffold(
+          extendBodyBehindAppBar: true, // 設定可以在appBar後面擴充body
+          appBar: qppAppBar(fullScreenMenuBtnPageStateProvider),
+          body: Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage('desktop_bg_kv.png'),
               ),
-              child: InformationOuterFrame(
-                userID: 886900100106,
-              ),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
-          ),
-          FullScreenMenuBtnPage(fullScreenMenuBtnPageStateProvider),
-        ],
-      ),
+            ),
+            child: child,
+          ), // This trailing comma makes auto-formatting nicer for build methods.
+        ),
+        FullScreenMenuBtnPage(fullScreenMenuBtnPageStateProvider),
+      ],
     );
   }
 }

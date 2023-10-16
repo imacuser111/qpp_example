@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/api/core/api_response.dart';
@@ -10,12 +8,17 @@ import 'package:qr_flutter/qr_flutter.dart';
 class InformationOuterFrame extends StatelessWidget {
   InformationOuterFrame({super.key, required this.userID});
 
-  final int userID;
+  final String userID;
 
   late final StateNotifierProvider<UserSelectInfoNotifier,
           ApiResponse<BaseResponse>?> userSelectInfoStateProvider =
       StateNotifierProvider((ref) {
-    Future.microtask(() => ref.notifier.getUserInfo(userID));
+    int? userID = int.tryParse(this.userID);
+
+    if (userID != null) {
+      Future.microtask(() => ref.notifier.getUserInfo(userID));
+    }
+
     return UserSelectInfoNotifier(ApiResponse.initial());
   });
 
@@ -24,42 +27,39 @@ class InformationOuterFrame extends StatelessWidget {
     debugPrint('InformationOuterFrame build');
 
     return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1280),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 180, bottom: 48, left: 20, right: 20),
-                child: Container(
-                  clipBehavior: Clip.hardEdge, // 超出的部分，裁剪掉
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
-                  child: Column(
-                    children: [
-                      AvatarWidget(
-                        userSelectInfoStateProvider:
-                            userSelectInfoStateProvider,
-                        userID: userID,
-                      ),
-                      InformationDescriptionWidget(
-                        userSelectInfoStateProvider:
-                            userSelectInfoStateProvider,
-                      ),
-                    ],
-                  ),
+      child: Column(
+        children: [
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1280),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  top: 180, bottom: 48, left: 20, right: 20),
+              child: Container(
+                clipBehavior: Clip.hardEdge, // 超出的部分，裁剪掉
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                child: Column(
+                  children: [
+                    AvatarWidget(
+                      userSelectInfoStateProvider: userSelectInfoStateProvider,
+                      userID: userID,
+                    ),
+                    InformationDescriptionWidget(
+                      userSelectInfoStateProvider: userSelectInfoStateProvider,
+                    ),
+                  ],
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(bottom: 89),
-              child: const QRCodeWidget(
-                str:
-                    "https://qpptec.com/app/information?phoneNumber=886972609811&lang=zh_TW",
-              ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(bottom: 89),
+            child: const QRCodeWidget(
+              str:
+                  "https://qpptec.com/app/information?phoneNumber=886972609811&lang=zh_TW",
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -72,7 +72,7 @@ class AvatarWidget extends StatelessWidget {
       required this.userSelectInfoStateProvider,
       required this.userID});
 
-  final int userID;
+  final String userID;
 
   final StateNotifierProvider<UserSelectInfoNotifier,
       ApiResponse<BaseResponse>?> userSelectInfoStateProvider;
@@ -111,7 +111,7 @@ class AvatarWidget extends StatelessWidget {
                     final notifier = ref.watch(userSelectInfoStateProvider);
                     final response = (notifier?.data);
                     return Text(
-                      response?.userSelectInfoResponse.name ?? '',
+                      response?.userSelectInfoResponse.name ?? '暱稱',
                       style: const TextStyle(
                         color: Colors.amber,
                         fontSize: 28,
@@ -121,7 +121,7 @@ class AvatarWidget extends StatelessWidget {
                   },
                 ),
                 Text(
-                  userID.toString(),
+                  userID,
                   style: const TextStyle(
                     color: Colors.amber,
                     fontSize: 24,
@@ -152,19 +152,17 @@ class InformationDescriptionWidget extends ConsumerWidget {
     final notifier = ref.watch(userSelectInfoStateProvider);
     final response = (notifier?.data);
 
-    final String text = response?.userSelectInfoResponse.info ?? '';
+    final String text = response?.userSelectInfoResponse.info ?? '尚未新增簡介';
     const TextStyle textStyle = TextStyle(fontSize: 18, color: Colors.white);
-    final double textH = text.height(textStyle, context);
+    // final double textH = text.height(textStyle, context);
 
     return Container(
-      height: textH + 40 * 2,
+      width: double.infinity,
       color: const Color.fromRGBO(22, 32, 68, 1),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 61, right: 60),
-          child: Text(text, style: textStyle),
-        ),
+      child: Padding(
+        padding:
+            const EdgeInsets.only(left: 61, right: 60, top: 40, bottom: 40),
+        child: Text(text, style: textStyle),
       ),
     );
   }
@@ -194,41 +192,5 @@ class QRCodeWidget extends StatelessWidget {
         const Text('掃描條碼開啟QPP', style: TextStyle(color: Colors.amber)),
       ],
     );
-  }
-}
-
-// MARK: - 字串擴充
-extension StringExtension on String {
-  /// 計算文字Size(\n不會計算)
-  Size size(TextStyle style) {
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: this, style: style),
-      textDirection: TextDirection.ltr,
-    )..layout(minWidth: 0, maxWidth: double.infinity);
-    return textPainter.size;
-  }
-
-  /// 計算文字高度
-  double height(TextStyle style, BuildContext context) {
-    // final mediaQuery = MediaQuery.of(context);
-    FlutterView window = PlatformDispatcher.instance.views.first;
-
-    final Size sizeFull = (TextPainter(
-      text: TextSpan(
-        text: replaceAll('\n', ''),
-        style: style,
-      ),
-      // textScaleFactor: mediaQuery.textScaleFactor,
-      textDirection: TextDirection.ltr,
-    )..layout())
-        .size;
-
-    final numberOfLinebreaks = split('\n').length;
-
-    final numberOfLines =
-        (sizeFull.width / (window.physicalSize.width)).ceil() +
-            numberOfLinebreaks;
-
-    return sizeFull.height * numberOfLines;
   }
 }
