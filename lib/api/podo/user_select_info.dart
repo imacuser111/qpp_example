@@ -24,6 +24,9 @@ class UserSelectInfoResponse {
   final String name;
   final int verificationType;
 
+  String get nameStr => name.isEmpty ? '暱稱' : name;
+  String get infoStr => info.isEmpty ? '尚未新增簡介' : info;
+
   const UserSelectInfoResponse({
     required this.info,
     required this.name,

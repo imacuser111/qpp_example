@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 // MARK: - 字串擴充
-extension StringExtension on String {
+extension TextExtension on String {
   /// 計算文字Size(\n不會計算)
   Size size(TextStyle style) {
     final TextPainter textPainter = TextPainter(

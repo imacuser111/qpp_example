@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:qpp_example/api/core/http_service.dart';
 import 'package:qpp_example/api/podo/core/base_response.dart';
+import 'package:qpp_example/utils/qpp_image_utils.dart';
 
-enum RequestMethod { get, post, put, delete, patch, copy }
+enum RequestMethod { get, post, put, delete, patch, copy, head }
 
 abstract class BaseApi {
   RequestMethod get method;
@@ -69,6 +70,8 @@ abstract class BaseApi {
 
     Options options = Options(headers: headerParams);
 
+    dio.options.baseUrl = "https://dev2-api.qpptec.com/client/";
+
     try {
       switch (method) {
         case RequestMethod.get:
@@ -76,12 +79,25 @@ abstract class BaseApi {
               queryParameters: queryParams, options: options);
         case RequestMethod.post:
           response = await dio.post(url, data: bodyParams, options: options);
-        default: break;
+        case RequestMethod.head:
+          dio.options.baseUrl = QppImageUtils.userImageUrl;
+          response = await dio.head(url,
+              queryParameters: queryParams, options: options);
+        default:
+          return;
       }
     } on DioException catch (error) {
       errorCallBack(service.errorFactory(error));
+      return;
     }
-    if (response != null && response.data != null) {
+
+    /// QPP圖片
+    if (method == RequestMethod.head) {
+      successCallBack(BaseResponse(json: response.headers.map));
+      return;
+    }
+
+    if (response.data != null) {
       String dataStr = json.encode(response.data);
       Map<String, dynamic> dataMap = json.decode(dataStr);
       dataMap = service.responseFactory(dataMap);

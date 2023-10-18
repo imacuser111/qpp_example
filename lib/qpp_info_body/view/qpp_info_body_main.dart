@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/api/podo/core/base_response.dart';
 import 'package:qpp_example/qpp_info_body/view_model/qpp_info_body_view_model.dart';
+import 'package:qpp_example/utils/qpp_image_utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class InformationOuterFrame extends StatelessWidget {
@@ -10,16 +10,18 @@ class InformationOuterFrame extends StatelessWidget {
 
   final String userID;
 
-  late final StateNotifierProvider<UserSelectInfoNotifier,
-          ApiResponse<BaseResponse>?> userSelectInfoStateProvider =
-      StateNotifierProvider((ref) {
+  late final userSelectInfoProvider =
+      ChangeNotifierProvider<UserSelectInfoChangeNotifier>((ref) {
     int? userID = int.tryParse(this.userID);
 
     if (userID != null) {
       Future.microtask(() => ref.notifier.getUserInfo(userID));
+      Future.microtask(() => ref.notifier.getUserImage(userID));
+      Future.microtask(() => ref.notifier
+          .getUserImage(userID, style: QppImageStyle.backgroundImage));
     }
 
-    return UserSelectInfoNotifier(ApiResponse.initial());
+    return UserSelectInfoChangeNotifier();
   });
 
   @override
@@ -41,11 +43,11 @@ class InformationOuterFrame extends StatelessWidget {
                 child: Column(
                   children: [
                     AvatarWidget(
-                      userSelectInfoStateProvider: userSelectInfoStateProvider,
+                      userSelectInfoProvider: userSelectInfoProvider,
                       userID: userID,
                     ),
                     InformationDescriptionWidget(
-                      userSelectInfoStateProvider: userSelectInfoStateProvider,
+                      userSelectInfoProvider: userSelectInfoProvider,
                     ),
                   ],
                 ),
@@ -54,9 +56,9 @@ class InformationOuterFrame extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.only(bottom: 89),
-            child: const QRCodeWidget(
+            child: QRCodeWidget(
               str:
-                  "https://qpptec.com/app/information?phoneNumber=886972609811&lang=zh_TW",
+                  "https://qpptec.com/app/information?phoneNumber=$userID&lang=zh_TW",
             ),
           ),
         ],
@@ -66,27 +68,42 @@ class InformationOuterFrame extends StatelessWidget {
 }
 
 // 頭像Widget
-class AvatarWidget extends StatelessWidget {
+class AvatarWidget extends ConsumerWidget {
   const AvatarWidget(
-      {super.key,
-      required this.userSelectInfoStateProvider,
-      required this.userID});
+      {super.key, required this.userSelectInfoProvider, required this.userID});
 
   final String userID;
 
-  final StateNotifierProvider<UserSelectInfoNotifier,
-      ApiResponse<BaseResponse>?> userSelectInfoStateProvider;
+  final ChangeNotifierProvider<UserSelectInfoChangeNotifier>
+      userSelectInfoProvider;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     debugPrint('AvatarWidget build');
+
+    final notifier = ref.watch(userSelectInfoProvider);
+
+    final infoResponse = notifier.infoState.data;
+
+    final avatarResponse = notifier.avaterState.data;
+    String avatar = QppImageUtils.getUserImageURL(int.tryParse(userID) ?? 0,
+        timestamp:
+            avatarResponse?.getUserImageResponse.lastModifiedTimestamp ?? 0);
+    final avaterIsError = notifier.avaterIsError;
+
+    final bgResponse = notifier.bgImageState.data;
+    String bgImage = QppImageUtils.getUserImageURL(int.tryParse(userID) ?? 0,
+        imageStyle: QppImageStyle.backgroundImage,
+        timestamp: bgResponse?.getUserImageResponse.lastModifiedTimestamp ?? 0);
+    final bgImageIsError = notifier.bgImageIsError;
 
     return Container(
       height: 265,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: AssetImage('desktop_pic_commodity_largepic_default.webp'),
+          image: bgImageIsError ? const AssetImage('desktop_pic_commodity_largepic_default.webp') as ImageProvider : NetworkImage(bgImage),
+          onError: (exception, stackTrace) => notifier.imageErrorToggle(style: QppImageStyle.backgroundImage),
         ),
       ),
       child: Stack(
@@ -96,29 +113,24 @@ class AvatarWidget extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 36),
-                const SizedBox(
+                SizedBox(
                   width: 100,
                   height: 100,
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent, // 設置透明背景
-                    backgroundImage:
-                        AssetImage('desktop_pic_profile_avatar_default.png'),
+                    backgroundImage: avaterIsError ? const AssetImage('desktop_pic_profile_avatar_default.png') as ImageProvider : NetworkImage(avatar),
+                    onBackgroundImageError: (exception, stackTrace) =>
+                        notifier.imageErrorToggle(),
                   ),
                 ),
                 const SizedBox(height: 20),
-                Consumer(
-                  builder: (context, ref, child) {
-                    final notifier = ref.watch(userSelectInfoStateProvider);
-                    final response = (notifier?.data);
-                    return Text(
-                      response?.userSelectInfoResponse.name ?? '暱稱',
-                      style: const TextStyle(
-                        color: Colors.amber,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    );
-                  },
+                Text(
+                  infoResponse?.userSelectInfoResponse.nameStr ?? "",
+                  style: const TextStyle(
+                    color: Colors.amber,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 Text(
                   userID,
@@ -140,19 +152,19 @@ class AvatarWidget extends StatelessWidget {
 /// 資訊說明Widget
 class InformationDescriptionWidget extends ConsumerWidget {
   const InformationDescriptionWidget(
-      {super.key, required this.userSelectInfoStateProvider});
+      {super.key, required this.userSelectInfoProvider});
 
-  final StateNotifierProvider<UserSelectInfoNotifier,
-      ApiResponse<BaseResponse>?> userSelectInfoStateProvider;
+  final ChangeNotifierProvider<UserSelectInfoChangeNotifier>
+      userSelectInfoProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     debugPrint('InformationDescriptionWidget build');
 
-    final notifier = ref.watch(userSelectInfoStateProvider);
-    final response = (notifier?.data);
+    final notifier = ref.watch(userSelectInfoProvider);
+    final response = (notifier.infoState.data);
 
-    final String text = response?.userSelectInfoResponse.info ?? '尚未新增簡介';
+    final String text = response?.userSelectInfoResponse.infoStr ?? "";
     const TextStyle textStyle = TextStyle(fontSize: 18, color: Colors.white);
     // final double textH = text.height(textStyle, context);
 

@@ -1,4 +1,5 @@
-import 'package:qpp_example/api/podo/user_select_info_response.dart';
+import 'package:qpp_example/api/podo/get_user_image.dart';
+import 'package:qpp_example/api/podo/user_select_info.dart';
 
 class BaseResponse {
   final Map<String, dynamic> json;
@@ -11,7 +12,7 @@ class BaseResponse {
 }
 
 extension BaseResponseExtension on BaseResponse {
-  UserSelectInfoResponse get userSelectInfoResponse {
-    return UserSelectInfoResponse.fromJson(json);
-  }
+  UserSelectInfoResponse get userSelectInfoResponse => UserSelectInfoResponse.fromJson(json);
+
+  GetUserImageResponse get getUserImageResponse => GetUserImageResponse.fromJson(json);
 }
