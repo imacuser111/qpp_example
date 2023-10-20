@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:qpp_example/main.dart';
+import 'package:qpp_example/common_ui/qpp_app_bar/qpp_background.dart';
+import 'package:qpp_example/extension/string/url.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// 首頁
 class HomePage extends StatelessWidget {
@@ -114,9 +114,10 @@ class HomePageMainView extends StatelessWidget {
       child: InkWell(
         child: Image.asset(isAndroid ? 'btn-google.png' : 'btn-apple.png'),
         onHover: (value) => print(value),
-        onTap: () => _launchURL(isAndroid
-            ? 'https://play.google.com/store/apps/details?id=com.qpptec.QPP'
-            : 'https://apps.apple.com/tw/app/qpp/id1501319938'),
+        onTap: () => isAndroid
+          ? 'https://play.google.com/store/apps/details?id=com.qpptec.QPP'
+              .launchURL()
+          : 'https://apps.apple.com/tw/app/qpp/id1501319938'.launchURL(),
       ),
     );
   }
@@ -157,23 +158,20 @@ class _PlayStoreButtonState extends State<PlayStoreButton> {
       child: Stack(
         children: [
           Image.asset(isAndroid ? 'btn-google.png' : 'btn-apple.png'),
-          Container(transform: Matrix4.rotationY(positionX), color: Colors.blue, width: 100, height: 100,)
+          Container(
+            transform: Matrix4.rotationY(positionX),
+            color: Colors.blue,
+            width: 100,
+            height: 100,
+          )
         ],
       ),
       onHover: (value) => startAnimation(),
-      onTap: () => _launchURL(isAndroid
+      onTap: () => isAndroid
           ? 'https://play.google.com/store/apps/details?id=com.qpptec.QPP'
-          : 'https://apps.apple.com/tw/app/qpp/id1501319938'),
+              .launchURL()
+          : 'https://apps.apple.com/tw/app/qpp/id1501319938'.launchURL(),
     );
-  }
-}
-
-/// 啟動URL
-_launchURL(String path) async {
-  final Uri url = Uri.parse(path);
-
-  if (!await launchUrl(url)) {
-    throw Exception('Could not launch $url');
   }
 }
 
