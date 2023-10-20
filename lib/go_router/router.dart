@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/main.dart';
-import 'package:qpp_example/qpp_home/view/qpp_home_page.dart';
-import 'package:qpp_example/qpp_info_body/view/qpp_info_body_main.dart';
+import 'package:qpp_example/page/qpp_home/view/qpp_home_page.dart';
+import 'package:qpp_example/page/qpp_info_body/view/qpp_info_body_main.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
 
 /// The route configuration.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/qpp_background.dart';
 import 'package:qpp_example/extension/string/url.dart';
+import 'package:qpp_example/main.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// 首頁
@@ -115,9 +116,9 @@ class HomePageMainView extends StatelessWidget {
         child: Image.asset(isAndroid ? 'btn-google.png' : 'btn-apple.png'),
         onHover: (value) => print(value),
         onTap: () => isAndroid
-          ? 'https://play.google.com/store/apps/details?id=com.qpptec.QPP'
-              .launchURL()
-          : 'https://apps.apple.com/tw/app/qpp/id1501319938'.launchURL(),
+            ? 'https://play.google.com/store/apps/details?id=com.qpptec.QPP'
+                .launchURL()
+            : 'https://apps.apple.com/tw/app/qpp/id1501319938'.launchURL(),
       ),
     );
   }

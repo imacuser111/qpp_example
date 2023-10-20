@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/api/podo/core/base_response.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/qpp_background.dart';
+import 'package:qpp_example/main.dart';
 import 'package:qpp_example/page/qpp_info_body/view_model/qpp_info_body_view_model.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -196,10 +197,11 @@ class InformationDescriptionWidget extends ConsumerWidget {
 
 /// 資訊頁的QRCode
 class QRCodeForInfoWidget extends StatelessWidget {
-  const QRCodeForInfoWidget({super.key, required this.str, this.infoStr = '掃描條碼開啟QPP'});
+  const QRCodeForInfoWidget(
+      {super.key, required this.str, this.infoStr = '掃描條碼開啟QPP'});
 
   final String str;
-  
+
   final String infoStr;
 
   @override
