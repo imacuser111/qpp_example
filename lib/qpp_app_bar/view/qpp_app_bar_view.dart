@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,14 +36,6 @@ class QppAppBarTitle extends ConsumerWidget with QppAppBarTitleExtension {
     final bool isShowFullScreenMenu =
         ref.watch(fullScreenMenuBtnPageStateProvider);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      isSmallTypesetting(size.width)
-          ? ()
-          : isShowFullScreenMenu
-              ? notifier.toggle()
-              : ();
-    });
-
     return Row(
       children: [
         // 最左邊間距
@@ -63,7 +57,10 @@ class QppAppBarTitle extends ConsumerWidget with QppAppBarTitleExtension {
                 onPressed: () {},
               )
             : isSmallTypesetting(size.width)
-                ? animationMenuBtn(false, notifier)
+                ? AnimationMenuBtn(
+                    isClose: false,
+                    notifier: notifier,
+                  )
                 : spacing(10),
       ],
     );
@@ -127,15 +124,72 @@ mixin QppAppBarTitleExtension {
           .toList(),
     );
   }
+}
 
-  /// animationMenuBtn(三條or關閉)
-  Widget animationMenuBtn(
-      bool isClose, FullScreenMenuBtnPageStateNotifier notifier) {
-    return IconButton(
-      onPressed: () => notifier.toggle(),
-      icon: isClose
-          ? const Icon(Icons.close, color: Colors.white)
-          : const Icon(Icons.menu, color: Colors.white),
+/// animationMenuBtn(三條or關閉)
+class AnimationMenuBtn extends StatefulWidget {
+  const AnimationMenuBtn(
+      {super.key, required this.isClose, required this.notifier});
+
+  final bool isClose;
+  final FullScreenMenuBtnPageStateNotifier notifier;
+
+  @override
+  State<StatefulWidget> createState() => _AnimationMenuBtn();
+}
+
+class _AnimationMenuBtn extends State<AnimationMenuBtn>
+    with TickerProviderStateMixin {
+  late bool isClose;
+  late FullScreenMenuBtnPageStateNotifier notifier;
+
+  late AnimationController _controller;
+
+  int count = 0;
+  int targetCount = 1;
+
+  @override
+  void initState() {
+    super.initState();
+
+    isClose = widget.isClose;
+    notifier = widget.notifier;
+
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        count++;
+        if (count < targetCount) {
+          _controller.reset();
+          _controller.forward();
+        }
+      }
+    });
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Transform.rotate(
+          angle: -_controller.value * 2 * pi,
+          child: IconButton(
+            onPressed: () => notifier.toggle(),
+            icon: isClose || count < targetCount
+                ? const Icon(Icons.close, color: Colors.white)
+                : const Icon(Icons.menu, color: Colors.white),
+          ),
+        );
+      },
     );
   }
 }
@@ -261,7 +315,7 @@ class FullScreenMenuBtnPage extends ConsumerWidget
     return isShowFullScreenMenu
         ? Container(
             color: const Color.fromARGB(255, 23, 57, 117).withOpacity(0.9),
-            child: Column(
+            child: Stack(
               children: [
                 SizedBox(
                   height: 100,
@@ -272,7 +326,7 @@ class FullScreenMenuBtnPage extends ConsumerWidget
                       logo(context),
                       const Spacer(),
                       // 三條 or 最右邊間距
-                      animationMenuBtn(true, notifier),
+                      AnimationMenuBtn(isClose: true, notifier: notifier),
                       spacing(10),
                     ],
                   ),
@@ -302,92 +356,3 @@ class FullScreenMenuBtnPage extends ConsumerWidget
         : Container();
   }
 }
-
-// class MyMenuWidget extends StatefulWidget {
-//   const MyMenuWidget({super.key});
-
-//   @override
-//   State<MyMenuWidget> createState() => _MyMenuWidgetState();
-// }
-
-// class _MyMenuWidgetState extends State<MyMenuWidget>
-//     with TickerProviderStateMixin {
-//   final MenuController _menuController = MenuController();
-//   late AnimationController _animationController;
-//   late Animation<double> _menuAnimation;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _animationController = AnimationController(
-//       vsync: this,
-//       duration: const Duration(milliseconds: 300), // 调整动画持续时间
-//     );
-//     _menuAnimation =
-//         Tween<double>(begin: 0, end: 1).animate(_animationController);
-//   }
-
-//   void _toggleMenu() {
-//     if (_menuController.isOpen) {
-//       _animationController.reverse(); // 反向播放动画以关闭菜单
-//       _menuController.close();
-//     } else {
-//       _animationController.forward(); // 正向播放动画以打开菜单
-//       _menuController.open();
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       children: [
-//         ElevatedButton(
-//           onPressed: _toggleMenu,
-//           child: Text('Toggle Menu'),
-//         ),
-//         AnimatedBuilder(
-//           animation: _menuAnimation, // 使用自己创建的动画
-//           builder: (context, child) {
-//             return SizedBox(
-//               height: _menuAnimation.value * 200, // 菜单高度根据动画值变化
-//               child: MenuAnchor(
-//                 controller: _menuController,
-//                 menuChildren: [
-//                   Container(
-//                     width: 200,
-//                     color: Colors.blue,
-//                     child: Center(
-//                       child: Text(
-//                         'Menu Content',
-//                         style: TextStyle(color: Colors.white),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//                 child: child,
-//               ),
-//             );
-//           },
-//           child: Container(
-//             width: 200,
-//             height: 50,
-//             color: Colors.green,
-//             child: Center(
-//               child: Text(
-//                 'Main Content',
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     _animationController.dispose(); // 在不再使用时销毁动画控制器
-//     super.dispose();
-//   }
-// }

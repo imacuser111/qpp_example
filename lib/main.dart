@@ -53,20 +53,23 @@ class MainFramework extends StatelessWidget {
         Scaffold(
           extendBodyBehindAppBar: true, // 設定可以在appBar後面擴充body
           appBar: qppAppBar(fullScreenMenuBtnPageStateProvider),
-          body: Container(
-            height: double.infinity,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('desktop_bg_kv.png'),
-              ),
-            ),
-            child: child,
-          ), // This trailing comma makes auto-formatting nicer for build methods.
+          body: child,
         ),
         FullScreenMenuBtnPage(fullScreenMenuBtnPageStateProvider),
       ],
     );
   }
+}
+
+/// 背景圖片Widgth
+Widget backgroundWidgth({required Widget child}) {
+  return Container(
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('desktop_bg_kv.png'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    child: child,
+  );
 }

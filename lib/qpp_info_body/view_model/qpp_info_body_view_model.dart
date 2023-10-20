@@ -6,34 +6,6 @@ import 'package:qpp_example/api/podo/get_user_image.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 
-// class UserSelectInfoNotifier extends StateNotifier<ApiResponse<BaseResponse>> {
-//   UserSelectInfoNotifier(super.state);
-
-//   getUserInfo(int userID) {
-//     state = ApiResponse.loading();
-
-//     final request = UserSelectInfoRequest(userID);
-
-//     request.request(successCallBack: (data) {
-//       state = ApiResponse.completed(data);
-//     }, errorCallBack: (error) {
-//       state = ApiResponse.error(error);
-//     });
-//   }
-
-//   getUserImage(int userID, {QppImageStyle style = QppImageStyle.avatar}) {
-//     state = ApiResponse.loading();
-
-//     final request = GetUserImageRequest(userID, style);
-
-//     request.request(successCallBack: (data) {
-//       state = ApiResponse.completed(data);
-//     }, errorCallBack: (error) {
-//       state = ApiResponse.error(error);
-//     });
-//   }
-// }
-
 class UserSelectInfoChangeNotifier extends ChangeNotifier {
   /// 資訊狀態
   ApiResponse<BaseResponse> infoState = ApiResponse.initial();

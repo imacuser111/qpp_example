@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/api/podo/core/base_response.dart';
+import 'package:qpp_example/main.dart';
 import 'package:qpp_example/qpp_info_body/view_model/qpp_info_body_view_model.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -29,39 +30,41 @@ class InformationOuterFrame extends StatelessWidget {
     debugPrint('InformationOuterFrame build');
 
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1280),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 180, bottom: 48, left: 20, right: 20),
-              child: Container(
-                clipBehavior: Clip.hardEdge, // 超出的部分，裁剪掉
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
-                child: Column(
-                  children: [
-                    AvatarWidget(
-                      userSelectInfoProvider: userSelectInfoProvider,
-                      userID: userID,
-                    ),
-                    InformationDescriptionWidget(
-                      userSelectInfoProvider: userSelectInfoProvider,
-                    ),
-                  ],
+      child: backgroundWidgth(
+        child: Column(
+          children: [
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1280),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 180, bottom: 48, left: 20, right: 20),
+                child: Container(
+                  clipBehavior: Clip.hardEdge, // 超出的部分，裁剪掉
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                  child: Column(
+                    children: [
+                      AvatarWidget(
+                        userSelectInfoProvider: userSelectInfoProvider,
+                        userID: userID,
+                      ),
+                      InformationDescriptionWidget(
+                        userSelectInfoProvider: userSelectInfoProvider,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(bottom: 89),
-            child: QRCodeWidget(
-              str:
-                  "https://qpptec.com/app/information?phoneNumber=$userID&lang=zh_TW",
+            Container(
+              padding: const EdgeInsets.only(bottom: 89),
+              child: QRCodeForInfoWidget(
+                str:
+                    "https://qpptec.com/app/information?phoneNumber=$userID&lang=zh_TW",
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -102,13 +105,20 @@ class AvatarWidget extends ConsumerWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: bgImageIsError ? const AssetImage('desktop_pic_commodity_largepic_default.webp') as ImageProvider : NetworkImage(bgImage),
-          onError: (exception, stackTrace) => notifier.imageErrorToggle(style: QppImageStyle.backgroundImage),
+          image: bgImageIsError
+              ? const AssetImage('desktop_pic_commodity_largepic_default.webp')
+                  as ImageProvider
+              : NetworkImage(bgImage),
+          onError: (exception, stackTrace) =>
+              notifier.imageErrorToggle(style: QppImageStyle.backgroundImage),
         ),
       ),
       child: Stack(
         children: [
-          ModalBarrier(color: Colors.black.withOpacity(0.7)), // 遮罩
+          ModalBarrier(
+            color: Colors.black.withOpacity(0.7),
+            dismissible: false,
+          ), // 遮罩
           Center(
             child: Column(
               children: [
@@ -118,14 +128,18 @@ class AvatarWidget extends ConsumerWidget {
                   height: 100,
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent, // 設置透明背景
-                    backgroundImage: avaterIsError ? const AssetImage('desktop_pic_profile_avatar_default.png') as ImageProvider : NetworkImage(avatar),
+                    backgroundImage: avaterIsError
+                        ? const AssetImage(
+                                'desktop_pic_profile_avatar_default.png')
+                            as ImageProvider
+                        : NetworkImage(avatar),
                     onBackgroundImageError: (exception, stackTrace) =>
                         notifier.imageErrorToggle(),
                   ),
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  infoResponse?.userSelectInfoResponse.nameStr ?? "",
+                  infoResponse?.userSelectInfoResponse.nameStr ?? '暱稱',
                   style: const TextStyle(
                     color: Colors.amber,
                     fontSize: 28,
@@ -164,7 +178,7 @@ class InformationDescriptionWidget extends ConsumerWidget {
     final notifier = ref.watch(userSelectInfoProvider);
     final response = (notifier.infoState.data);
 
-    final String text = response?.userSelectInfoResponse.infoStr ?? "";
+    final String text = response?.userSelectInfoResponse.infoStr ?? '尚未新增簡介';
     const TextStyle textStyle = TextStyle(fontSize: 18, color: Colors.white);
     // final double textH = text.height(textStyle, context);
 
@@ -180,11 +194,13 @@ class InformationDescriptionWidget extends ConsumerWidget {
   }
 }
 
-// QRCode
-class QRCodeWidget extends StatelessWidget {
-  const QRCodeWidget({super.key, required this.str});
+/// 資訊頁的QRCode
+class QRCodeForInfoWidget extends StatelessWidget {
+  const QRCodeForInfoWidget({super.key, required this.str, this.infoStr = '掃描條碼開啟QPP'});
 
   final String str;
+  
+  final String infoStr;
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +217,7 @@ class QRCodeWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        const Text('掃描條碼開啟QPP', style: TextStyle(color: Colors.amber)),
+        Text(infoStr, style: const TextStyle(color: Colors.amber)),
       ],
     );
   }
