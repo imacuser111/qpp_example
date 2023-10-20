@@ -37,7 +37,7 @@ final GoRouter router = GoRouter(
                 UniversalLinkParamData.fromJson(state.uri.queryParameters);
             return MainFramework(
               child: CommodityInfoPage(
-                commodityId: data.commodityID ?? "",
+                commodityID: data.commodityID ?? "",
               ),
             );
           },

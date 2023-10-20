@@ -90,9 +90,16 @@ mixin QppAppBarTitleExtension {
     return IconButton(
       icon: ConstrainedBox(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 148),
-        child: SvgPicture.asset(
-          'desktop-pic-qpp-logo-01.svg',
+        child:
+            // SvgPicture.asset(
+            //   'desktop-pic-qpp-logo-01.svg',
+            //   width: 148.getRealWidth(),
+            //   fit: BoxFit.contain,
+            // ),
+            Image.asset(
+          'desktop-pic-qpp-logo-01.png',
           width: 148.getRealWidth(),
+          scale: 46 / 148,
         ),
       ),
       onPressed: () => context.goNamed("home"),

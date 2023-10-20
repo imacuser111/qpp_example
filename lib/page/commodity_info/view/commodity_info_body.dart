@@ -4,9 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 
 class CommodityInfoPage extends ConsumerWidget {
-  final String commodityId;
+  final String commodityID;
 
-  const CommodityInfoPage({super.key, required this.commodityId});
+  const CommodityInfoPage({super.key, required this.commodityID});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
