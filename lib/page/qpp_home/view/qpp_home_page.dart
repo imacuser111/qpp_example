@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qpp_example/common_ui/qpp_app_bar/qpp_background.dart';
 import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/main.dart';
 import 'package:qr_flutter/qr_flutter.dart';
