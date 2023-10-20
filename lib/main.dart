@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/api/core/http_service.dart';
+import 'package:qpp_example/common_ui/qpp_app_bar/view/qpp_app_bar_view.dart';
+import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
 import 'package:qpp_example/go_router/router.dart';
-import 'package:qpp_example/qpp_app_bar/view/qpp_app_bar_view.dart';
-import 'package:qpp_example/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() {

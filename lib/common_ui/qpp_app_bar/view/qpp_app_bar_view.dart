@@ -4,8 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qpp_example/qpp_app_bar/model/qpp_app_bar_model.dart';
-import 'package:qpp_example/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
+import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
+import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 AppBar qppAppBar(
