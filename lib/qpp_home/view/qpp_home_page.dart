@@ -141,10 +141,10 @@ class _PlayStoreButtonState extends State<PlayStoreButton> {
   void startAnimation() {
     setState(() {
       isAnimating = true;
-      positionX = 200.0; // 目標位置
+      positionX = 500.0; // 目標位置
     });
 
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         isAnimating = false;
       });
@@ -157,7 +157,7 @@ class _PlayStoreButtonState extends State<PlayStoreButton> {
       child: Stack(
         children: [
           Image.asset(isAndroid ? 'btn-google.png' : 'btn-apple.png'),
-          Container(transform: Matrix4.rotationX(positionX), color: Colors.blue, width: 100, height: 100,)
+          Container(transform: Matrix4.rotationY(positionX), color: Colors.blue, width: 100, height: 100,)
         ],
       ),
       onHover: (value) => startAnimation(),
