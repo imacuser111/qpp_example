@@ -147,27 +147,26 @@ class AnimationMenuBtn extends StatefulWidget {
 
 class _AnimationMenuBtn extends State<AnimationMenuBtn>
     with TickerProviderStateMixin {
-  late bool isClose;
-  late FullScreenMenuBtnPageStateNotifier notifier;
-
+  late bool _isClose;
+  late FullScreenMenuBtnPageStateNotifier _notifier;
   late AnimationController _controller;
 
-  int count = 0;
-  int targetCount = 1;
+  int _count = 0;
+  final int _targetCount = 1;
 
   @override
   void initState() {
     super.initState();
 
-    isClose = widget.isClose;
-    notifier = widget.notifier;
+    _isClose = widget.isClose;
+    _notifier = widget.notifier;
 
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        count++;
-        if (count < targetCount) {
+        _count++;
+        if (_count < _targetCount) {
           _controller.reset();
           _controller.forward();
         }
@@ -190,8 +189,8 @@ class _AnimationMenuBtn extends State<AnimationMenuBtn>
         return Transform.rotate(
           angle: -_controller.value * 2 * pi,
           child: IconButton(
-            onPressed: () => notifier.toggle(),
-            icon: isClose || count < targetCount
+            onPressed: () => _notifier.toggle(),
+            icon: _isClose || _count < _targetCount
                 ? const Icon(Icons.close, color: Colors.white)
                 : const Icon(Icons.menu, color: Colors.white),
           ),
