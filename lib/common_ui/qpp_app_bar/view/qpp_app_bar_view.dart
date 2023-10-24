@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
@@ -89,7 +90,13 @@ mixin QppAppBarTitleExtension {
     return IconButton(
       icon: ConstrainedBox(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 148),
-        child: Image.asset(
+        child:
+            // SvgPicture.asset(
+            //   'desktop-pic-qpp-logo-01.svg',
+            //   width: 148.getRealWidth(),
+            //   fit: BoxFit.contain,
+            // ),
+            Image.asset(
           'desktop-pic-qpp-logo-01.png',
           width: 148.getRealWidth(),
           scale: 46 / 148,
