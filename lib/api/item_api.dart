@@ -14,5 +14,5 @@ abstract class ItemApi {
   @Headers(<String, dynamic>{
     'Content-Type': 'application/json',
   })
-  Future<ItemSelectResponse> postItemSelect(@Body() itemIds);
+  Future<ItemSelectInfoResponse> postItemSelect(@Body() itemIds);
 }

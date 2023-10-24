@@ -13,7 +13,7 @@ class _ItemApi implements ItemApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://pro2-api.qpptec.com/client/';
+    baseUrl ??= 'https://dev2-api.qpptec.com/client/';
   }
 
   final Dio _dio;
@@ -21,16 +21,18 @@ class _ItemApi implements ItemApi {
   String? baseUrl;
 
   @override
-  Future<ItemSelectResponse> postItemSelect(dynamic itemIds) async {
+  Future<ItemSelectInfoResponse> postItemSelect(dynamic itemIds) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': 'application/json'};
+    _headers.removeWhere((k, v) => v == null);
     final _data = itemIds;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ItemSelectResponse>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ItemSelectInfoResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
+      contentType: 'application/json',
     )
             .compose(
               _dio.options,
@@ -43,7 +45,7 @@ class _ItemApi implements ItemApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ItemSelectResponse.fromJson(_result.data!);
+    final value = ItemSelectInfoResponse.fromJson(_result.data!);
     return value;
   }
 

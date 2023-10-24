@@ -26,9 +26,11 @@ const storage = kReleaseMode
     : "https://storage.googleapis.com/qpp_blockchain_test/";
 
 // /// GCP AP I- 正式 / 測試
-const apiUrl = kDebugMode
-    ? "https://pro2-api.qpptec.com/client/"
-    : "https://dev2-api.qpptec.com/client/";
+// const apiUrl = kDebugMode
+//     ? "https://pro2-api.qpptec.com/client/"
+//     : "https://dev2-api.qpptec.com/client/";
+
+const apiUrl = "https://dev2-api.qpptec.com/client/";
 
 /// Polygonscan位址
 const polygonUrl = "https://polygonscan.com/tx/";
