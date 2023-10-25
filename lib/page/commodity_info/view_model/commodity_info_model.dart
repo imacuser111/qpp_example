@@ -12,6 +12,14 @@ class CommodityInfoModel extends ChangeNotifier {
   /// 物品資訊
   ApiResponse<ItemData> itemSelectInfoState = ApiResponse.initial();
 
+  /// 物品資訊
+  ApiResponse<MultiLanguageItemDescriptionData> itemDescriptionInfoState =
+      ApiResponse.initial();
+
+  /// 物品資訊
+  ApiResponse<MultiLanguageItemIntroLinkData> itemLinkInfoState =
+      ApiResponse.initial();
+
   /// 頭像狀態
   ApiResponse<BaseResponse> avatarState = ApiResponse.initial();
 
@@ -39,6 +47,8 @@ class CommodityInfoModel extends ChangeNotifier {
 
   /// 取得物品說明資訊
   getMultiLanguageItemDescription(ItemApi client, String id) {
+    itemDescriptionInfoState = ApiResponse.loading();
+    notifyListeners();
     String requestBody =
         MultiLanguageItemDescriptionSelectRequest().createBody(id);
 
@@ -47,15 +57,20 @@ class CommodityInfoModel extends ChangeNotifier {
         .then((descriptionResponse) {
       MultiLanguageItemDescriptionData descriptionData =
           descriptionResponse.descriptionData;
+      itemDescriptionInfoState = ApiResponse.completed(descriptionData);
+      notifyListeners();
       print('Des Success');
     }).catchError((error) {
-      itemSelectInfoState = ApiResponse.error(error);
+      itemDescriptionInfoState = ApiResponse.error(error);
+      notifyListeners();
       print('get item des data error: $error');
     }).whenComplete(() => getMultiLanguageItemIntroLink(client, id));
   }
 
   /// 取得物品連結資訊
   getMultiLanguageItemIntroLink(ItemApi client, String id) {
+    itemLinkInfoState = ApiResponse.loading();
+    notifyListeners();
     String requestBody =
         MultiLanguageItemIntroLinkSelectRequest().createBody(id);
 
@@ -64,9 +79,12 @@ class CommodityInfoModel extends ChangeNotifier {
         .then((introLinkResponse) {
       MultiLanguageItemIntroLinkData introLinkData =
           introLinkResponse.introLinkData;
+      itemLinkInfoState = ApiResponse.completed(introLinkData);
+      notifyListeners();
       print('Intro Success');
     }).catchError((error) {
-      itemSelectInfoState = ApiResponse.error(error);
+      itemLinkInfoState = ApiResponse.error(error);
+      notifyListeners();
       print('get item Intro data error: $error');
     });
   }
