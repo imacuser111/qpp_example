@@ -6,6 +6,7 @@ import 'package:qpp_example/api/item_api.dart';
 import 'package:qpp_example/api/podo/core/base_response.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_description_select.dart';
+import 'package:qpp_example/api/podo/multi_language_item_intro_link_select.dart';
 
 class CommodityInfoModel extends ChangeNotifier {
   /// 物品資訊
@@ -14,6 +15,7 @@ class CommodityInfoModel extends ChangeNotifier {
   /// 頭像狀態
   ApiResponse<BaseResponse> avatarState = ApiResponse.initial();
 
+  /// 取得物品資訊
   getItemInfo(String id) {
     itemSelectInfoState = ApiResponse.loading();
     notifyListeners();
@@ -27,28 +29,45 @@ class CommodityInfoModel extends ChangeNotifier {
       ItemData itemData = itemSelectResponse.getItem(0);
       itemSelectInfoState = ApiResponse.completed(itemData);
       notifyListeners();
-      getMultiLanguageItemDescription(client, id);
       print('Success');
     }).catchError((error) {
       itemSelectInfoState = ApiResponse.error(error);
       notifyListeners();
       print('get item data error: $error');
-    });
+    }).whenComplete(() => getMultiLanguageItemDescription(client, id));
   }
 
+  /// 取得物品說明資訊
   getMultiLanguageItemDescription(ItemApi client, String id) {
     String requestBody =
         MultiLanguageItemDescriptionSelectRequest().createBody(id);
 
     client
         .postMultiLanguageItemDescriptionSelect(requestBody)
-        .then((itemSelectResponse) {
+        .then((descriptionResponse) {
       MultiLanguageItemDescriptionData descriptionData =
-          itemSelectResponse.descriptionData;
+          descriptionResponse.descriptionData;
       print('Des Success');
     }).catchError((error) {
       itemSelectInfoState = ApiResponse.error(error);
       print('get item des data error: $error');
+    }).whenComplete(() => getMultiLanguageItemIntroLink(client, id));
+  }
+
+  /// 取得物品連結資訊
+  getMultiLanguageItemIntroLink(ItemApi client, String id) {
+    String requestBody =
+        MultiLanguageItemIntroLinkSelectRequest().createBody(id);
+
+    client
+        .postMultiLanguageItemIntroLinkSelect(requestBody)
+        .then((introLinkResponse) {
+      MultiLanguageItemIntroLinkData introLinkData =
+          introLinkResponse.introLinkData;
+      print('Intro Success');
+    }).catchError((error) {
+      itemSelectInfoState = ApiResponse.error(error);
+      print('get item Intro data error: $error');
     });
   }
 
