@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:qpp_example/api/podo/core/base_response.dart';
 
 part 'item_select.g.dart';
 
@@ -11,13 +12,13 @@ class ItemSelectRequest {
 }
 
 /// 搜尋物品資訊
-class ItemSelectInfoResponse {
+class ItemSelectInfoResponse extends BaseResponse {
   final List<dynamic> itemList;
 
-  const ItemSelectInfoResponse({required this.itemList});
+  const ItemSelectInfoResponse({required this.itemList, required super.json});
 
   factory ItemSelectInfoResponse.fromJson(Map<String, dynamic> json) {
-    return ItemSelectInfoResponse(itemList: json['itemList']);
+    return ItemSelectInfoResponse(json: json, itemList: json['itemList']);
   }
 
   ItemData getItem(int index) {

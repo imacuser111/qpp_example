@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:qpp_example/api/podo/core/base_response.dart';
 
 part 'multi_language_item_intro_link_select.g.dart';
 
@@ -11,15 +12,16 @@ class MultiLanguageItemIntroLinkSelectRequest {
 }
 
 /// 搜尋物品多語系連結資訊
-class MultiLanguageItemIntroLinkSelectInfoResponse {
+class MultiLanguageItemIntroLinkSelectInfoResponse extends BaseResponse {
   final MultiLanguageItemIntroLinkData introLinkData;
 
   const MultiLanguageItemIntroLinkSelectInfoResponse(
-      {required this.introLinkData});
+      {required this.introLinkData, required super.json});
 
   factory MultiLanguageItemIntroLinkSelectInfoResponse.fromJson(
       Map<String, dynamic> json) {
     return MultiLanguageItemIntroLinkSelectInfoResponse(
+        json: json,
         introLinkData:
             MultiLanguageItemIntroLinkData.fromJson(json['introLink']));
   }

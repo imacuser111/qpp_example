@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/api/core/api_response.dart';
-import 'package:qpp_example/api/item_api.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
@@ -16,7 +15,7 @@ class CommodityInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     late final itemSelectInfoProvider =
         ChangeNotifierProvider<CommodityInfoModel>((ref) {
-      Future.microtask(() => ref.notifier.getItemInfo(commodityID));
+      Future.microtask(() => ref.notifier.loadData(commodityID));
       return CommodityInfoModel();
     });
 

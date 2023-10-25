@@ -18,7 +18,4 @@ extension BaseResponseExtension on BaseResponse {
 
   GetUserImageResponse get getUserImageResponse =>
       GetUserImageResponse.fromJson(json);
-
-  ItemSelectInfoResponse get itemSelectInfoResponse =>
-      ItemSelectInfoResponse.fromJson(json);
 }
