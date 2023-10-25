@@ -8,6 +8,9 @@ import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_description_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
+import 'package:qpp_example/constants/server_const.dart';
+import 'package:qpp_example/extension/string/crypto.dart';
+import 'package:qpp_example/utils/qpp_image_utils.dart';
 
 class CommodityInfoModel extends ChangeNotifier {
   /// 物品資訊
@@ -48,8 +51,9 @@ class CommodityInfoModel extends ChangeNotifier {
         ItemData itemData = itemSelectResponse.getItem(0);
         itemSelectInfoState = ApiResponse.completed(itemData);
         // 取物品資訊成功後, 取得創建者資料
-        int? id = itemSelectInfoState.data?.creatorId;
-        getUserInfo(id!);
+        int? creatorId = itemSelectInfoState.data?.creatorId;
+        getUserInfo(creatorId!);
+        getItemImage(creatorId);
       } else {
         itemSelectInfoState = ApiResponse.error(itemSelectResponse.errorCode);
         print('取得物品資訊錯誤 SERVER_ERROR_CODE: ${itemSelectResponse.errorCode}');
@@ -136,26 +140,15 @@ class CommodityInfoModel extends ChangeNotifier {
     });
   }
 
-  /// 取得用戶圖片
-  // getUserImage(int userID, {QppImageStyle style = QppImageStyle.avatar}) {
-  //   bool isAvater = style == QppImageStyle.avatar;
+  // 取得物品圖片
+  getItemImage(int userID) {
+    String itemPhotoUrl =
+        "${storage}Item/${userID.toString().hashUID}_${itemSelectInfoState.data!.id}_Image1.png?v=${itemSelectInfoState.data!.updateTimestamp}";
 
-  //   isAvater
-  //       ? avaterState = ApiResponse.loading()
-  //       : bgImageState = ApiResponse.loading();
+    print('Photo: $itemPhotoUrl');
 
-  //   final request = GetUserImageRequest(userID, style);
-
-  //   request.request(successCallBack: (data) {
-  //     isAvater
-  //         ? avaterState = ApiResponse.completed(data)
-  //         : bgImageState = ApiResponse.completed(data);
-  //   }, errorCallBack: (error) {
-  //     isAvater
-  //         ? avaterState = ApiResponse.error(error)
-  //         : bgImageState = ApiResponse.error(error);
-  //   });
-  // }
+    // ServerConstants.getProductProfileUrl()+hash_creator_Uid+"_"+pid+"_"+ PhotoKind.PHOTO.getValue()+".png";
+  }
 
   String get imgUrl {
     return '';
