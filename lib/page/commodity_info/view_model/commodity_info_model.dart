@@ -8,8 +8,6 @@ import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_description_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
-import 'package:qpp_example/constants/server_const.dart';
-import 'package:qpp_example/extension/string/crypto.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 
 class CommodityInfoModel extends ChangeNotifier {
@@ -140,20 +138,15 @@ class CommodityInfoModel extends ChangeNotifier {
     });
   }
 
-  // 取得物品圖片
-  getItemImage(int userID) {
-    String itemPhotoUrl =
-        "${storage}Item/${userID.toString().hashUID}_${itemSelectInfoState.data!.id}_Image.png?v=${itemSelectInfoState.data!.updateTimestamp}";
+  /// 取得物品圖片
+  getItemImage(int creatorID) {
+    var itemData = itemSelectInfoState.data!;
+    String itemPhotoUrl = QppImageUtils.getItemImageURL(creatorID, itemData.id,
+        timeStamp: itemData.updateTimestamp);
 
     itemPhotoState = ApiResponse.completed(itemPhotoUrl);
     notifyListeners();
 
     print('Photo: $itemPhotoUrl');
-
-    // ServerConstants.getProductProfileUrl()+hash_creator_Uid+"_"+pid+"_"+ PhotoKind.PHOTO.getValue()+".png";
-  }
-
-  String get imgUrl {
-    return '';
   }
 }

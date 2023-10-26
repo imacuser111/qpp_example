@@ -1,3 +1,4 @@
+import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/string/crypto.dart';
 
 /// QPP圖片類型
@@ -80,5 +81,20 @@ class QppImageUtils {
     // let timestamp = (timestamp == 0) ? ImageUtils.checkDBTimestamp(timestamp: timestamp, fileName: fileName) : 0
 
     return '$baseURL$fileName?v=$timestamp';
+  }
+
+  /// 取得物品圖片
+  /// - Param:
+  ///   - creatorID: 創建者 ID
+  ///   - itemID: 物品 ID
+  ///   - timeStamp: 時戳
+  static String getItemImageURL(int creatorID, int itemID,
+      {int timeStamp = 0}) {
+    // baseUrl - ${storage}Item/
+    // fileName - hash_creator_Uid + "_" + pid + "_" + PhotoKind.PHOTO.getValue() + ".png"
+    // query param - "?v=timestamp"
+    String itemPhotoUrl =
+        "${storage}Item/${creatorID.toString().hashUID}_${itemID}_Image${QppImageStyle.avatar.value}.png?v=$timeStamp";
+    return itemPhotoUrl;
   }
 }
