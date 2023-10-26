@@ -28,7 +28,7 @@ class CommodityInfoModel extends ChangeNotifier {
   ApiResponse<UserSelectInfoResponse> userInfoState = ApiResponse.initial();
 
   /// 頭像狀態
-  ApiResponse<String> avatarState = ApiResponse.initial();
+  ApiResponse<String> itemPhotoState = ApiResponse.initial();
 
   loadData(String id) {
     HttpService service = HttpService.instance;
@@ -143,7 +143,10 @@ class CommodityInfoModel extends ChangeNotifier {
   // 取得物品圖片
   getItemImage(int userID) {
     String itemPhotoUrl =
-        "${storage}Item/${userID.toString().hashUID}_${itemSelectInfoState.data!.id}_Image1.png?v=${itemSelectInfoState.data!.updateTimestamp}";
+        "${storage}Item/${userID.toString().hashUID}_${itemSelectInfoState.data!.id}_Image.png?v=${itemSelectInfoState.data!.updateTimestamp}";
+
+    itemPhotoState = ApiResponse.completed(itemPhotoUrl);
+    notifyListeners();
 
     print('Photo: $itemPhotoUrl');
 

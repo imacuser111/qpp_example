@@ -42,24 +42,26 @@ class CommodityInfoPage extends StatelessWidget {
             // 上半部 bg
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage(
-                        'assets/desktop-pic-commodity-largepic-sample-general.webp'),
+                    image: AssetImage(
+                        'desktop-pic-commodity-largepic-sample-general.webp'),
                     fit: BoxFit.cover)),
             child: Column(children: [
               // 物品 icon
-              ClipOval(
-                child: Image.network(
-                  'https://storage.googleapis.com/qpp_blockchain/Item/9E56D46E4848CD1BBF82A8ADA053FF68806193A204F47058B2FB87AB0C32288C_109555_Image1.png?v=1683259489078672',
-                  errorBuilder: (context, error, stackTrace) {
-                    return SvgPicture.asset(
-                      'desktop-pic-commodity-avatar-default.svg',
-                    );
-                  },
-                  width: 100,
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
+              ItemImgPhoto(provider: itemSelectInfoProvider)
+              // ClipOval(
+              //   child: Image.network(
+              //     'https://storage.googleapis.com/qpp_blockchain/Item/9E56D46E4848CD1BBF82A8ADA053FF68806193A204F47058B2FB87AB0C32288C_109555_Image1.png?v=1683259489078672',
+              //     errorBuilder: (context, error, stackTrace) {
+              //       return SvgPicture.asset(
+              //         'desktop-pic-commodity-avatar-default.svg',
+              //       );
+              //     },
+              //     width: 100,
+              //     filterQuality: FilterQuality.high,
+              //     fit: BoxFit.fitWidth,
+              //   ),
+              // )
+              ,
               const SizedBox(
                 height: 45,
               ),
@@ -146,6 +148,36 @@ String getNameText(ApiResponse<ItemData> state) {
     default:
       // 非完成都回傳空字串
       return "";
+  }
+}
+
+/// 物品圖片
+class ItemImgPhoto extends ConsumerWidget {
+  final ChangeNotifierProvider<CommodityInfoModel> provider;
+
+  const ItemImgPhoto({super.key, required this.provider});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ApiResponse<String> itemPhotoState = ref.watch(provider).itemPhotoState;
+
+    return itemPhotoState.status == Status.completed
+        ? ClipOval(
+            child: Image.network(
+              itemPhotoState.data!,
+              errorBuilder: (context, error, stackTrace) {
+                return SvgPicture.asset(
+                  'desktop-pic-commodity-avatar-default.svg',
+                );
+              },
+              width: 100,
+              filterQuality: FilterQuality.high,
+              fit: BoxFit.fitWidth,
+            ),
+          )
+        : const SizedBox(
+            height: 0,
+          );
   }
 }
 
