@@ -20,7 +20,6 @@ class InvitationUtils {
       ids[ids.length - swaps[i]] = tmp;
     }
 
-    int length = (userId.length + 2) ~/ 3;
     String convertingStr = String.fromCharCodes(ids);
 
     // 查码表为0~9，A~Z，去除易混淆数量IOZ，共33个字
@@ -69,9 +68,7 @@ class InvitationUtils {
     return builder.toString();
   }
 
-  // SU00CE2R
-
-  /// code 轉換成 user id, test OK
+  /// code 轉換成 user id
   static String invitationCodeToUserId(String code) {
     if (code.isEmpty || code.length % 2 != 0 || code.length <= 6) {
       return "";
