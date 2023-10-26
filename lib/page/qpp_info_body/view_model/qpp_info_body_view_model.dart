@@ -11,7 +11,7 @@ class UserSelectInfoChangeNotifier extends ChangeNotifier {
   ApiResponse<BaseResponse> infoState = ApiResponse.initial();
 
   /// 頭像狀態
-  ApiResponse<String> avaterState = ApiResponse.initial();
+  ApiResponse<BaseResponse> avaterState = ApiResponse.initial();
 
   /// 背景圖片狀態
   ApiResponse<BaseResponse> bgImageState = ApiResponse.initial();
@@ -40,10 +40,23 @@ class UserSelectInfoChangeNotifier extends ChangeNotifier {
 
   /// 取得用戶圖片
   getUserImage(int userID, {QppImageStyle style = QppImageStyle.avatar}) {
-    String userImagePath =
-        QppImageUtils.getUserImageURL(userID, imageStyle: QppImageStyle.avatar);
-    avaterState = ApiResponse.completed(userImagePath);
-    notifyListeners();
+    bool isAvater = style == QppImageStyle.avatar;
+
+    isAvater
+        ? avaterState = ApiResponse.loading()
+        : bgImageState = ApiResponse.loading();
+
+    final request = GetUserImageRequest(userID, style);
+
+    request.request(successCallBack: (data) {
+      isAvater
+          ? avaterState = ApiResponse.completed(data)
+          : bgImageState = ApiResponse.completed(data);
+    }, errorCallBack: (error) {
+      isAvater
+          ? avaterState = ApiResponse.error(error)
+          : bgImageState = ApiResponse.error(error);
+    });
   }
 
   /// 圖片錯誤(翻轉)

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/api/podo/core/base_response.dart';
 import 'package:qpp_example/page/qpp_info_body/view_model/qpp_info_body_view_model.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
@@ -87,11 +85,11 @@ class AvatarWidget extends ConsumerWidget {
 
     final infoResponse = notifier.infoState.data;
 
-    final avatarResponse = notifier.avaterState;
-    // String avatar = QppImageUtils.getUserImageURL(int.tryParse(userID) ?? 0,
-    //     timestamp:
-    //         avatarResponse?.getUserImageResponse.lastModifiedTimestamp ?? 0);
-    // final avaterIsError = notifier.avaterIsError;
+    final avatarResponse = notifier.avaterState.data;
+    String avatar = QppImageUtils.getUserImageURL(int.tryParse(userID) ?? 0,
+        timestamp:
+            avatarResponse?.getUserImageResponse.lastModifiedTimestamp ?? 0);
+    final avaterIsError = notifier.avaterIsError;
 
     final bgResponse = notifier.bgImageState.data;
     String bgImage = QppImageUtils.getUserImageURL(int.tryParse(userID) ?? 0,
@@ -127,13 +125,13 @@ class AvatarWidget extends ConsumerWidget {
                   height: 100,
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent, // 設置透明背景
-                    backgroundImage: avatarResponse.status == Status.completed
-                        ? NetworkImage(avatarResponse.data!) as ImageProvider
-                        : const Svg('desktop-image-newsfeed-avatar-normal.svg'),
-                    onBackgroundImageError: (exception, stackTrace) {
-                      ref.read(userSelectInfoProvider.notifier).avaterState =
-                          ApiResponse.error(exception.toString());
-                    },
+                    backgroundImage: avaterIsError
+                        ? const AssetImage(
+                                'desktop_pic_profile_avatar_default.png')
+                            as ImageProvider
+                        : NetworkImage(avatar),
+                    onBackgroundImageError: (exception, stackTrace) =>
+                        notifier.imageErrorToggle(),
                   ),
                 ),
                 const SizedBox(height: 20),
