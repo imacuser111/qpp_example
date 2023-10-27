@@ -7,7 +7,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'item_api.g.dart';
 
-@RestApi(baseUrl: apiUrl)
+@RestApi(baseUrl: ServerConst.apiUrl)
 abstract class ItemApi {
   factory ItemApi(Dio dio, {String baseUrl}) = _ItemApi;
 

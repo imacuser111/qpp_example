@@ -33,11 +33,11 @@ final GoRouter router = GoRouter(
           name: 'commodity_info',
           path: 'app/commodity_info',
           builder: (BuildContext context, GoRouterState state) {
-            final data =
-                UniversalLinkParamData.fromJson(state.uri.queryParameters);
+            // final data =
+            //     UniversalLinkParamData.fromJson(state.uri.queryParameters);
             return MainFramework(
               child: CommodityInfoPage(
-                commodityID: data.commodityID ?? "",
+                routerState: state,
               ),
             );
           },

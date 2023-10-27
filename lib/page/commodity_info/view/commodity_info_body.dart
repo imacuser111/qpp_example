@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
+import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
+import 'package:qpp_example/universal_link/universal_link_data.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class CommodityInfoPage extends StatelessWidget {
-  final String commodityID;
+  final GoRouterState routerState;
 
-  const CommodityInfoPage({super.key, required this.commodityID});
+  const CommodityInfoPage({super.key, required this.routerState});
 
   @override
   Widget build(BuildContext context) {
+    // 物品 ID
+    String commodityID =
+        UniversalLinkParamData.fromJson(routerState.uri.queryParameters)
+                .commodityID ??
+            "";
+    // 完整路徑, 產 QR Code 用
+    String qrCodeUrl = ServerConst.routerHost + routerState.uri.toString();
+
     late final itemSelectInfoProvider =
         ChangeNotifierProvider<CommodityInfoModel>((ref) {
       Future.microtask(() => ref.notifier.loadData(commodityID));
@@ -47,21 +59,7 @@ class CommodityInfoPage extends StatelessWidget {
                     fit: BoxFit.cover)),
             child: Column(children: [
               // 物品 icon
-              ItemImgPhoto(provider: itemSelectInfoProvider)
-              // ClipOval(
-              //   child: Image.network(
-              //     'https://storage.googleapis.com/qpp_blockchain/Item/9E56D46E4848CD1BBF82A8ADA053FF68806193A204F47058B2FB87AB0C32288C_109555_Image1.png?v=1683259489078672',
-              //     errorBuilder: (context, error, stackTrace) {
-              //       return SvgPicture.asset(
-              //         'desktop-pic-commodity-avatar-default.svg',
-              //       );
-              //     },
-              //     width: 100,
-              //     filterQuality: FilterQuality.high,
-              //     fit: BoxFit.fitWidth,
-              //   ),
-              // )
-              ,
+              ItemImgPhoto(provider: itemSelectInfoProvider),
               const SizedBox(
                 height: 45,
               ),
@@ -107,6 +105,7 @@ class CommodityInfoPage extends StatelessWidget {
         ]),
       ),
       // QR Code
+
       Center(
         child: Card(
           margin: const EdgeInsets.only(bottom: 15),
@@ -116,12 +115,11 @@ class CommodityInfoPage extends StatelessWidget {
             // 圓角參數
             borderRadius: BorderRadius.circular(8),
           ),
-          // child: QrImageView(
-          //   backgroundColor: QppColor.white,
-          //   data:
-          //       'https://qpptec.com/app/commodity_info?commodityID=109555&sharer=SUV5G42V&lang=zh_TW&openExternalBrowser=1&action=stay',
-          //   size: 150,
-          // ),
+          child: QrImageView(
+            backgroundColor: QppColor.white,
+            data: qrCodeUrl,
+            size: 150,
+          ),
         ),
       ),
       // 下方

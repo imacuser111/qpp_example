@@ -94,7 +94,7 @@ class QppImageUtils {
     // fileName - hash_creator_Uid + "_" + pid + "_" + PhotoKind.PHOTO.getValue() + ".png"
     // query param - "?v=timestamp"
     String itemPhotoUrl =
-        "${storage}Item/${creatorID.toString().hashUID}_${itemID}_Image${QppImageStyle.avatar.value}.png?v=$timeStamp";
+        "${ServerConst.storage}Item/${creatorID.toString().hashUID}_${itemID}_Image${QppImageStyle.avatar.value}.png?v=$timeStamp";
     return itemPhotoUrl;
   }
 }
