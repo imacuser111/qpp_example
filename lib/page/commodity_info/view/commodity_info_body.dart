@@ -5,8 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/constants/server_const.dart';
+import 'package:qpp_example/model/enum/item/item_category.dart';
+import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
+
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -65,50 +68,82 @@ class CommodityInfoPage extends StatelessWidget {
               ),
               // 物品名稱
               Consumer(builder: (context, ref, _) {
-                ApiResponse<ItemData> itemInfoState =
+                ApiResponse<QppItem> itemInfoState =
                     ref.watch(itemSelectInfoProvider).itemSelectInfoState;
-                return Text(
-                  getNameText(itemInfoState),
-                  style: const TextStyle(fontSize: 30, color: QppColor.white),
-                );
+                return itemInfoState.status == Status.completed
+                    ? Text(
+                        itemInfoState.data!.name,
+                        style: const TextStyle(
+                            fontSize: 30, color: QppColor.white),
+                      )
+                    : const SizedBox();
               }),
             ]),
           ),
-          Consumer(builder: (context, ref, _) {
-            ApiResponse<ItemData> itemInfoState =
-                ref.watch(itemSelectInfoProvider).itemSelectInfoState;
-            if (itemInfoState.status == Status.completed) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Table(
-                  columnWidths: const {
-                    0: FixedColumnWidth(180.0),
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    _itemCategoryTableRow(
-                        property: '類別',
-                        value: itemInfoState.data!.id.toString()),
-                    _itemCreatorTableRow(property: '創建者', value: '456'),
-                    _itemDescriptionTableRow(
-                        property: '說明',
-                        value:
-                            'https://storage.googleapis.com/qpp_blockchain/Item/9E56D46E4848CD1BBF82A8ADA053FF68806193A204F47058B2FB87AB0C32288C_109555_Image1.png?v=1683259489078672'),
-                  ],
-                ),
-              );
-            } else {
-              return SizedBox();
-            }
-          })
+          // Consumer(
+          //   builder: (context, ref, _) {
+          //     // 物品資訊區塊
+          //     ApiResponse<ItemData> itemInfoState =
+          //         ref.watch(itemSelectInfoProvider).itemSelectInfoState;
+          //     if (itemInfoState.status == Status.completed) {
+          //       return Padding(
+          //         padding: const EdgeInsets.only(bottom: 20),
+          //         child: Table(
+          //           columnWidths: const {
+          //             0: FixedColumnWidth(180.0),
+          //           },
+          //           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          //           textBaseline: TextBaseline.alphabetic,
+          //           children: [
+          //             _itemCategoryTableRow(
+          //                 property: '類別',
+          //                 value: itemInfoState.data!.id.toString()),
+          //             _itemCreatorTableRow(property: '創建者', value: '456'),
+          //             _itemDescriptionTableRow(
+          //                 property: '說明',
+          //                 value:
+          //                     'https://storage.googleapis.com/qpp_blockchain/Item/9E56D46E4848CD1BBF82A8ADA053FF68806193A204F47058B2FB87AB0C32288C_109555_Image1.png?v=1683259489078672'),
+          //           ],
+          //         ),
+          //       );
+          //     } else {
+          //       return SizedBox();
+          //     }
+          //   },
+          // )
+          Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: ItemInfoRow(
+                provider: itemSelectInfoProvider,
+              )
+              //  ItemInfoTable(
+              //   provider: itemSelectInfoProvider,
+              // ),
+              //  Table(
+              //   columnWidths: const {
+              //     0: FixedColumnWidth(180.0),
+              //   },
+              //   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              //   textBaseline: TextBaseline.alphabetic,
+              //   children: [
+              //     TableRow(children: _categoryCell(data)),
+              //     _itemCategoryTableRow(
+              //         property: '類別', value: itemInfoState.data!.id.toString()),
+              //     _itemCreatorTableRow(property: '創建者', value: '456'),
+              //     _itemDescriptionTableRow(
+              //         property: '說明',
+              //         value:
+              //             'https://storage.googleapis.com/qpp_blockchain/Item/9E56D46E4848CD1BBF82A8ADA053FF68806193A204F47058B2FB87AB0C32288C_109555_Image1.png?v=1683259489078672'),
+              //   ],
+              // ),
+              ),
         ]),
       ),
       // QR Code
 
       Center(
         child: Card(
-          margin: const EdgeInsets.only(bottom: 15),
+          margin: const EdgeInsets.only(bottom: 15, top: 50),
           // 切子元件超出範圍
           clipBehavior: Clip.hardEdge,
           shape: RoundedRectangleBorder(
@@ -135,17 +170,6 @@ class CommodityInfoPage extends StatelessWidget {
         ),
       ),
     ]);
-  }
-}
-
-/// 取得物品名稱
-String getNameText(ApiResponse<ItemData> state) {
-  switch (state.status) {
-    case Status.completed:
-      return state.data!.name;
-    default:
-      // 非完成都回傳空字串
-      return "";
   }
 }
 
@@ -179,6 +203,194 @@ class ItemImgPhoto extends ConsumerWidget {
   }
 }
 
+// TODO: TEST custom row layout
+
+/// 資訊顯示抽象類
+abstract class InfoRow extends ConsumerWidget {
+  final ChangeNotifierProvider<CommodityInfoModel> provider;
+  const InfoRow({super.key, required this.provider});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ApiResponse response = getResponse(ref);
+    dynamic data = response.data;
+    return response.status == Status.completed
+        ? getContent(data)
+        : const SizedBox(
+            height: 0,
+          );
+  }
+
+  ApiResponse getResponse(WidgetRef ref);
+
+  Widget getContent(dynamic data);
+}
+
+/// 物品資訊
+class ItemInfoRow extends InfoRow {
+  const ItemInfoRow({super.key, required super.provider});
+
+  @override
+  ApiResponse getResponse(WidgetRef ref) {
+    return ref.watch(provider).itemSelectInfoState;
+  }
+
+  @override
+  Widget getContent(dynamic data) {
+    return _rowCell(title: '類別', data: data);
+  }
+}
+
+/// 內容 cell
+Widget _rowCell({required String title, required dynamic data}) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 8, bottom: 8),
+    child: Row(
+      children: [
+        // 左邊標題
+        SizedBox(
+          width: 180,
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+          ),
+        ),
+        // 取得右邊內容
+        getCellContentWidget(data),
+      ],
+    ),
+  );
+}
+
+/// 取得右邊內容
+Widget getCellContentWidget(dynamic data) {
+  if (data is QppItem) {
+    return _cellCategory(item: data);
+  }
+  return const SizedBox();
+}
+
+/// 類別
+Expanded _cellCategory({required QppItem item}) {
+  return Expanded(
+      child: Row(
+    children: [
+      // 類別 icon
+      SvgPicture.asset(
+        item.categoryIconPath,
+        width: 20,
+      ),
+      // 間隔
+      const SizedBox(
+        width: 8,
+      ),
+      // 類別名稱
+      Text(
+        item.categoryName,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+      ),
+      // 間隔
+      const SizedBox(
+        width: 8,
+      ),
+      // 物品 ID
+      Text(
+        item.id.toString(),
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 18, color: QppColor.mediumAquamarine),
+      ),
+    ],
+  ));
+}
+
+/// 物品資訊 table
+class ItemInfoTable extends ConsumerWidget {
+  final ChangeNotifierProvider<CommodityInfoModel> provider;
+  const ItemInfoTable({super.key, required this.provider});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ApiResponse<QppItem> itemInfoState =
+        ref.watch(provider).itemSelectInfoState;
+
+    return Table(
+      columnWidths: const {
+        0: FixedColumnWidth(180.0),
+      },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      textBaseline: TextBaseline.alphabetic,
+      children: [
+        _itemCategoryTableRow(property: '', value: ''),
+        // itemInfoState.status == Status.completed
+        //     ? _itemCategoryTableRoww(
+        //         // property: '類別', value: itemInfoState.data!.id.toString()),
+        //         property: '類別',
+        //         state: itemInfoState)
+        //     : TableRow(),
+        _itemCreatorTableRow(property: '創建者', value: '456'),
+        _itemDescriptionTableRow(
+            property: '說明',
+            value:
+                'https://storage.googleapis.com/qpp_blockchain/Item/9E56D46E4848CD1BBF82A8ADA053FF68806193A204F47058B2FB87AB0C32288C_109555_Image1.png?v=1683259489078672'),
+      ],
+    );
+  }
+}
+
+// 類別 item
+TableRow _itemCategoryTableRoww(
+    {required String property, ApiResponse<ItemData>? state}) {
+  return state!.status == Status.completed
+      ? TableRow(
+          children: [
+            // title
+            TableCell(
+              verticalAlignment: TableCellVerticalAlignment.baseline,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 60, top: 15, bottom: 15),
+                child: Text(
+                  property,
+                  style: const TextStyle(
+                      color: QppColor.babyBlueEyes, fontSize: 20),
+                ),
+              ),
+            ),
+            // data
+            TableCell(
+              verticalAlignment: TableCellVerticalAlignment.baseline,
+              child: Row(children: [
+                // 類別 icon
+                SvgPicture.asset(
+                  'desktop-icon-display-treasure.svg',
+                  width: 20,
+                ),
+
+                const SizedBox(
+                  width: 10,
+                ),
+                // 類別
+                Text(
+                  state.data!.category.toString(),
+                  style: const TextStyle(color: QppColor.white, fontSize: 20),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                // id
+                Text(
+                  state.data!.id.toString(),
+                  style: const TextStyle(
+                      color: QppColor.mediumAquamarine, fontSize: 20),
+                ),
+              ]),
+            ),
+          ],
+        )
+      : TableRow();
+}
+
 // 類別 item
 TableRow _itemCategoryTableRow(
     {required String property, required String value}) {
@@ -188,7 +400,8 @@ TableRow _itemCategoryTableRow(
       TableCell(
         verticalAlignment: TableCellVerticalAlignment.baseline,
         child: Padding(
-          padding: const EdgeInsets.only(left: 60, top: 15, bottom: 15),
+          // padding: const EdgeInsets.only(left: 60, top: 15, bottom: 15),
+          padding: const EdgeInsets.only(left: 0, top: 0, bottom: 0),
           child: Text(
             property,
             style: const TextStyle(color: QppColor.babyBlueEyes, fontSize: 20),
@@ -200,10 +413,10 @@ TableRow _itemCategoryTableRow(
         verticalAlignment: TableCellVerticalAlignment.baseline,
         child: Row(children: [
           // 類別 icon
-          SvgPicture.asset(
-            'desktop-icon-display-treasure.svg',
-            width: 20,
-          ),
+          // SvgPicture.asset(
+          //   'desktop-icon-display-treasure.svg',
+          //   width: 20,
+          // ),
 
           const SizedBox(
             width: 10,
@@ -226,6 +439,54 @@ TableRow _itemCategoryTableRow(
       ),
     ],
   );
+}
+
+/// 類別 Cell
+List<Widget> _categoryCell(ItemData data) {
+  return [
+    // title
+    const TableCell(
+      verticalAlignment: TableCellVerticalAlignment.baseline,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 60, top: 15, bottom: 15),
+        child: Text(
+          '類別',
+          style: const TextStyle(color: QppColor.babyBlueEyes, fontSize: 20),
+        ),
+      ),
+    ),
+    // data
+    TableCell(
+      verticalAlignment: TableCellVerticalAlignment.baseline,
+      child: Row(children: [
+        // TODO: 類別 Icon
+        // 類別 icon
+        SvgPicture.asset(
+          'desktop-icon-display-treasure.svg',
+          width: 20,
+        ),
+
+        const SizedBox(
+          width: 10,
+        ),
+        // TODO: 類別名稱
+        // 類別
+        const Text(
+          '類別名稱',
+          style: const TextStyle(color: QppColor.white, fontSize: 20),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        // id
+        Text(
+          data.id.toString(),
+          style:
+              const TextStyle(color: QppColor.mediumAquamarine, fontSize: 20),
+        ),
+      ]),
+    ),
+  ];
 }
 
 // 創建者 item

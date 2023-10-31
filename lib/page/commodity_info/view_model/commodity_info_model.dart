@@ -8,17 +8,18 @@ import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_description_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
+import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 
 class CommodityInfoModel extends ChangeNotifier {
   /// 物品資訊
-  ApiResponse<ItemData> itemSelectInfoState = ApiResponse.initial();
+  ApiResponse<QppItem> itemSelectInfoState = ApiResponse.initial();
 
-  /// 物品資訊
+  /// 物品多語系說明資訊
   ApiResponse<MultiLanguageItemDescriptionData> itemDescriptionInfoState =
       ApiResponse.initial();
 
-  /// 物品資訊
+  /// 物品多語系連結資訊
   ApiResponse<MultiLanguageItemIntroLinkData> itemLinkInfoState =
       ApiResponse.initial();
 
@@ -47,7 +48,8 @@ class CommodityInfoModel extends ChangeNotifier {
     client.postItemSelect(requestBody).then((itemSelectResponse) {
       if (itemSelectResponse.errorCode == "OK") {
         ItemData itemData = itemSelectResponse.getItem(0);
-        itemSelectInfoState = ApiResponse.completed(itemData);
+        QppItem item = QppItem.create(itemData);
+        itemSelectInfoState = ApiResponse.completed(item);
         // 取物品資訊成功後, 取得創建者資料
         int? creatorId = itemSelectInfoState.data?.creatorId;
         getUserInfo(creatorId!);

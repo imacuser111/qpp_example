@@ -89,4 +89,8 @@ class ItemData {
 
   factory ItemData.fromJson(Map<String, dynamic> json) =>
       _$ItemDataFromJson(json);
+
+  bool get isSearchable {
+    return searchable == 1;
+  }
 }
