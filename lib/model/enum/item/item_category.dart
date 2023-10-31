@@ -104,15 +104,14 @@ enum ItemCategory {
       case physicalVoucher:
       case digitVoucher:
         return "desktop-icon-display-ticket.svg";
-      case hiddenVoucher:
-        // TODO: 需判斷為 QR Code/序號
-        // serial desktop-icon-display-scratch-card-serial-number.svg
-        // qr code desktop-icon-display-scratch-card-qr-code.svg
-        return "desktop-icon-display-scratch-card-qr-code.svg";
       case idCard:
         return "desktop-icon-display-idcard.svg";
       case digitItem:
         return "數位物品";
+      case hiddenVoucher:
+      // 需判斷為 QR Code/序號, 在 sub category 處理
+      // serial desktop-icon-display-scratch-card-serial-number.svg
+      // qr code desktop-icon-display-scratch-card-qr-code.svg
       case questionnaire:
       case commission:
       case authorize:
