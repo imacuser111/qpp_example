@@ -19,25 +19,19 @@ enum ItemSubCategory {
 
   /// 取得顯示名稱
   String get displayName {
-    switch (this) {
-      case serial:
-        return "序號";
-      case qrCodeOrSpecial:
-        return "QR Code";
-      default:
-        return "unknown";
-    }
+    return switch (this) {
+      serial => "序號",
+      qrCodeOrSpecial => "QR Code",
+      _ => "unknown",
+    };
   }
 
   /// 取得 icon 路徑
   String get iconPath {
-    switch (this) {
-      case serial:
-        return "desktop-icon-display-scratch-card-serial-number.svg";
-      case qrCodeOrSpecial:
-        return "desktop-icon-display-scratch-card-qr-code.svg";
-      default:
-        return "unknown";
-    }
+    return switch (this) {
+      serial => "desktop-icon-display-scratch-card-serial-number.svg",
+      qrCodeOrSpecial => "desktop-icon-display-scratch-card-qr-code.svg",
+      _ => "unknown",
+    };
   }
 }

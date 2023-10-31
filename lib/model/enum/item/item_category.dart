@@ -63,33 +63,21 @@ enum ItemCategory {
 
   /// 取得顯示名稱
   String get displayName {
-    switch (this) {
-      case systemCoin:
-        return "系統貨幣";
-      case questionnaire:
-        return "問券調查";
-      case commission:
-        return "交易_委託";
-      case authorize:
-        return "開放授權";
-      case virtualCoin:
-        return "數位貨幣";
-      case virtualTreasure:
-      case virtualTreasureWithTag:
-        return "虛擬寶物";
-      case physicalVoucher:
-        return "實體票券";
-      case hiddenVoucher:
-        return "序號/QR Code";
-      case digitVoucher:
-        return "數位票券";
-      case idCard:
-        return "身份識別";
-      case digitItem:
-        return "數位物品";
-      default:
-        return "";
-    }
+    return switch (this) {
+      systemCoin => "系統貨幣",
+      questionnaire => "問券調查",
+      commission => "交易_委託",
+      authorize => "開放授權",
+      virtualCoin => "數位貨幣",
+      virtualTreasure => "虛擬寶物",
+      virtualTreasureWithTag => "虛擬寶物",
+      physicalVoucher => "實體票券",
+      hiddenVoucher => "序號/QR Code",
+      digitVoucher => "數位票券",
+      idCard => "身份識別",
+      digitItem => "數位物品",
+      _ => "",
+    };
   }
 
   /// 取得 icon 圖片路徑

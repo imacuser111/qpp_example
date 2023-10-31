@@ -27,16 +27,25 @@ enum Language {
   final String value;
   const Language(this.value);
 
+  factory Language.findTypeByValue(String value) {
+    for (var lan in Language.values) {
+      if (lan.value == value) {
+        return lan;
+      }
+    }
+    return Language.chineseTrad;
+  }
+
   String get displayTitle {
     return switch (this) {
-      Language.chineseTrad => '繁體中文',
-      Language.chineseSimp => '简体中文',
-      Language.english => 'English',
-      Language.japanese => '日本語',
-      Language.korean => '한국어',
-      Language.vietnam => 'Việt Nam',
-      Language.thailand => 'ภาษาไทย',
-      Language.indonesia => 'Bahasa Indonesia',
+      chineseTrad => '繁體中文',
+      chineseSimp => '简体中文',
+      english => 'English',
+      japanese => '日本語',
+      korean => '한국어',
+      vietnam => 'Việt Nam',
+      thailand => 'ภาษาไทย',
+      indonesia => 'Bahasa Indonesia',
     };
   }
 }
