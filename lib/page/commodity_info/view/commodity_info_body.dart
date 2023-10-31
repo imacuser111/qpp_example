@@ -85,9 +85,11 @@ class CommodityInfoPage extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 20),
               child: Column(
                 children: [
+                  // 類別欄位
                   ItemInfoRow(
                     provider: itemSelectInfoProvider,
                   ),
+                  // 創建者欄位
                   CreatorInfoRow(provider: itemSelectInfoProvider),
                 ],
               )),
