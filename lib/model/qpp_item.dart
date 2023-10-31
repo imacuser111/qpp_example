@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/model/enum/item/item_category.dart';
 import 'package:qpp_example/model/enum/item/item_sub_category.dart';

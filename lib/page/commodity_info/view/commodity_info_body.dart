@@ -6,6 +6,7 @@ import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/model/qpp_item.dart';
+import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
 
@@ -79,11 +80,16 @@ class CommodityInfoPage extends StatelessWidget {
               }),
             ]),
           ),
-
-          Padding(
+          // 資料區下半部
+          Container(
               padding: const EdgeInsets.only(bottom: 20),
-              child: ItemInfoRow(
-                provider: itemSelectInfoProvider,
+              child: Column(
+                children: [
+                  ItemInfoRow(
+                    provider: itemSelectInfoProvider,
+                  ),
+                  CreatorInfoRow(provider: itemSelectInfoProvider),
+                ],
               )),
         ]),
       ),
@@ -163,7 +169,10 @@ abstract class InfoRow extends ConsumerWidget {
     ApiResponse response = getResponse(ref);
     dynamic data = response.data;
     return response.status == Status.completed
-        ? getContent(data)
+        ? Padding(
+            padding: const EdgeInsets.fromLTRB(60, 8, 60, 8),
+            child: getContent(data),
+          )
         : const SizedBox(
             height: 0,
           );
@@ -185,45 +194,37 @@ class ItemInfoRow extends InfoRow {
 
   @override
   Widget getContent(dynamic data) {
-    return _rowCell(title: '類別', data: data);
+    return _cellCategory(title: '類別', item: data);
   }
 }
 
-/// 內容 cell
-Widget _rowCell({required String title, required dynamic data}) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 8, bottom: 8),
-    child: Row(
-      children: [
-        // 左邊標題
-        SizedBox(
-          width: 180,
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
-          ),
-        ),
-        // 取得右邊內容
-        getCellContentWidget(data),
-      ],
-    ),
-  );
-}
+/// 創建者資訊
+class CreatorInfoRow extends InfoRow {
+  const CreatorInfoRow({super.key, required super.provider});
 
-/// 取得右邊內容
-Widget getCellContentWidget(dynamic data) {
-  if (data is QppItem) {
-    return _cellCategory(item: data);
+  @override
+  ApiResponse getResponse(WidgetRef ref) {
+    return ref.watch(provider).userInfoState;
   }
-  return const SizedBox();
+
+  @override
+  Widget getContent(data) {
+    return _cellCreator(title: '創建者', creator: data);
+  }
 }
 
 /// 類別
-Expanded _cellCategory({required QppItem item}) {
-  return Expanded(
-      child: Row(
+Widget _cellCategory({required String title, required QppItem item}) {
+  return Row(
     children: [
+      SizedBox(
+        width: 180,
+        child: Text(
+          title,
+          textAlign: TextAlign.start,
+          style: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+        ),
+      ),
       // 類別 icon
       SvgPicture.asset(
         item.categoryIconPath,
@@ -250,53 +251,55 @@ Expanded _cellCategory({required QppItem item}) {
         style: const TextStyle(fontSize: 18, color: QppColor.mediumAquamarine),
       ),
     ],
-  ));
+  );
 }
 
-/// 類別 Cell
-List<Widget> _categoryCell(ItemData data) {
-  return [
-    // title
-    const TableCell(
-      verticalAlignment: TableCellVerticalAlignment.baseline,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 60, top: 15, bottom: 15),
+/// 創建者
+Widget _cellCreator({required String title, required QppUser creator}) {
+  return Row(
+    children: [
+      SizedBox(
+        width: 180,
         child: Text(
-          '類別',
-          style: const TextStyle(color: QppColor.babyBlueEyes, fontSize: 20),
+          title,
+          textAlign: TextAlign.start,
+          style: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
         ),
       ),
-    ),
-    // data
-    TableCell(
-      verticalAlignment: TableCellVerticalAlignment.baseline,
-      child: Row(children: [
-        // TODO: 類別 Icon
-        // 類別 icon
-        SvgPicture.asset(
-          'desktop-icon-display-treasure.svg',
-          width: 20,
-        ),
-
-        const SizedBox(
-          width: 10,
-        ),
-        // TODO: 類別名稱
-        // 類別
-        const Text(
-          '類別名稱',
-          style: const TextStyle(color: QppColor.white, fontSize: 20),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        // id
-        Text(
-          data.id.toString(),
-          style:
-              const TextStyle(color: QppColor.mediumAquamarine, fontSize: 20),
-        ),
-      ]),
-    ),
-  ];
+      // 若為官方帳號, 顯示 icon
+      creator.isOfficial
+          ? Container(
+              padding: const EdgeInsets.only(right: 8),
+              child: SvgPicture.asset(
+                creator.officialIconPath,
+                width: 20,
+              ),
+            )
+          : const SizedBox(),
+      // id
+      Text(
+        creator.displayID,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 18, color: QppColor.indianYellow),
+      ),
+      // 間隔
+      const SizedBox(
+        width: 8,
+      ),
+      // name
+      Text(
+        creator.displayName,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 18, color: QppColor.indianYellow),
+      ),
+      const Expanded(child: Text('')),
+      // 物件左右翻轉, 或用 RotatedBox
+      Directionality(
+          textDirection: TextDirection.rtl,
+          child: SvgPicture.asset(
+            'mobile-icon-actionbar-back-normal.svg',
+            matchTextDirection: true,
+          )),
+    ],
+  );
 }
