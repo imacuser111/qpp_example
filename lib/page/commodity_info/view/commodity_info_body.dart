@@ -28,9 +28,10 @@ class CommodityInfoPage extends StatelessWidget {
             "";
     // 完整路徑, 產 QR Code 用
     String qrCodeUrl = ServerConst.routerHost + routerState.uri.toString();
-
+    // model 初始化
     late final itemSelectInfoProvider =
         ChangeNotifierProvider<CommodityInfoModel>((ref) {
+      // 開始取資料
       Future.microtask(() => ref.notifier.loadData(commodityID));
       return CommodityInfoModel();
     });
