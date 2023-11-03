@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:qpp_example/api/core/base_api.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 
