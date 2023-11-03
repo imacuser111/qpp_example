@@ -17,4 +17,9 @@ class ItemImgData {
   Color get bgColor {
     return Color(int.parse('0xFF$colorHex'));
   }
+
+  /// 是否為 NFT 圖片
+  bool get isNFT {
+    return colorHex != null;
+  }
 }

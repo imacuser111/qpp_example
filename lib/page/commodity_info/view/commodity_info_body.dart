@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
+import 'package:qpp_example/common_ui/item_image.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
@@ -61,7 +62,7 @@ class CommodityInfoPage extends StatelessWidget {
                         'desktop-pic-commodity-largepic-sample-general.webp'),
                     fit: BoxFit.cover)),
             child: Column(children: [
-              // 物品 icon
+              // 物品圖片
               ItemImgPhoto(provider: itemSelectInfoProvider),
               const SizedBox(
                 height: 45,
@@ -126,36 +127,6 @@ class CommodityInfoPage extends StatelessWidget {
         ),
       ),
     ]);
-  }
-}
-
-/// 物品圖片
-class ItemImgPhoto extends ConsumerWidget {
-  final ChangeNotifierProvider<CommodityInfoModel> provider;
-
-  const ItemImgPhoto({super.key, required this.provider});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ApiResponse<String> itemPhotoState = ref.watch(provider).itemPhotoState;
-
-    return itemPhotoState.status == Status.completed
-        ? ClipOval(
-            child: Image.network(
-              itemPhotoState.data!,
-              errorBuilder: (context, error, stackTrace) {
-                return SvgPicture.asset(
-                  'desktop-pic-commodity-avatar-default.svg',
-                );
-              },
-              width: 100,
-              filterQuality: FilterQuality.high,
-              fit: BoxFit.fitWidth,
-            ),
-          )
-        : const SizedBox(
-            height: 0,
-          );
   }
 }
 

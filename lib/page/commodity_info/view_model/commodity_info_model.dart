@@ -8,6 +8,7 @@ import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_description_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
+import 'package:qpp_example/model/item_img_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
@@ -27,8 +28,8 @@ class CommodityInfoModel extends ChangeNotifier {
   /// 創建者資訊狀態
   ApiResponse<QppUser> userInfoState = ApiResponse.initial();
 
-  /// 頭像狀態
-  ApiResponse<String> itemPhotoState = ApiResponse.initial();
+  /// 物品圖片狀態
+  ApiResponse<ItemImgData> itemPhotoState = ApiResponse.initial();
 
   loadData(String id) {
     HttpService service = HttpService.instance;
@@ -149,7 +150,7 @@ class CommodityInfoModel extends ChangeNotifier {
     String itemPhotoUrl = QppImageUtils.getItemImageURL(creatorID, itemData.id,
         timeStamp: itemData.updateTimestamp);
 
-    itemPhotoState = ApiResponse.completed(itemPhotoUrl);
+    itemPhotoState = ApiResponse.completed(ItemImgData(itemPhotoUrl));
     notifyListeners();
 
     print('Photo: $itemPhotoUrl');
