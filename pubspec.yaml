@@ -47,7 +47,21 @@ dependencies:
   pub_semver: ^2.1.4
   flutter_svg_provider: ^1.0.6
   flutter_screenutil: ^5.9.0
+  # 多語系
   easy_localization: ^3.0.3
+  easy_localization_loader: ^2.0.0
+  # build_runner 產 CSV 檔, 因套件有衝突, 載下來修改
+  easy_localization_generator:
+    path: easy_localization_generator/
+  # easy_localization_generator 用
+  # https://github.com/rinlv/easy_localization_generator
+  # csv: ^5.0.2
+  # analyzer: ^5.11.1
+  # source_gen: ^1.2.7
+  # build: ^2.3.1
+  # build_config: ^1.1.1
+  # path: ^1.8.3
+  # http: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +86,7 @@ flutter:
   assets:
     - assets/
     - assets/translations/
+    - assets/langs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

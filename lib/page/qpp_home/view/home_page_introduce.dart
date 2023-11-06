@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:qpp_example/extension/string/url.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/page/qpp_home/model/qpp_home_page_model.dart';
 import 'package:qpp_example/utils/screen.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -65,7 +66,7 @@ class HomePageIntroduce extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          tr("home.webtitle"),
+          QppLocales.alertCancel,
           // 'QPP - 數位背包',
           style: const TextStyle(
               color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),

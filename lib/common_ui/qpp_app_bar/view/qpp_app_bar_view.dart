@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -218,6 +219,8 @@ class LanguageDropdownMenu extends StatelessWidget {
             onExit: (event) => menuController.close(),
             builder: (event) => MenuItemButton(
               onPressed: () {
+                context.setLocale(const Locale('en', 'US'));
+                print('Now change to ${context.locale.toString()}');
                 menuController.close();
                 debugPrint(e.displayTitle);
               },
