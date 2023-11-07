@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
@@ -65,10 +64,9 @@ class HomePageIntroduce extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          QppLocales.alertCancel,
-          // 'QPP - 數位背包',
-          style: const TextStyle(
+        const Text(
+          'QPP - 數位背包',
+          style: TextStyle(
               color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 30),
