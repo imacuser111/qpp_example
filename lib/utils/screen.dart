@@ -1,6 +1,22 @@
 import 'dart:ui';
 
-enum ScreenStyle { mobile, tablet, desktop }
+import 'package:flutter/cupertino.dart';
+
+enum ScreenStyle {
+  mobile,
+  tablet,
+  desktop;
+
+  bool get isDesktopStyle {
+    return this == ScreenStyle.desktop;
+  }
+}
+
+extension BoxConstraintsExtension on BoxConstraints {
+  ScreenStyle get screenStyle {
+    return maxWidth.determineScreenStyle();
+  }
+}
 
 extension DoubleScreenExtension on double {
   /// 決定螢幕樣式

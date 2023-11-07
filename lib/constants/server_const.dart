@@ -2,11 +2,23 @@ import 'package:flutter/foundation.dart';
 
 // server 常數放置
 
+/// 依照裝置跳轉Google Play Store or Apple App Store
+const appStoreUrl = 'https://qpptec.com/app/go';
+
+/// Google Play Store Url
+const googlePlayStoreUrl = 'https://play.google.com/store/apps/details?id=com.qpptec.QPP';
+
+/// Apple App Store Url
+const appleStoreUrl = 'https://apps.apple.com/tw/app/qpp/id1501319938';
+
 /// 隱私權網址
 const privacyPolicyUrl = "https://www.qpptec.com/privacy?lang=%s";
 
 /// 使用條款網址
 const termsOfUseUrl = "https://www.qpptec.com/term?lang=%s";
+
+/// 信箱
+const mailUrl = 'mailto:info@qpptec.com';
 
 /// 跨境燃料費 url
 const crossBorderFueCostUrl =
