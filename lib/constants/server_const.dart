@@ -1,16 +1,28 @@
 import 'package:flutter/foundation.dart';
 
 // server 常數放置
-
 class ServerConst {
   ///
   static const routerHost = "https://qpptec.com";
+
+  /// 依照裝置跳轉Google Play Store or Apple App Store
+  static const appStoreUrl = 'https://qpptec.com/app/go';
+
+  /// Google Play Store Url
+  static const googlePlayStoreUrl =
+      'https://play.google.com/store/apps/details?id=com.qpptec.QPP';
+
+  /// Apple App Store Url
+  static const appleStoreUrl = 'https://apps.apple.com/tw/app/qpp/id1501319938';
 
   /// 隱私權網址
   static const privacyPolicyUrl = "https://www.qpptec.com/privacy?lang=%s";
 
   /// 使用條款網址
   static const termsOfUseUrl = "https://www.qpptec.com/term?lang=%s";
+
+  /// 信箱
+  static const mailUrl = 'mailto:info@qpptec.com';
 
   /// 跨境燃料費 url
   static const crossBorderFueCostUrl =
@@ -46,7 +58,7 @@ class ServerConst {
       : "https://goerli.etherscan.io/tx/";
 
   /// ethereum 正式 / 測試  地址
-  static const chainAddressEthereum = kReleaseMode
+  static const hainAddressEthereum = kReleaseMode
       ? "0x3dbeb39b1f87bcd85a66ea8f6a69ffaf87157b0d"
       : "0x77263fd6b4eeadc1932ddf4b9eb7d38e3466628e";
 }

@@ -260,10 +260,10 @@ List<Widget> _categoryCell(ItemData data) {
     const TableCell(
       verticalAlignment: TableCellVerticalAlignment.baseline,
       child: Padding(
-        padding: const EdgeInsets.only(left: 60, top: 15, bottom: 15),
+        padding: EdgeInsets.only(left: 60, top: 15, bottom: 15),
         child: Text(
           '類別',
-          style: const TextStyle(color: QppColor.babyBlueEyes, fontSize: 20),
+          style: TextStyle(color: QppColor.babyBlueEyes, fontSize: 20),
         ),
       ),
     ),
@@ -285,7 +285,7 @@ List<Widget> _categoryCell(ItemData data) {
         // 類別
         const Text(
           '類別名稱',
-          style: const TextStyle(color: QppColor.white, fontSize: 20),
+          style: TextStyle(color: QppColor.white, fontSize: 20),
         ),
         const SizedBox(
           width: 10,

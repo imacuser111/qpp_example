@@ -1,21 +1,23 @@
 import 'dart:math';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qpp_example/extension/throttle_debounce.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
+import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/model/enum/language.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 AppBar qppAppBar(
     StateNotifierProvider<FullScreenMenuBtnPageStateNotifier, bool>
-        fullScreenMenuBtnPageStateProvider) {
+        fullScreenMenuBtnPageStateProvider,
+    {required double height}) {
   return AppBar(
     automaticallyImplyLeading: false, // 關閉返回按鈕
-    toolbarHeight: 100,
-    backgroundColor: const Color(0xff000b2b).withOpacity(0.6),
+    toolbarHeight: height,
+    backgroundColor: QppColor.onyx60,
     title: QppAppBarTitle(fullScreenMenuBtnPageStateProvider),
   );
 }
@@ -40,10 +42,11 @@ class QppAppBarTitle extends ConsumerWidget with QppAppBarTitleExtension {
     return Row(
       children: [
         // 最左邊間距
-        spacing(200),
+        Flexible(child: spacing(200)),
         isShowFullScreenMenu ? Container() : logo(context),
         // QPP -> Button 間距
-        Expanded(flex: 2, child: spacing(466)),
+        // Expanded(child: spacing(466)),
+        const Spacer(flex: 5),
         // 選單按鈕
         menuRow(size.width),
         // 語系
@@ -62,7 +65,7 @@ class QppAppBarTitle extends ConsumerWidget with QppAppBarTitleExtension {
                     isClose: false,
                     notifier: notifier,
                   )
-                : spacing(10),
+                : SizedBox(width: 10.getRealWidth()),
       ],
     );
   }
@@ -90,13 +93,7 @@ mixin QppAppBarTitleExtension {
     return IconButton(
       icon: ConstrainedBox(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 148),
-        child:
-            // SvgPicture.asset(
-            //   'desktop-pic-qpp-logo-01.svg',
-            //   width: 148.getRealWidth(),
-            //   fit: BoxFit.contain,
-            // ),
-            Image.asset(
+        child: Image.asset(
           'desktop-pic-qpp-logo-01.png',
           width: 148.getRealWidth(),
           scale: 46 / 148,
@@ -115,15 +112,29 @@ mixin QppAppBarTitleExtension {
     return Row(
       children: MainMenu.values
           .map(
-            (e) => MouseRegionCustomWidget(
-              builder: (event) => TextButton(
-                onPressed: () => debugPrint(e.value),
-                child: Text(
-                  e.value,
-                  style: TextStyle(
-                      color: event is PointerEnterEvent
-                          ? Colors.amber
-                          : Colors.white),
+            (e) => Padding(
+              padding: EdgeInsets.only(right: e == MainMenu.contact ? 0 : 30),
+              child: MouseRegionCustomWidget(
+                builder: (event) => MouseRegion(
+                  cursor: SystemMouseCursors.click, // 改鼠標樣式
+                  child: GestureDetector(
+                    onTap: () {
+                      BuildContext? currentContext = e.currentContext;
+
+                      if (currentContext != null) {
+                        Scrollable.ensureVisible(currentContext,
+                            duration: const Duration(seconds: 1));
+                      }
+                    }.throttleWithTimeout(timeout: 2000),
+                    child: Text(
+                      e.value,
+                      style: TextStyle(
+                          color: event is PointerEnterEvent
+                              ? Colors.amber
+                              : Colors.white,
+                          fontSize: 16),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -282,7 +293,7 @@ class MouseRegionCustomWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint(toString());
+    // debugPrint(toString());
 
     final notifier = ref.read(mouseRegionStateNotifier.notifier);
 
@@ -324,16 +335,16 @@ class FullScreenMenuBtnPage extends ConsumerWidget
             child: Stack(
               children: [
                 SizedBox(
-                  height: 100,
+                  height: 60,
                   child: Row(
                     children: [
                       // 最左邊間距
-                      spacing(200),
+                      Flexible(child: spacing(200)),
                       logo(context),
-                      const Spacer(),
+                      const Spacer(flex: 5),
                       // 三條 or 最右邊間距
                       AnimationMenuBtn(isClose: true, notifier: notifier),
-                      spacing(10),
+                      SizedBox(width: 10.getRealWidth()),
                     ],
                   ),
                 ),
