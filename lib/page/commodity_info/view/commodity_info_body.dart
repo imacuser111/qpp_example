@@ -6,6 +6,7 @@ import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/common_ui/item_image.dart';
 import 'package:qpp_example/constants/server_const.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
@@ -168,7 +169,8 @@ class ItemInfoRow extends InfoRow {
 
   @override
   Widget getContent(dynamic data) {
-    return _cellCategory(title: '類別', item: data);
+    // 使用多語系
+    return _cellCategory(title: QppLocales.commodityInfoCategory, item: data);
   }
 }
 
@@ -183,7 +185,8 @@ class CreatorInfoRow extends InfoRow {
 
   @override
   Widget getContent(data) {
-    return _cellCreator(title: '創建者', creator: data);
+    // 使用多語系
+    return _cellCreator(title: QppLocales.commodityInfoCreator, creator: data);
   }
 }
 

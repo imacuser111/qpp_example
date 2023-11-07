@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:qpp_example/extension/throttle_debounce.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/model/enum/language.dart';
 import 'package:qpp_example/utils/screen.dart';
@@ -230,7 +231,7 @@ class LanguageDropdownMenu extends StatelessWidget {
             onExit: (event) => menuController.close(),
             builder: (event) => MenuItemButton(
               onPressed: () {
-                context.setLocale(const Locale('en', 'US'));
+                context.setLocale(e.locale);
                 print('Now change to ${context.locale.toString()}');
                 menuController.close();
                 debugPrint(e.displayTitle);

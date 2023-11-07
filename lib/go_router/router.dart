@@ -10,6 +10,7 @@ import 'package:qpp_example/universal_link/universal_link_data.dart';
 final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
+      // 首頁
       name: 'home',
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
@@ -19,6 +20,7 @@ final GoRouter router = GoRouter(
       },
       routes: <RouteBase>[
         GoRoute(
+          // 個人資訊頁
           name: 'information',
           path: 'app/information',
           builder: (BuildContext context, GoRouterState state) {
@@ -30,11 +32,10 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
+          // 物品資訊頁
           name: 'commodity_info',
           path: 'app/commodity_info',
           builder: (BuildContext context, GoRouterState state) {
-            // final data =
-            //     UniversalLinkParamData.fromJson(state.uri.queryParameters);
             return MainFramework(
               child: CommodityInfoPage(
                 routerState: state,

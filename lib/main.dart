@@ -19,8 +19,11 @@ void main() async {
   service.initDio();
 
   runApp(EasyLocalization(
+      // 支援的語系, 從 QppLocales 直接取出
       supportedLocales: QppLocales.supportedLocales,
+      // 預設語系
       startLocale: const Locale('zh', 'TW'),
+      // 當前語系缺少翻譯時, 使用此語系
       fallbackLocale: const Locale('zh', 'TW'),
       path: 'assets/langs/langs.csv',
       assetLoader: CsvAssetLoader(),
@@ -29,8 +32,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
