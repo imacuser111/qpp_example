@@ -13,8 +13,8 @@ enum PlayStoreType {
 
   String get url {
     return switch (this) {
-      PlayStoreType.google => googlePlayStoreUrl,
-      PlayStoreType.apple => appleStoreUrl
+      PlayStoreType.google => ServerConst.googlePlayStoreUrl,
+      PlayStoreType.apple => ServerConst.appleStoreUrl
     };
   }
 }

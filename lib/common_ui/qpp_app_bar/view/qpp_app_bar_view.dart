@@ -7,6 +7,7 @@ import 'package:qpp_example/extension/throttle_debounce.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/model/enum/language.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 AppBar qppAppBar(
@@ -229,12 +230,12 @@ class LanguageDropdownMenu extends StatelessWidget {
             builder: (event) => MenuItemButton(
               onPressed: () {
                 menuController.close();
-                debugPrint(e.value);
+                debugPrint(e.displayTitle);
               },
               child: Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: Text(
-                  e.value,
+                  e.displayTitle,
                   style: TextStyle(
                       color: event is PointerEnterEvent
                           ? Colors.amber

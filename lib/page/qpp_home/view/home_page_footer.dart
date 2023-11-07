@@ -69,7 +69,7 @@ class _FooterInfo extends StatelessWidget {
     return Row(
       children: [
         Text(text, style: const TextStyle(color: QppColor.white, fontSize: 14)),
-        const CLinkText(text: 'info@qpptec.com', link: mailUrl),
+        const CLinkText(text: 'info@qpptec.com', link: ServerConst.mailUrl),
       ],
     );
   }
@@ -144,22 +144,22 @@ class _Guide extends StatelessWidget {
       children: const [
         CLinkText(
             text: '隱私權政策',
-            link: privacyPolicyUrl,
+            link: ServerConst.privacyPolicyUrl,
             fontSize: fontSize,
             isNewTab: true),
         CLinkText(
             text: 'Apple Store',
-            link: appleStoreUrl,
+            link: ServerConst.appleStoreUrl,
             fontSize: fontSize,
             isNewTab: true),
         CLinkText(
             text: '使用者條款',
-            link: termsOfUseUrl,
+            link: ServerConst.termsOfUseUrl,
             fontSize: fontSize,
             isNewTab: true),
         CLinkText(
             text: 'Google Play',
-            link: googlePlayStoreUrl,
+            link: ServerConst.googlePlayStoreUrl,
             fontSize: fontSize,
             isNewTab: true),
       ],

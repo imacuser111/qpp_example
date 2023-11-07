@@ -12,7 +12,9 @@ class BaseResponse {
 }
 
 extension BaseResponseExtension on BaseResponse {
-  UserSelectInfoResponse get userSelectInfoResponse => UserSelectInfoResponse.fromJson(json);
+  UserSelectInfoResponse get userSelectInfoResponse =>
+      UserSelectInfoResponse.fromJson(json);
 
-  GetUserImageResponse get getUserImageResponse => GetUserImageResponse.fromJson(json);
+  GetUserImageResponse get getUserImageResponse =>
+      GetUserImageResponse.fromJson(json);
 }

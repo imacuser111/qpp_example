@@ -116,9 +116,9 @@ class _Qrcode extends StatelessWidget {
           child: MouseRegion(
             cursor: SystemMouseCursors.click, // 改鼠標樣式
             child: GestureDetector(
-              onTap: () => appStoreUrl.launchURL(),
+              onTap: () => ServerConst.appStoreUrl.launchURL(),
               child: QrImageView(
-                data: appStoreUrl,
+                data: ServerConst.appStoreUrl,
                 size: 110,
               ),
             ),
@@ -145,7 +145,7 @@ class _Qrcode extends StatelessWidget {
                           text: '即刻登入', style: TextStyle(color: Colors.white)),
                       TextSpan(
                           text: '免費擁有數位背包',
-                          style: TextStyle(color: Colors.amberAccent, fontFamily: 'your_font_name'))
+                          style: TextStyle(color: Colors.amberAccent))
                     ],
                   ),
                 ),

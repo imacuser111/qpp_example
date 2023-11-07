@@ -18,6 +18,7 @@ class UserSelectInfoChangeNotifier extends ChangeNotifier {
 
   /// 頭像錯誤
   bool avaterIsError = false;
+
   /// 背景圖錯誤
   bool bgImageIsError = false;
 
@@ -41,20 +42,28 @@ class UserSelectInfoChangeNotifier extends ChangeNotifier {
   getUserImage(int userID, {QppImageStyle style = QppImageStyle.avatar}) {
     bool isAvater = style == QppImageStyle.avatar;
 
-    isAvater ? avaterState = ApiResponse.loading() : bgImageState = ApiResponse.loading();
+    isAvater
+        ? avaterState = ApiResponse.loading()
+        : bgImageState = ApiResponse.loading();
 
     final request = GetUserImageRequest(userID, style);
 
     request.request(successCallBack: (data) {
-      isAvater ? avaterState = ApiResponse.completed(data) : bgImageState = ApiResponse.completed(data);
+      isAvater
+          ? avaterState = ApiResponse.completed(data)
+          : bgImageState = ApiResponse.completed(data);
     }, errorCallBack: (error) {
-      isAvater ? avaterState = ApiResponse.error(error) : bgImageState = ApiResponse.error(error);
+      isAvater
+          ? avaterState = ApiResponse.error(error)
+          : bgImageState = ApiResponse.error(error);
     });
   }
 
   /// 圖片錯誤(翻轉)
   imageErrorToggle({QppImageStyle style = QppImageStyle.avatar}) {
-    style == QppImageStyle.avatar ? avaterIsError = !avaterIsError : bgImageIsError = !bgImageIsError;
+    style == QppImageStyle.avatar
+        ? avaterIsError = !avaterIsError
+        : bgImageIsError = !bgImageIsError;
     notifyListeners();
   }
 }
