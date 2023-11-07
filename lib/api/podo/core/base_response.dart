@@ -1,5 +1,4 @@
 import 'package:qpp_example/api/podo/get_user_image.dart';
-import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
 
 class BaseResponse {
