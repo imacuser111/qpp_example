@@ -16,28 +16,39 @@ import 'package:qpp_example/universal_link/universal_link_data.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class CommodityInfoPage extends StatelessWidget {
-  CommodityInfoPage({super.key, required this.routerState});
-
+class CommodityInfoPage extends StatefulWidget {
   final GoRouterState routerState;
+  const CommodityInfoPage({super.key, required this.routerState});
 
+  @override
+  State<StatefulWidget> createState() {
+    return _CommodityInfoPageState();
+  }
+}
+
+class _CommodityInfoPageState extends State<CommodityInfoPage> {
   // 完整路徑, 產 QR Code 用
-  late final String qrCodeUrl =
-      ServerConst.routerHost + routerState.uri.toString();
+  String qrCodeUrl = '';
   // 物品 ID
-  late final String commodityID =
-      UniversalLinkParamData.fromJson(routerState.uri.queryParameters)
-              .commodityID ??
-          "";
+  String commodityID = "";
+  late ChangeNotifierProvider<CommodityInfoModel> itemSelectInfoProvider;
 
-  // model 初始化
-  late final itemSelectInfoProvider =
-      ChangeNotifierProvider<CommodityInfoModel>((ref) {
-    // 開始取資料
-    print('debug load data');
-    Future.microtask(() => ref.notifier.loadData(commodityID));
-    return CommodityInfoModel();
-  });
+  @override
+  void initState() {
+    super.initState();
+    qrCodeUrl = ServerConst.routerHost + widget.routerState.uri.toString();
+    commodityID =
+        UniversalLinkParamData.fromJson(widget.routerState.uri.queryParameters)
+                .commodityID ??
+            "";
+    // model 初始化
+    itemSelectInfoProvider = ChangeNotifierProvider<CommodityInfoModel>((ref) {
+      // 開始取資料
+      print('debug load data');
+      Future.microtask(() => ref.notifier.loadData(commodityID));
+      return CommodityInfoModel();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
