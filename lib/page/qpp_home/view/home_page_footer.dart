@@ -120,7 +120,7 @@ class _Guide extends StatelessWidget {
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _Menu(runSpacing: runSpacing),
+          _MenuButton(runSpacing: runSpacing),
           SizedBox(height: paddingHeight),
           _TitleWrap(runSpacing: runSpacing),
           SizedBox(height: paddingHeight),
@@ -132,8 +132,8 @@ class _Guide extends StatelessWidget {
 }
 
 /// 選單按鈕(Warp)
-class _Menu extends StatelessWidget {
-  const _Menu({required this.runSpacing});
+class _MenuButton extends StatelessWidget {
+  const _MenuButton({required this.runSpacing});
 
   final double runSpacing;
 
