@@ -46,6 +46,7 @@ dependencies:
   retrofit: ^4.0.3
   pub_semver: ^2.1.4
   flutter_svg_provider: ^1.0.6
+  flutter_screenutil: ^5.9.0
 
 dev_dependencies:
   flutter_test:

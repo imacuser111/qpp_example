@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qpp_example/extension/list/list.dart';
 import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/page/qpp_home/model/qpp_home_page_model.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/screen.dart';
 
 /// 首頁 - 聯絡我們
 class HomePageContact extends StatelessWidget {
@@ -10,21 +12,34 @@ class HomePageContact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage('desktop_bg_area03.webp'),
-        fit: BoxFit.cover,
-      )),
-      padding:
-          const EdgeInsets.only(top: 100, bottom: 100, left: 20, right: 20),
-      child: Column(children: [_TitleContent(), _Benefit()]),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage('desktop_bg_area03.webp'),
+            fit: BoxFit.cover,
+          )),
+          padding:
+              const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
+          child: Column(
+            children: [const _TitleContent(), _benefit(constraints.maxWidth)],
+          ));
+    });
+  }
+
+  Widget _benefit(double width) {
+    return switch (width) {
+      >= 1250 => const _DesktopStyleBenefit(),
+      >= 850 && < 1250 => const _TabletStyleBenefit(),
+      _ => const _MobileStyleBenefit()
+    };
   }
 }
 
 /// 標題內容
 class _TitleContent extends StatelessWidget {
+  const _TitleContent();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,27 +50,45 @@ class _TitleContent extends StatelessWidget {
               color: QppColor.white, fontSize: 40, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 30),
-        Flex(
-            direction: Axis.horizontal,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                  child: SvgPicture.asset('desktop_icon_area04_official.svg')),
-              Flexible(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _shadowText('立即申請合作廠商「官方帳號」',
-                          textColor: QppColor.laserLemon),
-                      _linkText(),
-                    ]),
-              ),
-            ]),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final bool isDesktopStyle = constraints.screenStyle.isDesktopStyle;
+            final int flex = isDesktopStyle ? 1 : 0;
+
+            return Flex(
+                direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    flex: flex,
+                      child: SvgPicture.asset('desktop_icon_area04_official.svg')),
+                  Flexible(
+                    flex: flex,
+                    child: Column(
+                        crossAxisAlignment: isDesktopStyle ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                        children: const [
+                          _ShadowText('立即申請合作廠商「官方帳號」',
+                              textColor: QppColor.laserLemon),
+                          _LinkText(),
+                        ]),
+                  ),
+                ]);
+          }
+        ),
       ],
     );
   }
+}
 
-  Widget _shadowText(String text, {required Color textColor}) {
+/// 陰影文字
+class _ShadowText extends StatelessWidget {
+  const _ShadowText(this.text, {required this.textColor});
+
+  final String text;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
     return Text(
       text,
       style: TextStyle(
@@ -69,10 +102,21 @@ class _TitleContent extends StatelessWidget {
       ),
     );
   }
+}
 
-  StatefulWidget _linkText() {
-    bool isHovered = false;
+/// 連結文字
+class _LinkText extends StatefulWidget {
+  const _LinkText();
 
+  @override
+  State<_LinkText> createState() => _LinkTextState();
+}
+
+class _LinkTextState extends State<_LinkText> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
     return StatefulBuilder(
       builder: (context, setState) {
         return InkWell(
@@ -92,7 +136,8 @@ class _TitleContent extends StatelessWidget {
                 ),
               ),
             ),
-            child: _shadowText('info@qpptec.com', textColor: QppColor.mayaBlue),
+            child: const _ShadowText('info@qpptec.com',
+                textColor: QppColor.mayaBlue),
           ),
         );
       },
@@ -100,38 +145,88 @@ class _TitleContent extends StatelessWidget {
   }
 }
 
-/// 益處
-class _Benefit extends StatelessWidget {
+/// 桌面樣式益處
+class _DesktopStyleBenefit extends StatelessWidget {
+  const _DesktopStyleBenefit();
+
   @override
   Widget build(BuildContext context) {
+    const double space = 70;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: HomePageContactType.values
-          .map((e) => Flexible(child: _benefitItem(e)))
+          .map(
+            (e) => Flexible(
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      top: e.contentOfTop ? 0 : space,
+                      bottom: e.contentOfTop ? space : 0),
+                  child: _BenefitItem(e)),
+            ),
+          )
           .toList(),
     );
   }
+}
 
-  Widget _benefitItem(HomePageContactType type) {
-    const double space = 70;
+/// 手機樣式益處
+class _TabletStyleBenefit extends StatelessWidget {
+  const _TabletStyleBenefit();
 
-    return Padding(
-      padding: EdgeInsets.only(
-          top: type.contentOfTop ? 0 : space,
-          bottom: type.contentOfTop ? space : 0),
-      child: Stack(alignment: Alignment.center, children: [
-        SvgPicture.asset('desktop_bg_area03_box.svg'),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(type.title,
-              style: const TextStyle(color: QppColor.laserLemon, fontSize: 24)),
-          const SizedBox(height: 17),
-          SizedBox(
-            width: 280,
-            child: Text(type.directions,
-                style: const TextStyle(color: QppColor.white, fontSize: 18)),
-          ),
-        ]),
+  @override
+  Widget build(BuildContext context) {
+    const types = HomePageContactType.values;
+
+    return Column(children: [
+      Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: types.filterLast
+              .map((e) => Flexible(child: _BenefitItem(e)))
+              .toList()),
+      _BenefitItem(types.last)
+    ]);
+  }
+}
+
+/// 手機樣式益處
+class _MobileStyleBenefit extends StatelessWidget {
+  const _MobileStyleBenefit();
+
+  @override
+  Widget build(BuildContext context) {
+    const types = HomePageContactType.values;
+
+    return Column(
+        children: types
+            .map((e) => Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: _BenefitItem(e),
+                ))
+            .toList());
+  }
+}
+
+/// 益處Item
+class _BenefitItem extends StatelessWidget {
+  const _BenefitItem(this.type);
+
+  final HomePageContactType type;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(alignment: Alignment.center, children: [
+      SvgPicture.asset('desktop_bg_area03_box.svg'),
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(type.title,
+            style: const TextStyle(color: QppColor.laserLemon, fontSize: 24)),
+        const SizedBox(height: 17),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 280),
+          child: Text(type.directions,
+              style: const TextStyle(color: QppColor.white, fontSize: 18)),
+        ),
       ]),
-    );
+    ]);
   }
 }

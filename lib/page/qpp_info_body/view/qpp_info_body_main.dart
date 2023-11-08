@@ -26,33 +26,42 @@ class InformationOuterFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('InformationOuterFrame build');
+    debugPrint(toString());
 
     return SingleChildScrollView(
       child: Column(
         children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1280),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 180, bottom: 48, left: 20, right: 20),
-              child: Container(
-                clipBehavior: Clip.hardEdge, // 超出的部分，裁剪掉
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
-                child: Column(
-                  children: [
-                    AvatarWidget(
-                      userSelectInfoProvider: userSelectInfoProvider,
-                      userID: userID,
+          Row(
+            children: [
+              const Spacer(),
+              Expanded(
+                flex: 10,
+                child: Center(
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 1280),
+                    padding: const EdgeInsets.only(
+                        top: 180, bottom: 48, left: 20, right: 20),
+                    child: Container(
+                      clipBehavior: Clip.hardEdge, // 超出的部分，裁剪掉
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
+                      child: Column(
+                        children: [
+                          AvatarWidget(
+                            userSelectInfoProvider: userSelectInfoProvider,
+                            userID: userID,
+                          ),
+                          InformationDescriptionWidget(
+                            userSelectInfoProvider: userSelectInfoProvider,
+                          ),
+                        ],
+                      ),
                     ),
-                    InformationDescriptionWidget(
-                      userSelectInfoProvider: userSelectInfoProvider,
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+              const Spacer(),
+            ],
           ),
           Container(
             padding: const EdgeInsets.only(bottom: 89),
@@ -184,7 +193,7 @@ class InformationDescriptionWidget extends ConsumerWidget {
       color: const Color.fromRGBO(22, 32, 68, 1),
       child: Padding(
         padding:
-            const EdgeInsets.only(left: 61, right: 60, top: 40, bottom: 40),
+        const EdgeInsets.symmetric(vertical: 40, horizontal: 60),
         child: Text(text, style: textStyle),
       ),
     );
