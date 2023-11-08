@@ -8,7 +8,9 @@ import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_description_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
+import 'package:qpp_example/model/item_img_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
+import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 
 class CommodityInfoModel extends ChangeNotifier {
@@ -24,10 +26,10 @@ class CommodityInfoModel extends ChangeNotifier {
       ApiResponse.initial();
 
   /// 創建者資訊狀態
-  ApiResponse<UserSelectInfoResponse> userInfoState = ApiResponse.initial();
+  ApiResponse<QppUser> userInfoState = ApiResponse.initial();
 
-  /// 頭像狀態
-  ApiResponse<String> itemPhotoState = ApiResponse.initial();
+  /// 物品圖片狀態
+  ApiResponse<ItemImgData> itemPhotoState = ApiResponse.initial();
 
   loadData(String id) {
     HttpService service = HttpService.instance;
@@ -128,7 +130,9 @@ class CommodityInfoModel extends ChangeNotifier {
 
     request.request(successCallBack: (data) {
       if (data.errorCode == "OK") {
-        userInfoState = ApiResponse.completed(data.userSelectInfoResponse);
+        // 取得創建用戶
+        QppUser creator = QppUser.create(userID, data.userSelectInfoResponse);
+        userInfoState = ApiResponse.completed(creator);
       } else {
         userInfoState = ApiResponse.error(data.errorCode);
         print('取得創建者用戶資訊錯誤 SERVER_ERROR_CODE: ${data.errorCode}');
@@ -146,7 +150,7 @@ class CommodityInfoModel extends ChangeNotifier {
     String itemPhotoUrl = QppImageUtils.getItemImageURL(creatorID, itemData.id,
         timeStamp: itemData.updateTimestamp);
 
-    itemPhotoState = ApiResponse.completed(itemPhotoUrl);
+    itemPhotoState = ApiResponse.completed(ItemImgData(itemPhotoUrl));
     notifyListeners();
 
     print('Photo: $itemPhotoUrl');

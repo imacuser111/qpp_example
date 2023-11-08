@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 /// 語系
 enum Language {
   /// 繁體中文
@@ -46,6 +48,20 @@ enum Language {
       vietnam => 'Việt Nam',
       thailand => 'ภาษาไทย',
       indonesia => 'Bahasa Indonesia',
+    };
+  }
+
+  /// 取得對應 Locale
+  Locale get locale {
+    return switch (this) {
+      chineseTrad => const Locale('zh', 'TW'),
+      chineseSimp => const Locale('zh', 'CN'),
+      english => const Locale('en', 'US'),
+      japanese => const Locale('ja', 'JP'),
+      korean => const Locale('ko', 'KR'),
+      vietnam => const Locale('vi', 'VN'),
+      thailand => const Locale('th', 'TH'),
+      indonesia => const Locale('id', 'ID'),
     };
   }
 }
