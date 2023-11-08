@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
@@ -16,27 +17,31 @@ import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class CommodityInfoPage extends StatelessWidget {
+  CommodityInfoPage({super.key, required this.routerState});
+
   final GoRouterState routerState;
 
-  const CommodityInfoPage({super.key, required this.routerState});
+  // 完整路徑, 產 QR Code 用
+  late final String qrCodeUrl =
+      ServerConst.routerHost + routerState.uri.toString();
+  // 物品 ID
+  late final String commodityID =
+      UniversalLinkParamData.fromJson(routerState.uri.queryParameters)
+              .commodityID ??
+          "";
+
+  // model 初始化
+  late final itemSelectInfoProvider =
+      ChangeNotifierProvider<CommodityInfoModel>((ref) {
+    // 開始取資料
+    print('debug load data');
+    Future.microtask(() => ref.notifier.loadData(commodityID));
+    return CommodityInfoModel();
+  });
 
   @override
   Widget build(BuildContext context) {
-    // 物品 ID
-    String commodityID =
-        UniversalLinkParamData.fromJson(routerState.uri.queryParameters)
-                .commodityID ??
-            "";
-    // 完整路徑, 產 QR Code 用
-    String qrCodeUrl = ServerConst.routerHost + routerState.uri.toString();
-    // model 初始化
-    late final itemSelectInfoProvider =
-        ChangeNotifierProvider<CommodityInfoModel>((ref) {
-      // 開始取資料
-      Future.microtask(() => ref.notifier.loadData(commodityID));
-      return CommodityInfoModel();
-    });
-
+    print('debug build CommodityInfoPage');
     return ListView(children: [
       // 上方資料卡片容器
       Card(

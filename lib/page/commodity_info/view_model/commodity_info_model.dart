@@ -32,6 +32,7 @@ class CommodityInfoModel extends ChangeNotifier {
   ApiResponse<ItemImgData> itemPhotoState = ApiResponse.initial();
 
   loadData(String id) {
+    debugPrint('開始取得物品資訊...');
     HttpService service = HttpService.instance;
     Dio dio = service.dio;
     final client = ItemApi(dio);
