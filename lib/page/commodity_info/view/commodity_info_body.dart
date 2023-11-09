@@ -21,6 +21,8 @@ class CommodityInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(toString());
+
     // 物品 ID
     String commodityID =
         UniversalLinkParamData.fromJson(routerState.uri.queryParameters)

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/string/url.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/page/qpp_home/model/qpp_home_page_model.dart';
 import 'package:qpp_example/page/qpp_home/view/qpp_home_page.dart';
 import 'package:qpp_example/utils/screen.dart';
@@ -80,7 +81,7 @@ class _Info extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           Text(
-            'home_section_1_p'.tr(),
+            context.tr('home_section_1_p'),
             textAlign: isHorizontal ? TextAlign.start : TextAlign.center,
             style: const TextStyle(color: Colors.white, fontSize: 16),
           ),

@@ -16,7 +16,7 @@ final GoRouter router = GoRouter(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
         print('router builder');
-        return MainFramework(child: const HomePage());
+        return const MainFramework(child: HomePage());
       },
       routes: <RouteBase>[
         GoRoute(
@@ -27,8 +27,7 @@ final GoRouter router = GoRouter(
             final data =
                 UniversalLinkParamData.fromJson(state.uri.queryParameters);
             return MainFramework(
-              child: InformationOuterFrame(userID: data.phoneNumber ?? "")
-            );
+                child: InformationOuterFrame(userID: data.phoneNumber ?? ""));
           },
         ),
         GoRoute(
@@ -37,9 +36,7 @@ final GoRouter router = GoRouter(
           path: 'app/commodity_info',
           builder: (BuildContext context, GoRouterState state) {
             return MainFramework(
-              child: CommodityInfoPage(
-                routerState: state,
-              ),
+              child: CommodityInfoPage(routerState: state),
             );
           },
         )

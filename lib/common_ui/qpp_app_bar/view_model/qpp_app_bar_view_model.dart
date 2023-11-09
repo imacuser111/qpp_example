@@ -1,16 +1,21 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// 全螢幕按鈕選單狀態
-class FullScreenMenuBtnPageStateNotifier extends StateNotifier<bool> {
-  FullScreenMenuBtnPageStateNotifier() : super(false);
+/// 是否顯示全螢幕選單Provider
+final StateNotifierProvider<IsOpenAppBarMenuBtnPageStateNotifier, bool>
+    isOpenAppBarMenuBtnPageProvider =
+    StateNotifierProvider((ref) => IsOpenAppBarMenuBtnPageStateNotifier());
+
+/// 是否顯示全螢幕選單Notifier
+class IsOpenAppBarMenuBtnPageStateNotifier extends StateNotifier<bool> {
+  IsOpenAppBarMenuBtnPageStateNotifier() : super(false);
 
   void toggle() {
-    state = !state; // 是否顯示全螢幕選單
+    state = !state;
   }
 }
 
-/// 滑鼠狀態
+/// 滑鼠狀態Notifier
 class MouseRegionStateNotifier extends StateNotifier<PointerEvent> {
   MouseRegionStateNotifier() : super(const PointerExitEvent());
 
