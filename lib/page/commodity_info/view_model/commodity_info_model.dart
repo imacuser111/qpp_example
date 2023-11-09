@@ -10,6 +10,7 @@ import 'package:qpp_example/api/podo/multi_language_item_description_select.dart
 import 'package:qpp_example/api/podo/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
 import 'package:qpp_example/model/item_img_data.dart';
+import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
@@ -19,11 +20,11 @@ class CommodityInfoModel extends ChangeNotifier {
   ApiResponse<QppItem> itemSelectInfoState = ApiResponse.initial();
 
   /// 物品多語系說明資訊
-  ApiResponse<MultiLanguageItemData> itemDescriptionInfoState =
+  ApiResponse<ItemMultiLanguageData> itemDescriptionInfoState =
       ApiResponse.initial();
 
   /// 物品多語系連結資訊
-  ApiResponse<MultiLanguageItemData> itemLinkInfoState = ApiResponse.initial();
+  ApiResponse<ItemMultiLanguageData> itemLinkInfoState = ApiResponse.initial();
 
   /// 創建者資訊狀態
   ApiResponse<QppUser> userInfoState = ApiResponse.initial();
@@ -82,7 +83,9 @@ class CommodityInfoModel extends ChangeNotifier {
       if (descriptionResponse.errorCode == "OK") {
         MultiLanguageItemData descriptionData =
             descriptionResponse.descriptionData;
-        itemDescriptionInfoState = ApiResponse.completed(descriptionData);
+        ItemMultiLanguageData itemDescription =
+            ItemMultiLanguageData.description(descriptionData);
+        itemDescriptionInfoState = ApiResponse.completed(itemDescription);
       } else {
         itemDescriptionInfoState =
             ApiResponse.error(descriptionResponse.errorCode);
@@ -108,7 +111,9 @@ class CommodityInfoModel extends ChangeNotifier {
         .then((introLinkResponse) {
       if (introLinkResponse.errorCode == "OK") {
         MultiLanguageItemData introLinkData = introLinkResponse.introLinkData;
-        itemLinkInfoState = ApiResponse.completed(introLinkData);
+        ItemMultiLanguageData itemIntroLink =
+            ItemMultiLanguageData.link(introLinkData);
+        itemLinkInfoState = ApiResponse.completed(itemIntroLink);
       } else {
         itemLinkInfoState = ApiResponse.error(introLinkResponse.errorCode);
         print('取得物品連結資訊錯誤 SERVER_ERROR_CODE: ${introLinkResponse.errorCode}');

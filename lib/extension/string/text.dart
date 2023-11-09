@@ -36,3 +36,12 @@ extension TextExtension on String {
     return sizeFull.height * numberOfLines;
   }
 }
+
+extension StringExtension on String? {
+  bool get isNullOrEmpty {
+    if (this != null) {
+      return this!.isEmpty;
+    }
+    return true;
+  }
+}

@@ -29,6 +29,7 @@ enum Language {
   final String value;
   const Language(this.value);
 
+  /// 從字串取得 Language
   factory Language.findTypeByValue(String value) {
     for (var lan in Language.values) {
       if (lan.value == value) {
@@ -38,6 +39,27 @@ enum Language {
     return Language.chineseTrad;
   }
 
+  /// 從 Locale 取得 Language
+  factory Language.findTypeByLocale(Locale locale) {
+    for (var lan in Language.values) {
+      if (lan.locale == locale) {
+        return lan;
+      }
+    }
+    return Language.chineseTrad;
+  }
+
+  /// 從定義的 index 取得 Language
+  factory Language.findTypeByDefineIndex(int dIndex) {
+    for (var lan in Language.values) {
+      if (lan.getDefineIndex() == dIndex) {
+        return lan;
+      }
+    }
+    return Language.chineseTrad;
+  }
+
+  /// 取得定義 title
   String get displayTitle {
     return switch (this) {
       chineseTrad => '繁體中文',
@@ -48,6 +70,20 @@ enum Language {
       vietnam => 'Việt Nam',
       thailand => 'ภาษาไทย',
       indonesia => 'Bahasa Indonesia',
+    };
+  }
+
+  /// 取得定義的 index
+  int getDefineIndex() {
+    return switch (this) {
+      chineseTrad => 2,
+      chineseSimp => 3,
+      english => 1,
+      japanese => 4,
+      korean => 5,
+      vietnam => 6,
+      thailand => 7,
+      indonesia => 8,
     };
   }
 
