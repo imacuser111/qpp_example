@@ -5,6 +5,7 @@ import 'package:qpp_example/api/core/http_service.dart';
 import 'package:qpp_example/api/item_api.dart';
 import 'package:qpp_example/api/podo/core/base_response.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
+import 'package:qpp_example/api/podo/multi_language_item_data.dart';
 import 'package:qpp_example/api/podo/multi_language_item_description_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
@@ -18,12 +19,11 @@ class CommodityInfoModel extends ChangeNotifier {
   ApiResponse<QppItem> itemSelectInfoState = ApiResponse.initial();
 
   /// 物品多語系說明資訊
-  ApiResponse<MultiLanguageItemDescriptionData> itemDescriptionInfoState =
+  ApiResponse<MultiLanguageItemData> itemDescriptionInfoState =
       ApiResponse.initial();
 
   /// 物品多語系連結資訊
-  ApiResponse<MultiLanguageItemIntroLinkData> itemLinkInfoState =
-      ApiResponse.initial();
+  ApiResponse<MultiLanguageItemData> itemLinkInfoState = ApiResponse.initial();
 
   /// 創建者資訊狀態
   ApiResponse<QppUser> userInfoState = ApiResponse.initial();
@@ -80,7 +80,7 @@ class CommodityInfoModel extends ChangeNotifier {
         .postMultiLanguageItemDescriptionSelect(requestBody)
         .then((descriptionResponse) {
       if (descriptionResponse.errorCode == "OK") {
-        MultiLanguageItemDescriptionData descriptionData =
+        MultiLanguageItemData descriptionData =
             descriptionResponse.descriptionData;
         itemDescriptionInfoState = ApiResponse.completed(descriptionData);
       } else {
@@ -107,8 +107,7 @@ class CommodityInfoModel extends ChangeNotifier {
         .postMultiLanguageItemIntroLinkSelect(requestBody)
         .then((introLinkResponse) {
       if (introLinkResponse.errorCode == "OK") {
-        MultiLanguageItemIntroLinkData introLinkData =
-            introLinkResponse.introLinkData;
+        MultiLanguageItemData introLinkData = introLinkResponse.introLinkData;
         itemLinkInfoState = ApiResponse.completed(introLinkData);
       } else {
         itemLinkInfoState = ApiResponse.error(introLinkResponse.errorCode);

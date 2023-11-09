@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'multi_language_item_intro_link_select.dart';
+part of 'multi_language_item_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-MultiLanguageItemIntroLinkData _$MultiLanguageItemIntroLinkDataFromJson(
+MultiLanguageItemData _$MultiLanguageItemDataFromJson(
         Map<String, dynamic> json) =>
-    MultiLanguageItemIntroLinkData(
+    MultiLanguageItemData(
       CHT: json['CHT'] as String?,
       CHS: json['CHS'] as String?,
       ID: json['ID'] as String?,
@@ -24,8 +24,8 @@ MultiLanguageItemIntroLinkData _$MultiLanguageItemIntroLinkDataFromJson(
       updateTime: json['updateTime'] as int,
     );
 
-Map<String, dynamic> _$MultiLanguageItemIntroLinkDataToJson(
-        MultiLanguageItemIntroLinkData instance) =>
+Map<String, dynamic> _$MultiLanguageItemDataToJson(
+        MultiLanguageItemData instance) =>
     <String, dynamic>{
       'CHT': instance.CHT,
       'CHS': instance.CHS,

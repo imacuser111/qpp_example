@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-/// 語系
+/// 取得的資料對應的 語系規則
 enum Language {
   /// 繁體中文
   chineseTrad("CHT"),
