@@ -11,7 +11,7 @@ class ItemImgData {
   const ItemImgData(this.path) : colorHex = null;
 
   /// NFT 物品建構式
-  const ItemImgData.NFT({required this.path, required this.colorHex});
+  const ItemImgData.nft({required this.path, required this.colorHex});
 
   /// 取得 NFT 背景顏色, 未測試
   Color get bgColor {

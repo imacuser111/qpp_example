@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/string/url.dart';
-import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/page/qpp_home/model/qpp_home_page_model.dart';
 import 'package:qpp_example/page/qpp_home/view/qpp_home_page.dart';
 import 'package:qpp_example/utils/screen.dart';
@@ -80,7 +80,7 @@ class _Info extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           Text(
-            'QPP數位背包是使用門號存放各種數位商品的工具。\n手機門號即為QPP帳戶，無須註冊，想要使用數位商品時，只需下載安裝即可。\n立即打開QPP查看您有哪些數位物品吧！',
+            'home_section_1_p'.tr(),
             textAlign: isHorizontal ? TextAlign.start : TextAlign.center,
             style: const TextStyle(color: Colors.white, fontSize: 16),
           ),

@@ -18,7 +18,8 @@ void main() async {
   HttpService service = HttpService.instance; // dio
   service.initDio();
 
-  runApp(EasyLocalization(
+  runApp(
+    EasyLocalization(
       // 支援的語系, 從 QppLocales 直接取出
       supportedLocales: QppLocales.supportedLocales,
       // 預設語系
@@ -27,7 +28,9 @@ void main() async {
       fallbackLocale: const Locale('zh', 'TW'),
       path: 'assets/langs/langs.csv',
       assetLoader: CsvAssetLoader(),
-      child: const ProviderScope(child: MyApp())));
+      child: const ProviderScope(child: MyApp()),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -35,14 +38,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        routerConfig: router,
-        locale: context.locale,
-        supportedLocales: context.supportedLocales,
-        localizationsDelegates: context.localizationDelegates);
+      title: 'Flutter Demo',
+      theme: ThemeData(useMaterial3: true),
+      routerConfig: router,
+      locale: context.locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
+    );
   }
 }

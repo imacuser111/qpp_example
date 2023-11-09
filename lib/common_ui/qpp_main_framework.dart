@@ -46,6 +46,7 @@ class _MainScaffold extends StatelessWidget {
       appBar: qppAppBar(fullScreenMenuBtnPageStateProvider,
           height: _getAppBarHeight(context)),
       body: Container(
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('desktop-bg-kv.webp'),

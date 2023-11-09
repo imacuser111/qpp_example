@@ -8,15 +8,15 @@ import 'package:qpp_example/universal_link/universal_link_data.dart';
 
 /// The route configuration.
 final GoRouter router = GoRouter(
+  initialLocation: '/',
   routes: <RouteBase>[
     GoRoute(
       // 首頁
       name: 'home',
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return MainFramework(
-          child: const HomePage(),
-        );
+        print('router builder');
+        return MainFramework(child: const HomePage());
       },
       routes: <RouteBase>[
         GoRoute(
@@ -27,7 +27,7 @@ final GoRouter router = GoRouter(
             final data =
                 UniversalLinkParamData.fromJson(state.uri.queryParameters);
             return MainFramework(
-              child: InformationOuterFrame(userID: data.phoneNumber ?? ""),
+              child: InformationOuterFrame(userID: data.phoneNumber ?? "")
             );
           },
         ),
