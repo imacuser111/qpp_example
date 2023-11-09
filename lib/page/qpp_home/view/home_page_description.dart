@@ -70,7 +70,7 @@ class _PhoneDescriptionState extends State<_PhoneDescription> {
               flex: isDesktopStyle ? 1 : 2,
               child: Container(
                 color: QppColor.onyx60,
-                padding: const EdgeInsets.only(left: 50, right: 50),
+                padding: const EdgeInsets.symmetric(horizontal: 50),
                 alignment: Alignment.center,
                 child: Flex(
                   direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
@@ -154,7 +154,7 @@ class _ContentState extends State<_Content> {
             }),
         child: widget.screenStyle.isDesktopStyle
             ? _DesktopStyleContent(widget.type, isHovered: _isHovered)
-            : _PhoneStyleContent(widget.type, isHovered: _isHovered));
+            : _MobileStyleContent(widget.type, isHovered: _isHovered));
   }
 }
 
@@ -167,12 +167,14 @@ class _DesktopStyleContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bg = _Bg(type, screenStyle: ScreenStyle.desktop, isHovered: isHovered);
+
     return Row(children: [
-      type.conetntOfRight ? _Bg(type, screenStyle: ScreenStyle.desktop, isHovered: isHovered) : const SizedBox(),
+      type.conetntOfRight ? bg : const SizedBox.shrink(),
       Expanded(
         child: Container(
           color: QppColor.yaleBlue,
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -188,14 +190,14 @@ class _DesktopStyleContent extends StatelessWidget {
           ),
         ),
       ),
-      type.conetntOfRight ? const SizedBox() : _Bg(type, screenStyle: ScreenStyle.desktop, isHovered: isHovered),
+      type.conetntOfRight ? const SizedBox.shrink() : bg,
     ]);
   }
 }
 
 /// 手機樣式內容
-class _PhoneStyleContent extends StatelessWidget {
-  const _PhoneStyleContent(this.type, {required this.isHovered});
+class _MobileStyleContent extends StatelessWidget {
+  const _MobileStyleContent(this.type, {required this.isHovered});
 
   final HomePageDescriptionType type;
   final bool isHovered;
@@ -207,7 +209,7 @@ class _PhoneStyleContent extends StatelessWidget {
       Expanded(
         child: Container(
           color: QppColor.yaleBlue,
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -5,6 +5,7 @@ import 'package:qpp_example/common_ui/qpp_app_bar/view/qpp_app_bar_view.dart';
 import 'package:qpp_example/common_ui/qpp_text.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/screen.dart';
 
 /// 首頁 - 頁尾
 class HomePageFooter extends StatelessWidget {
@@ -12,12 +13,14 @@ class HomePageFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [_FooterInfo(), _CompanyName()]);
+    return const Column(children: [_FooterInfo(), _CompanyName()]);
   }
 }
 
 /// 頁尾資訊
 class _FooterInfo extends StatelessWidget {
+  const _FooterInfo();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,45 +30,73 @@ class _FooterInfo extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter),
       ),
-      padding:
-          const EdgeInsets.only(top: 100, bottom: 100, left: 20, right: 20),
-      child: Flex(
-        direction: Axis.horizontal,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(),
-          _info(),
-          const Spacer(),
-          _Guide(),
-          const Spacer(),
-          const LanguageDropdownMenu(),
-          const Spacer(),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
+      child: LayoutBuilder(builder: (context, constraints) {
+        final bool isDesktopStyle = constraints.screenStyle.isDesktopStyle;
+
+        return Flex(
+          direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            isDesktopStyle ? const Spacer() : const SizedBox.shrink(),
+            _Info(isDesktopStyle: isDesktopStyle),
+            isDesktopStyle ? const Spacer() : const SizedBox(height: 50),
+            const _Guide(),
+            isDesktopStyle ? const Spacer() : const SizedBox.shrink(),
+            isDesktopStyle
+                ? const LanguageDropdownMenu()
+                : const SizedBox.shrink(),
+            isDesktopStyle ? const Spacer() : const SizedBox.shrink(),
+          ],
+        );
+      }),
     );
   }
+}
 
-  Widget _info() {
-    return Flex(direction: Axis.horizontal, children: [
-      SvgPicture.asset('desktop_pic_qpp_logo_03.svg'),
-      const SizedBox(height: 30, width: 30),
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text('快鏈科技',
-            style: TextStyle(color: QppColor.white, fontSize: 16)),
-        const SizedBox(height: 20),
-        const Text('統一編號：83527156',
-            style: TextStyle(color: QppColor.white, fontSize: 14)),
-        const SizedBox(height: 5),
-        _infoLinkText('客服信箱：'),
-        const SizedBox(height: 5),
-        _infoLinkText('商務合作信箱：')
-      ]),
-    ]);
+/// 資訊
+class _Info extends StatelessWidget {
+  const _Info({required this.isDesktopStyle});
+
+  final bool isDesktopStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Flex(
+      direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SvgPicture.asset(isDesktopStyle
+            ? 'desktop_pic_qpp_logo_03.svg'
+            : 'mobile-pic-qpp-logo-03.svg'),
+        const SizedBox(height: 30, width: 30),
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('快鏈科技', style: TextStyle(color: QppColor.white, fontSize: 16)),
+            SizedBox(height: 20),
+            Text('統一編號：83527156',
+                style: TextStyle(color: QppColor.white, fontSize: 14)),
+            SizedBox(height: 5),
+            _InfoLinkText('客服信箱：'),
+            SizedBox(height: 5),
+            _InfoLinkText('商務合作信箱：')
+          ],
+        ),
+      ],
+    );
   }
+}
 
-  /// 資訊連結Text
-  Widget _infoLinkText(String text) {
+/// 資訊連結Text
+class _InfoLinkText extends StatelessWidget {
+  const _InfoLinkText(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Text(text, style: const TextStyle(color: QppColor.white, fontSize: 14)),
@@ -75,27 +106,39 @@ class _FooterInfo extends StatelessWidget {
   }
 }
 
+/// 導向
 class _Guide extends StatelessWidget {
-  final double runSpacing = 10;
+  const _Guide();
 
   @override
   Widget build(BuildContext context) {
     const double paddingHeight = 23;
+    const double runSpacing = 10;
 
     return Container(
       constraints: const BoxConstraints(maxWidth: 270),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        _menuRow(),
-        const SizedBox(height: paddingHeight),
-        _titleWrap(),
-        const SizedBox(height: paddingHeight),
-        _links()
-      ]),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _MenuButton(runSpacing: runSpacing),
+          SizedBox(height: paddingHeight),
+          _TitleWrap(runSpacing: runSpacing),
+          SizedBox(height: paddingHeight),
+          _Links(runSpacing: runSpacing)
+        ],
+      ),
     );
   }
+}
 
-  /// 選單按鈕(Row)
-  Widget _menuRow() {
+/// 選單按鈕(Warp)
+class _MenuButton extends StatelessWidget {
+  const _MenuButton({required this.runSpacing});
+
+  final double runSpacing;
+
+  @override
+  Widget build(BuildContext context) {
     return Wrap(
       spacing: 130,
       runSpacing: runSpacing,
@@ -119,9 +162,16 @@ class _Guide extends StatelessWidget {
           .toList(),
     );
   }
+}
 
-  /// 標題(條款、下載)
-  Widget _titleWrap() {
+/// 標題(條款、下載)
+class _TitleWrap extends StatelessWidget {
+  const _TitleWrap({required this.runSpacing});
+
+  final double runSpacing;
+
+  @override
+  Widget build(BuildContext context) {
     const textStyle = TextStyle(color: QppColor.white, fontSize: 16);
 
     return Wrap(
@@ -133,9 +183,16 @@ class _Guide extends StatelessWidget {
       ],
     );
   }
+}
 
-  /// 連結
-  Widget _links() {
+/// 連結
+class _Links extends StatelessWidget {
+  const _Links({required this.runSpacing});
+
+  final double runSpacing;
+
+  @override
+  Widget build(BuildContext context) {
     const double fontSize = 12;
 
     return Wrap(
@@ -169,6 +226,8 @@ class _Guide extends StatelessWidget {
 
 /// 公司名稱
 class _CompanyName extends StatelessWidget {
+  const _CompanyName();
+
   @override
   Widget build(BuildContext context) {
     return Container(

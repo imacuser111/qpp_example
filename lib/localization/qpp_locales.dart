@@ -15,4 +15,5 @@ part 'qpp_locales.g.dart';
 )
 
 /// 多語系取用
+// ignore: unused_element
 class _QppLocales {}
