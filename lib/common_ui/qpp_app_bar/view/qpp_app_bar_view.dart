@@ -11,45 +11,46 @@ import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/model/enum/language.dart';
 import 'package:qpp_example/utils/screen.dart';
 
-AppBar qppAppBar(
-    StateNotifierProvider<FullScreenMenuBtnPageStateNotifier, bool>
-        fullScreenMenuBtnPageStateProvider,
-    {required double height}) {
+AppBar qppAppBar({required double height}) {
   return AppBar(
     automaticallyImplyLeading: false, // 關閉返回按鈕
     toolbarHeight: height,
     backgroundColor: QppColor.onyx60,
-    title: QppAppBarTitle(fullScreenMenuBtnPageStateProvider),
+    title: const QppAppBarTitle(),
   );
 }
 
-class QppAppBarTitle extends ConsumerWidget with QppAppBarTitleExtension {
-  QppAppBarTitle(this.fullScreenMenuBtnPageStateProvider, {super.key});
-
-  final StateNotifierProvider<FullScreenMenuBtnPageStateNotifier, bool>
-      fullScreenMenuBtnPageStateProvider;
+class QppAppBarTitle extends ConsumerWidget {
+  const QppAppBarTitle({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     debugPrint(toString());
 
-    final size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
+    final bool isDesktopStyle =
+        size.width.determineScreenStyle().isDesktopStyle;
 
-    final notifier = ref.read(fullScreenMenuBtnPageStateProvider.notifier);
+    final notifier = ref.read(isOpenAppBarMenuBtnPageProvider.notifier);
 
     final bool isShowFullScreenMenu =
-        ref.watch(fullScreenMenuBtnPageStateProvider);
+        ref.watch(isOpenAppBarMenuBtnPageProvider);
 
     return Row(
       children: [
         // 最左邊間距
-        Flexible(child: spacing(200)),
-        isShowFullScreenMenu ? Container() : logo(context),
+        Flexible(
+          child: isDesktopStyle
+              ? const SizedBox(width: double.maxFinite)
+              : const SizedBox.shrink(),
+        ),
+        isShowFullScreenMenu ? const SizedBox.shrink() : const _Logo(),
         // QPP -> Button 間距
-        // Expanded(child: spacing(466)),
-        const Spacer(flex: 5),
+        const Spacer(flex: 2),
         // 選單按鈕
-        menuRow(size.width),
+        isDesktopStyle
+            ? const _MenuBtns()
+            : const Spacer(flex: 100), // felx設定一個大的數字讓他填充到最大
         // 語系
         const Padding(
           padding: EdgeInsets.only(left: 74),
@@ -57,58 +58,46 @@ class QppAppBarTitle extends ConsumerWidget with QppAppBarTitleExtension {
         ),
         // 三條 or 最右邊間距
         isShowFullScreenMenu
-            ? IconButton(
-                icon: const Text(''),
-                onPressed: () {},
-              )
-            : isSmallTypesetting(size.width)
-                ? AnimationMenuBtn(
-                    isClose: false,
-                    notifier: notifier,
-                  )
-                : SizedBox(width: 10.getRealWidth()),
+            ? const SizedBox(width: 39)
+            : isDesktopStyle
+                ? const Flexible(child: SizedBox.shrink())
+                : AnimationMenuBtn(isClose: false, notifier: notifier),
       ],
     );
   }
 }
 
-// 是否為小排版
-bool isSmallTypesetting(double width) =>
-    width.determineScreenStyle() != ScreenStyle.desktop;
+// QPP Logo
+class _Logo extends StatelessWidget {
+  const _Logo();
 
-mixin QppAppBarTitleExtension {
-  /// 間距
-  Widget spacing(double width) {
-    double realWidth = width.getRealWidth();
+  @override
+  Widget build(BuildContext context) {
+    final bool isDesktopStyle =
+        MediaQuery.of(context).size.width.determineScreenStyle().isDesktopStyle;
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(minWidth: 10, maxHeight: realWidth),
-      child: Container(
-        width: realWidth,
-      ),
-    );
-  }
-
-  /// QPP Logo
-  Widget logo(BuildContext context) {
     return IconButton(
-      icon: ConstrainedBox(
+      icon: Container(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 148),
         child: Image.asset(
           'desktop-pic-qpp-logo-01.png',
-          width: 148.getRealWidth(),
+          width: isDesktopStyle ? 148 : 100,
           scale: 46 / 148,
         ),
       ),
       onPressed: () => context.goNamed("home"),
     );
   }
+}
 
-  /// 選單按鈕(Row)
-  Widget menuRow(double width) {
-    if (isSmallTypesetting(width)) {
-      return const Spacer();
-    }
+/// 選單按鈕(Row)
+/// - Note: 產品介紹...等
+class _MenuBtns extends StatelessWidget {
+  const _MenuBtns();
+
+  @override
+  Widget build(BuildContext context) {
+    // debugPrint(toString());
 
     return Row(
       children: MainMenu.values
@@ -151,7 +140,7 @@ class AnimationMenuBtn extends StatefulWidget {
       {super.key, required this.isClose, required this.notifier});
 
   final bool isClose;
-  final FullScreenMenuBtnPageStateNotifier notifier;
+  final IsOpenAppBarMenuBtnPageStateNotifier notifier;
 
   @override
   State<StatefulWidget> createState() => _AnimationMenuBtn();
@@ -159,9 +148,8 @@ class AnimationMenuBtn extends StatefulWidget {
 
 class _AnimationMenuBtn extends State<AnimationMenuBtn>
     with TickerProviderStateMixin {
-  late bool _isClose;
-  late FullScreenMenuBtnPageStateNotifier _notifier;
-  late AnimationController _controller;
+  late final AnimationController _controller = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 500));
 
   int _count = 0;
   final int _targetCount = 1;
@@ -170,11 +158,6 @@ class _AnimationMenuBtn extends State<AnimationMenuBtn>
   void initState() {
     super.initState();
 
-    _isClose = widget.isClose;
-    _notifier = widget.notifier;
-
-    _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 500));
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _count++;
@@ -189,7 +172,7 @@ class _AnimationMenuBtn extends State<AnimationMenuBtn>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller.dispose(); // 要在super.dispose()之前處置Ticker
     super.dispose();
   }
 
@@ -201,8 +184,8 @@ class _AnimationMenuBtn extends State<AnimationMenuBtn>
         return Transform.rotate(
           angle: -_controller.value * 2 * pi,
           child: IconButton(
-            onPressed: () => _notifier.toggle(),
-            icon: _isClose || _count < _targetCount
+            onPressed: () => widget.notifier.toggle(),
+            icon: widget.isClose || _count < _targetCount
                 ? const Icon(Icons.close, color: Colors.white)
                 : const Icon(Icons.menu, color: Colors.white),
           ),
@@ -218,56 +201,65 @@ class LanguageDropdownMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(toString());
+    // debugPrint(toString());
 
-    MenuController menuController = MenuController();
+    final StateProvider<bool> isOpenControllerProvider =
+        StateProvider((ref) => false);
 
     // Item
-    List<MouseRegionCustomWidget> items = Language.values
+    List<Consumer> items = Language.values
         .map(
-          (e) => MouseRegionCustomWidget(
-            onEnter: (event) => menuController.open(),
-            onExit: (event) => menuController.close(),
-            builder: (event) => MenuItemButton(
-              onPressed: () {
-                context.setLocale(e.locale);
-                print('Now change to ${context.locale.toString()}');
-                menuController.close();
-                debugPrint(e.displayTitle);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                child: Text(
-                  e.displayTitle,
-                  style: TextStyle(
-                      color: event is PointerEnterEvent
-                          ? Colors.amber
-                          : Colors.white),
+          (e) => Consumer(builder: (context, ref, child) {
+            final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
+
+            return MouseRegionCustomWidget(
+              onEnter: (event) => isOpenNotifier.state = true,
+              onExit: (event) => isOpenNotifier.state = false,
+              builder: (event) => MenuItemButton(
+                onPressed: () {
+                  context.setLocale(e.locale);
+                  isOpenNotifier.state = false;
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    e.displayTitle,
+                    style: TextStyle(
+                        color: event is PointerEnterEvent
+                            ? Colors.amber
+                            : Colors.white),
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          }),
         )
         .toList();
 
     return MenuAnchor(
       builder: (context, controller, child) {
-        menuController = controller;
-        return MouseRegion(
-          onEnter: (event) => menuController.open(),
-          onExit: (event) => menuController.close(),
-          child: IconButton(
-            onPressed: () {
-              controller.isOpen ? controller.close() : controller.open();
-            },
-            icon: const Row(
-              children: [
-                Icon(Icons.language, color: Colors.white),
-                Icon(Icons.keyboard_arrow_down, color: Colors.white)
-              ],
+        return Consumer(builder: (context, ref, child) {
+          final isOpen = ref.watch(isOpenControllerProvider);
+          final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
+
+          Future.microtask(
+              () => isOpen ? controller.open() : controller.close());
+
+          return MouseRegion(
+            onEnter: (event) => isOpenNotifier.state = true,
+            onExit: (event) => isOpenNotifier.state = false,
+            child: IconButton(
+              onPressed: () =>
+                  controller.isOpen ? controller.close() : controller.open(),
+              icon: const Row(
+                children: [
+                  Icon(Icons.language, color: Colors.white),
+                  Icon(Icons.keyboard_arrow_down, color: Colors.white)
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        });
       },
       menuChildren: items,
       style: MenuStyle(
@@ -289,18 +281,18 @@ class MouseRegionCustomWidget extends ConsumerWidget {
 
   final void Function(PointerExitEvent event)? onExit;
 
+  /// 滑鼠狀態Provider
   final StateNotifierProvider<MouseRegionStateNotifier, PointerEvent>
-      mouseRegionStateNotifier = StateNotifierProvider((ref) {
-    return MouseRegionStateNotifier();
-  });
+      mouseRegionProvider =
+      StateNotifierProvider((ref) => MouseRegionStateNotifier());
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // debugPrint(toString());
 
-    final notifier = ref.read(mouseRegionStateNotifier.notifier);
+    final notifier = ref.read(mouseRegionProvider.notifier);
 
-    final PointerEvent event = ref.watch(mouseRegionStateNotifier);
+    final PointerEvent event = ref.watch(mouseRegionProvider);
 
     return MouseRegion(
       onEnter: (event) {
@@ -317,20 +309,15 @@ class MouseRegionCustomWidget extends ConsumerWidget {
 }
 
 /// 全螢幕選單按鈕
-class FullScreenMenuBtnPage extends ConsumerWidget
-    with QppAppBarTitleExtension {
-  const FullScreenMenuBtnPage(this.fullScreenMenuBtnPageStateProvider,
-      {super.key});
-
-  final StateNotifierProvider<FullScreenMenuBtnPageStateNotifier, bool>
-      fullScreenMenuBtnPageStateProvider;
+class FullScreenMenuBtnPage extends ConsumerWidget {
+  const FullScreenMenuBtnPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(fullScreenMenuBtnPageStateProvider.notifier);
+    final notifier = ref.read(isOpenAppBarMenuBtnPageProvider.notifier);
 
     final bool isShowFullScreenMenu =
-        ref.watch(fullScreenMenuBtnPageStateProvider);
+        ref.watch(isOpenAppBarMenuBtnPageProvider);
 
     return isShowFullScreenMenu
         ? Container(
@@ -342,12 +329,12 @@ class FullScreenMenuBtnPage extends ConsumerWidget
                   child: Row(
                     children: [
                       // 最左邊間距
-                      Flexible(child: spacing(200)),
-                      logo(context),
+                      const SizedBox(width: 16),
+                      const _Logo(),
                       const Spacer(flex: 5),
                       // 三條 or 最右邊間距
                       AnimationMenuBtn(isClose: true, notifier: notifier),
-                      SizedBox(width: 10.getRealWidth()),
+                      const SizedBox(width: 19.7),
                     ],
                   ),
                 ),
@@ -373,6 +360,6 @@ class FullScreenMenuBtnPage extends ConsumerWidget
               ],
             ),
           )
-        : Container();
+        : const SizedBox.shrink();
   }
 }

@@ -14,7 +14,7 @@ class HomePageIntroduce extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 200, bottom: 30),
+      padding: const EdgeInsets.only(top: 200, bottom: 80),
       child: Column(
         children: [
           LayoutBuilder(
@@ -80,7 +80,7 @@ class _Info extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           Text(
-            'home_section_1_p'.tr(),
+            context.tr('home_section_1_p'),
             textAlign: isHorizontal ? TextAlign.start : TextAlign.center,
             style: const TextStyle(color: Colors.white, fontSize: 16),
           ),
