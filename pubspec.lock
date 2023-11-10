@@ -228,9 +228,11 @@ packages:
   easy_localization_generator:
     dependency: "direct main"
     description:
-      path: easy_localization_generator-main
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: a7979b426664475fbc9a5445e2c0870771a9d30d
+      url: "https://github.com/imacuser111/qpp_easy_localiztion_generator.git"
+    source: git
     version: "0.3.2"
   easy_localization_loader:
     dependency: "direct main"
