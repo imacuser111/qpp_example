@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,9 +13,17 @@ import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
+import 'dart:ui' as ui;
 
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+// 完整路徑, 產 QR Code 用
+String qrCodeUrl = '';
+// 物品 ID
+String commodityID = "";
+// model
+late ChangeNotifierProvider<CommodityInfoModel> itemSelectInfoProvider;
 
 class CommodityInfoPage extends StatefulWidget {
   final GoRouterState routerState;
@@ -26,14 +35,7 @@ class CommodityInfoPage extends StatefulWidget {
   }
 }
 
-late ChangeNotifierProvider<CommodityInfoModel> itemSelectInfoProvider;
-
 class _CommodityInfoPageState extends State<CommodityInfoPage> {
-  // 完整路徑, 產 QR Code 用
-  String qrCodeUrl = '';
-  // 物品 ID
-  String commodityID = "";
-
   @override
   void initState() {
     super.initState();
@@ -55,68 +57,8 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
   Widget build(BuildContext context) {
     print('debug build CommodityInfoPage');
     return ListView(children: [
-      // 上方資料卡片容器
-      Card(
-        // 切子元件超出範圍
-        clipBehavior: Clip.hardEdge,
-        semanticContainer: false,
-        // margin: EdgeInsets.fromLTRB(120.w, 60.h, 120.w, 40),
-        color: QppColor.prussianBlue,
-        shape: RoundedRectangleBorder(
-          // 圓角參數
-          borderRadius: BorderRadius.circular(8),
-        ),
-        // Card 陰影
-        elevation: 0,
-        child: Column(children: [
-          // 資料區 上半部
-          Container(
-            margin: const EdgeInsets.only(bottom: 20),
-            padding: const EdgeInsets.only(top: 80, bottom: 30),
-            width: double.infinity,
-            // 上半部 bg
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(
-                        'desktop-pic-commodity-largepic-sample-general.webp'),
-                    fit: BoxFit.cover)),
-            child: Column(children: [
-              // 物品圖片
-              ItemImgPhoto(provider: itemSelectInfoProvider),
-              const SizedBox(
-                height: 45,
-              ),
-              // 物品名稱
-              Consumer(builder: (context, ref, _) {
-                ApiResponse<QppItem> itemInfoState =
-                    ref.watch(itemSelectInfoProvider).itemSelectInfoState;
-                return itemInfoState.status == Status.completed
-                    ? Text(
-                        itemInfoState.data!.name,
-                        style: const TextStyle(
-                            fontSize: 30, color: QppColor.white),
-                      )
-                    : const SizedBox();
-              }),
-            ]),
-          ),
-          // 資料區下半部
-          Container(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: const Column(
-                children: [
-                  // 類別欄位
-                  ItemInfoRow(),
-                  // 創建者欄位
-                  CreatorInfoRow(),
-                  //
-                  ItemIntroLinkRow(),
-                ],
-              )),
-        ]),
-      ),
+      const DesktopCard(),
       // QR Code
-
       Center(
         child: Card(
           margin: const EdgeInsets.only(bottom: 15, top: 50),
@@ -149,17 +91,85 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
   }
 }
 
-// TODO: TEST custom row layout
+///  桌面版本上方資料卡片容器
+class DesktopCard extends StatelessWidget {
+  const DesktopCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      // 切子元件超出範圍
+      clipBehavior: Clip.hardEdge,
+      semanticContainer: false,
+      // margin: EdgeInsets.fromLTRB(120.w, 60.h, 120.w, 40),
+      color: QppColor.prussianBlue,
+      shape: RoundedRectangleBorder(
+        // 圓角參數
+        borderRadius: BorderRadius.circular(8),
+      ),
+      // Card 陰影
+      elevation: 0,
+      child: Column(children: [
+        // 資料區 上半部
+        Container(
+          margin: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.only(top: 80, bottom: 30),
+          width: double.infinity,
+          // 上半部 bg
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(
+                      'desktop-pic-commodity-largepic-sample-general.webp'),
+                  fit: BoxFit.cover)),
+          child: Column(children: [
+            // 物品圖片
+            ItemImgPhoto(provider: itemSelectInfoProvider),
+            const SizedBox(
+              height: 45,
+            ),
+            // 物品名稱
+            Consumer(builder: (context, ref, _) {
+              ApiResponse<QppItem> itemInfoState =
+                  ref.watch(itemSelectInfoProvider).itemSelectInfoState;
+              return itemInfoState.status == Status.completed
+                  ? Text(
+                      itemInfoState.data!.name,
+                      style:
+                          const TextStyle(fontSize: 30, color: QppColor.white),
+                    )
+                  : const SizedBox();
+            }),
+          ]),
+        ),
+        // 資料區下半部
+        Container(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: const Column(
+              children: [
+                // 類別欄位
+                ItemInfoRow(),
+                // 創建者欄位
+                CreatorInfoRow(),
+                //
+                ItemIntroLinkRow(),
+                //
+                ItemDescriptionRow(),
+              ],
+            )),
+      ]),
+    );
+  }
+}
 
 /// 資訊顯示抽象類
 abstract class InfoRow extends ConsumerWidget {
-  // final ChangeNotifierProvider<CommodityInfoModel> provider;
   const InfoRow({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ApiResponse response = getResponse(ref);
     dynamic data = response.data;
+
     return response.status == Status.completed
         ? Padding(
             padding: const EdgeInsets.fromLTRB(60, 8, 60, 8),
@@ -185,9 +195,51 @@ class ItemInfoRow extends InfoRow {
   }
 
   @override
-  Widget getContent(dynamic data) {
-    // 使用多語系
-    return _cellCategory(title: QppLocales.commodityInfoCategory, item: data);
+  Widget getContent(data) {
+    if (data is QppItem) {
+      return Builder(builder: (context) {
+        return Row(
+          children: [
+            SizedBox(
+              width: 180,
+              child: Text(
+                context.tr('commodity_info_category'),
+                textAlign: TextAlign.start,
+                style:
+                    const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+              ),
+            ),
+            // 類別 icon
+            SvgPicture.asset(
+              data.categoryIconPath,
+              width: 20,
+            ),
+            // 間隔
+            const SizedBox(
+              width: 8,
+            ),
+            // 類別名稱
+            Text(
+              data.categoryName,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+            ),
+            // 間隔
+            const SizedBox(
+              width: 8,
+            ),
+            // 物品 ID
+            Text(
+              data.id.toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  fontSize: 18, color: QppColor.mediumAquamarine),
+            ),
+          ],
+        );
+      });
+    }
+    return const SizedBox();
   }
 }
 
@@ -202,8 +254,60 @@ class CreatorInfoRow extends InfoRow {
 
   @override
   Widget getContent(data) {
-    // 使用多語系
-    return _cellCreator(title: QppLocales.commodityInfoCreator, creator: data);
+    if (data is QppUser) {
+      return Builder(builder: (context) {
+        return Row(
+          children: [
+            SizedBox(
+              width: 180,
+              child: Text(
+                context.tr('commodity_info_creator'),
+                textAlign: TextAlign.start,
+                style:
+                    const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+              ),
+            ),
+            // 若為官方帳號, 顯示 icon
+            data.isOfficial
+                ? Container(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: SvgPicture.asset(
+                      data.officialIconPath,
+                      width: 20,
+                    ),
+                  )
+                : const SizedBox(),
+            // id
+            Text(
+              data.displayID,
+              textAlign: TextAlign.center,
+              style:
+                  const TextStyle(fontSize: 18, color: QppColor.indianYellow),
+            ),
+            // 間隔
+            const SizedBox(
+              width: 8,
+            ),
+            // name
+            Text(
+              data.displayName,
+              textAlign: TextAlign.center,
+              style:
+                  const TextStyle(fontSize: 18, color: QppColor.indianYellow),
+            ),
+            const Expanded(child: Text('')),
+            // 物件左右翻轉, 或用 RotatedBox
+            Directionality(
+                textDirection: ui.TextDirection.rtl,
+                child: SvgPicture.asset(
+                  'mobile-icon-actionbar-back-normal.svg',
+                  matchTextDirection: true,
+                )),
+          ],
+        );
+      });
+    }
+    return const SizedBox();
   }
 }
 
@@ -218,125 +322,80 @@ class ItemIntroLinkRow extends InfoRow {
 
   @override
   Widget getContent(data) {
-    // 使用多語系
-    return _cellIntroLink(
-        title: QppLocales.commodityInfoTitle, introLink: data);
+    if (data is ItemMultiLanguageData) {
+      // 檢查是否有資料
+      if (data.hasContent) {
+        // 有資料才顯示
+        return Builder(builder: (context) {
+          return Row(
+            // 子元件對齊頂端
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 180,
+                child: Text(
+                  context.tr('commodity_info_title'),
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                      fontSize: 18, color: QppColor.babyBlueEyes),
+                ),
+              ),
+              // intro link
+              Text(
+                data.getContentWithContext(context),
+                textAlign: TextAlign.start,
+                style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+              ),
+            ],
+          );
+        });
+      }
+    }
+    return const SizedBox();
   }
 }
 
-/// 類別
-Widget _cellCategory({required String title, required QppItem item}) {
-  return Row(
-    children: [
-      SizedBox(
-        width: 180,
-        child: Text(
-          title,
-          textAlign: TextAlign.start,
-          style: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
-        ),
-      ),
-      // 類別 icon
-      SvgPicture.asset(
-        item.categoryIconPath,
-        width: 20,
-      ),
-      // 間隔
-      const SizedBox(
-        width: 8,
-      ),
-      // 類別名稱
-      Text(
-        item.categoryName,
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 18, color: QppColor.platinum),
-      ),
-      // 間隔
-      const SizedBox(
-        width: 8,
-      ),
-      // 物品 ID
-      Text(
-        item.id.toString(),
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 18, color: QppColor.mediumAquamarine),
-      ),
-    ],
-  );
-}
+/// 物品說明資訊(多語系)
+class ItemDescriptionRow extends InfoRow {
+  const ItemDescriptionRow({super.key});
 
-/// 創建者
-Widget _cellCreator({required String title, required QppUser creator}) {
-  return Row(
-    children: [
-      SizedBox(
-        width: 180,
-        child: Text(
-          title,
-          textAlign: TextAlign.start,
-          style: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
-        ),
-      ),
-      // 若為官方帳號, 顯示 icon
-      creator.isOfficial
-          ? Container(
-              padding: const EdgeInsets.only(right: 8),
-              child: SvgPicture.asset(
-                creator.officialIconPath,
-                width: 20,
+  @override
+  ApiResponse getResponse(WidgetRef ref) {
+    return ref.watch(itemSelectInfoProvider).itemDescriptionInfoState;
+  }
+
+  @override
+  Widget getContent(data) {
+    if (data is ItemMultiLanguageData) {
+      // 檢查是否有資料
+      if (data.hasContent) {
+        // 有資料才顯示
+        return Builder(builder: (context) {
+          return Row(
+            // 子元件對齊頂端
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 180,
+                child: Text(
+                  context.tr('commodity_info_info'),
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                      fontSize: 18, color: QppColor.babyBlueEyes),
+                ),
               ),
-            )
-          : const SizedBox(),
-      // id
-      Text(
-        creator.displayID,
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 18, color: QppColor.indianYellow),
-      ),
-      // 間隔
-      const SizedBox(
-        width: 8,
-      ),
-      // name
-      Text(
-        creator.displayName,
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 18, color: QppColor.indianYellow),
-      ),
-      const Expanded(child: Text('')),
-      // 物件左右翻轉, 或用 RotatedBox
-      Directionality(
-          textDirection: TextDirection.rtl,
-          child: SvgPicture.asset(
-            'mobile-icon-actionbar-back-normal.svg',
-            matchTextDirection: true,
-          )),
-    ],
-  );
-}
-
-/// 物品多語系連結資訊
-Widget _cellIntroLink(
-    {required String title, required ItemMultiLanguageData introLink}) {
-  return Builder(builder: (context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 180,
-          child: Text(
-            title,
-            textAlign: TextAlign.start,
-            style: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
-          ),
-        ),
-
-        // intro link
-        Text(
-          introLink.getContentWithContext(context),
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 18, color: QppColor.platinum),
-        ),
-      ],
-    );
-  });
+              // intro link
+              Text(
+                data.getContentWithContext(context),
+                textAlign: TextAlign.start,
+                maxLines: 2,
+                style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+              ),
+            ],
+          );
+        });
+      }
+    }
+    return const SizedBox();
+  }
 }

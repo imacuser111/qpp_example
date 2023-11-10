@@ -86,4 +86,9 @@ class ItemMultiLanguageData {
       _ => '',
     };
   }
+
+  /// 是否有資料
+  bool get hasContent {
+    return !defaultContent.isNullOrEmpty;
+  }
 }
