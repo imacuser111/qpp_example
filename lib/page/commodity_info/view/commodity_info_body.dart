@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
@@ -14,30 +15,43 @@ import 'package:qpp_example/universal_link/universal_link_data.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class CommodityInfoPage extends StatelessWidget {
+class CommodityInfoPage extends StatefulWidget {
   final GoRouterState routerState;
-
   const CommodityInfoPage({super.key, required this.routerState});
 
   @override
-  Widget build(BuildContext context) {
-    print(toString());
+  State<StatefulWidget> createState() {
+    return _CommodityInfoPageState();
+  }
+}
 
-    // 物品 ID
-    String commodityID =
-        UniversalLinkParamData.fromJson(routerState.uri.queryParameters)
+class _CommodityInfoPageState extends State<CommodityInfoPage> {
+  // 完整路徑, 產 QR Code 用
+  String qrCodeUrl = '';
+  // 物品 ID
+  String commodityID = "";
+  late ChangeNotifierProvider<CommodityInfoModel> itemSelectInfoProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    qrCodeUrl = ServerConst.routerHost + widget.routerState.uri.toString();
+    commodityID =
+        UniversalLinkParamData.fromJson(widget.routerState.uri.queryParameters)
                 .commodityID ??
             "";
-    // 完整路徑, 產 QR Code 用
-    String qrCodeUrl = ServerConst.routerHost + routerState.uri.toString();
     // model 初始化
-    late final itemSelectInfoProvider =
-        ChangeNotifierProvider<CommodityInfoModel>((ref) {
+    itemSelectInfoProvider = ChangeNotifierProvider<CommodityInfoModel>((ref) {
       // 開始取資料
+      print('debug load data');
       Future.microtask(() => ref.notifier.loadData(commodityID));
       return CommodityInfoModel();
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    print('debug build CommodityInfoPage');
     return ListView(children: [
       // 上方資料卡片容器
       Card(
