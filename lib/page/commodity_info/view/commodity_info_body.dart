@@ -203,7 +203,7 @@ class ItemInfoRow extends InfoRow {
             SizedBox(
               width: 180,
               child: Text(
-                context.tr('commodity_info_category'),
+                context.tr(QppLocales.commodityInfoCategory),
                 textAlign: TextAlign.start,
                 style:
                     const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
@@ -261,7 +261,7 @@ class CreatorInfoRow extends InfoRow {
             SizedBox(
               width: 180,
               child: Text(
-                context.tr('commodity_info_creator'),
+                context.tr(QppLocales.commodityInfoCreator),
                 textAlign: TextAlign.start,
                 style:
                     const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
@@ -334,7 +334,7 @@ class ItemIntroLinkRow extends InfoRow {
               SizedBox(
                 width: 180,
                 child: Text(
-                  context.tr('commodity_info_title'),
+                  context.tr(QppLocales.commodityInfoTitle),
                   textAlign: TextAlign.start,
                   style: const TextStyle(
                       fontSize: 18, color: QppColor.babyBlueEyes),
@@ -378,7 +378,7 @@ class ItemDescriptionRow extends InfoRow {
               SizedBox(
                 width: 180,
                 child: Text(
-                  context.tr('commodity_info_info'),
+                  context.tr(QppLocales.commodityInfoInfo),
                   textAlign: TextAlign.start,
                   style: const TextStyle(
                       fontSize: 18, color: QppColor.babyBlueEyes),
