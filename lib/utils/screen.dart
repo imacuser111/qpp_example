@@ -33,8 +33,8 @@ extension DoubleScreenExtension on double {
 
 extension NumScreenExtension on num {
   /// 取得真實寬度
-  double getRealWidth() {
-    return screenWidthWithoutContext() * this / 1980;
+  double getRealWidth({required double screenWidth}) {
+    return screenWidth * this / 1980;
   }
 }
 
