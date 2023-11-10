@@ -49,7 +49,11 @@ dependencies:
   # 多語系
   easy_localization: ^3.0.3
   easy_localization_loader: ^2.0.0
-  easy_localization_generator: ^0.3.2
+
+  # flutter pub run build_runner build --delete-conflicting-outputs 產 CSV檔, 因套件有衝突, 載下來修改
+  easy_localization_generator:
+    path: easy_localization_generator-main/
+  # easy_localization_generator: ^0.3.2
 
 # 解決有衝突的套件
 dependency_overrides:

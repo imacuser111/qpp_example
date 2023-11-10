@@ -228,10 +228,9 @@ packages:
   easy_localization_generator:
     dependency: "direct main"
     description:
-      name: easy_localization_generator
-      sha256: f9294f8cd183b71c4039d5f9841a1086ebaa2dd8b2813b73b017ee8d6198e12e
-      url: "https://pub.dev"
-    source: hosted
+      path: easy_localization_generator-main
+      relative: true
+    source: path
     version: "0.3.2"
   easy_localization_loader:
     dependency: "direct main"
