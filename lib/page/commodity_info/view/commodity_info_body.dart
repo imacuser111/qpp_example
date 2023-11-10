@@ -7,6 +7,7 @@ import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/common_ui/item_image.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
+import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
@@ -25,12 +26,13 @@ class CommodityInfoPage extends StatefulWidget {
   }
 }
 
+late ChangeNotifierProvider<CommodityInfoModel> itemSelectInfoProvider;
+
 class _CommodityInfoPageState extends State<CommodityInfoPage> {
   // 完整路徑, 產 QR Code 用
   String qrCodeUrl = '';
   // 物品 ID
   String commodityID = "";
-  late ChangeNotifierProvider<CommodityInfoModel> itemSelectInfoProvider;
 
   @override
   void initState() {
@@ -101,14 +103,14 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
           // 資料區下半部
           Container(
               padding: const EdgeInsets.only(bottom: 20),
-              child: Column(
+              child: const Column(
                 children: [
                   // 類別欄位
-                  ItemInfoRow(
-                    provider: itemSelectInfoProvider,
-                  ),
+                  ItemInfoRow(),
                   // 創建者欄位
-                  CreatorInfoRow(provider: itemSelectInfoProvider),
+                  CreatorInfoRow(),
+                  //
+                  ItemIntroLinkRow(),
                 ],
               )),
         ]),
@@ -151,8 +153,8 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
 
 /// 資訊顯示抽象類
 abstract class InfoRow extends ConsumerWidget {
-  final ChangeNotifierProvider<CommodityInfoModel> provider;
-  const InfoRow({super.key, required this.provider});
+  // final ChangeNotifierProvider<CommodityInfoModel> provider;
+  const InfoRow({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -175,11 +177,11 @@ abstract class InfoRow extends ConsumerWidget {
 
 /// 物品資訊
 class ItemInfoRow extends InfoRow {
-  const ItemInfoRow({super.key, required super.provider});
+  const ItemInfoRow({super.key});
 
   @override
   ApiResponse getResponse(WidgetRef ref) {
-    return ref.watch(provider).itemSelectInfoState;
+    return ref.watch(itemSelectInfoProvider).itemSelectInfoState;
   }
 
   @override
@@ -191,17 +193,34 @@ class ItemInfoRow extends InfoRow {
 
 /// 創建者資訊
 class CreatorInfoRow extends InfoRow {
-  const CreatorInfoRow({super.key, required super.provider});
+  const CreatorInfoRow({super.key});
 
   @override
   ApiResponse getResponse(WidgetRef ref) {
-    return ref.watch(provider).userInfoState;
+    return ref.watch(itemSelectInfoProvider).userInfoState;
   }
 
   @override
   Widget getContent(data) {
     // 使用多語系
     return _cellCreator(title: QppLocales.commodityInfoCreator, creator: data);
+  }
+}
+
+/// 物品連結資訊(多語系)
+class ItemIntroLinkRow extends InfoRow {
+  const ItemIntroLinkRow({super.key});
+
+  @override
+  ApiResponse getResponse(WidgetRef ref) {
+    return ref.watch(itemSelectInfoProvider).itemLinkInfoState;
+  }
+
+  @override
+  Widget getContent(data) {
+    // 使用多語系
+    return _cellIntroLink(
+        title: QppLocales.commodityInfoTitle, introLink: data);
   }
 }
 
@@ -294,4 +313,30 @@ Widget _cellCreator({required String title, required QppUser creator}) {
           )),
     ],
   );
+}
+
+/// 物品多語系連結資訊
+Widget _cellIntroLink(
+    {required String title, required ItemMultiLanguageData introLink}) {
+  return Builder(builder: (context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 180,
+          child: Text(
+            title,
+            textAlign: TextAlign.start,
+            style: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+          ),
+        ),
+
+        // intro link
+        Text(
+          introLink.getContentWithContext(context),
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+        ),
+      ],
+    );
+  });
 }

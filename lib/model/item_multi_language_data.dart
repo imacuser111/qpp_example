@@ -50,8 +50,13 @@ class ItemMultiLanguageData {
   }
 
   /// 取得目前本地語系資訊內容, 若為空值會取預設語系資料
-  String getContent(BuildContext context) {
+  String getContentWithContext(BuildContext context) {
     Locale locale = context.locale;
+    return getContentWithLocale(locale);
+  }
+
+  /// 取得目前本地語系資訊內容, 若為空值會取預設語系資料
+  String getContentWithLocale(Locale locale) {
     String des = switch (locale.countryCode) {
       "US" => US,
       "TW" => CHT,
@@ -63,7 +68,6 @@ class ItemMultiLanguageData {
       'ID' => ID,
       _ => '',
     };
-
     return des.isNullOrEmpty ? defaultContent : des;
   }
 
