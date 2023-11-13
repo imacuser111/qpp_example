@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, no_leading_underscores_for_local_identifiers, prefer_typing_uninitialized_variables
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +35,7 @@ class ReadMoreText extends StatefulWidget {
     this.semanticsLabel,
     this.moreStyle,
     this.lessStyle,
-    this.delimiter = _kEllipsis + ' ',
+    this.delimiter = '$_kEllipsis ',
     this.delimiterStyle,
     this.callback,
     this.onLinkPressed,
@@ -154,16 +156,18 @@ class ReadMoreTextState extends State<ReadMoreText> {
 
         TextSpan? preTextSpan;
         TextSpan? postTextSpan;
-        if (widget.preDataText != null)
+        if (widget.preDataText != null) {
           preTextSpan = TextSpan(
-            text: widget.preDataText! + " ",
+            text: "${widget.preDataText!} ",
             style: widget.preDataTextStyle ?? effectiveTextStyle,
           );
-        if (widget.postDataText != null)
+        }
+        if (widget.postDataText != null) {
           postTextSpan = TextSpan(
-            text: " " + widget.postDataText!,
+            text: " ${widget.postDataText!}",
             style: widget.postDataTextStyle ?? effectiveTextStyle,
           );
+        }
 
         // Create a TextSpan with data
         final text = TextSpan(
