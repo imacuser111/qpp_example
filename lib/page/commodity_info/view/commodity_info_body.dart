@@ -14,8 +14,10 @@ import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
 import 'dart:ui' as ui;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/read_more_text.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// 完整路徑, 產 QR Code 用
@@ -345,13 +347,8 @@ class ItemIntroLinkRow extends InfoRow {
               // intro link
               Expanded(
                 // Expanded 包 text, 實現自動換行
-                child: Text(
-                  data.getContentWithContext(context),
-                  textAlign: TextAlign.start,
-                  maxLines: 2,
-                  style:
-                      const TextStyle(fontSize: 18, color: QppColor.platinum),
-                ),
+                child: InfoLinkReadMoreText(
+                    data: data.getContentWithContext(context)),
               ),
             ],
           );
@@ -394,13 +391,8 @@ class ItemDescriptionRow extends InfoRow {
               // intro link
               Expanded(
                 // Expanded 包 text, 實現自動換行
-                child: Text(
-                  data.getContentWithContext(context),
-                  textAlign: TextAlign.start,
-                  maxLines: 2,
-                  style:
-                      const TextStyle(fontSize: 18, color: QppColor.platinum),
-                ),
+                child: InfoLinkReadMoreText(
+                    data: data.getContentWithContext(context)),
               ),
             ],
           );
@@ -408,5 +400,39 @@ class ItemDescriptionRow extends InfoRow {
       }
     }
     return const SizedBox();
+  }
+}
+
+/// 連結及說明用, 顯示更多及開啟連結用 Text Widget
+class InfoLinkReadMoreText extends StatelessWidget {
+  final String data;
+  const InfoLinkReadMoreText({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return ReadMoreText(
+      data,
+      textAlign: TextAlign.start,
+      trimLines: 2,
+      trimMode: TrimMode.Line,
+      trimExpandedText: '',
+      trimCollapsedText: context.tr('commodity_info_more'),
+      moreStyle: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+      style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+      linkTextStyle:
+          const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+      onLinkPressed: (String url) {
+        _launchURL(url);
+      },
+    );
+  }
+
+  /// 打開連結
+  _launchURL(String url) async {
+    Uri uri = Uri.parse(url);
+    // 使用 url launcher 開啟連結
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $uri');
+    }
   }
 }

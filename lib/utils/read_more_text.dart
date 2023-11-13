@@ -1,9 +1,8 @@
 // ignore_for_file: constant_identifier_names, no_leading_underscores_for_local_identifiers, prefer_typing_uninitialized_variables
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-// https://pub-web.flutter-io.cn/packages/readmore
+// 修改自 https://pub-web.flutter-io.cn/packages/readmore
 
 enum TrimMode {
   Length,
@@ -20,7 +19,7 @@ class ReadMoreText extends StatefulWidget {
     this.preDataTextStyle,
     this.postDataTextStyle,
     // 收起提示字串
-    this.trimExpandedText = '',
+    this.trimExpandedText = 'Less',
     // 顯示更多提示字串
     this.trimCollapsedText = 'More',
     this.colorClickableText,
@@ -71,17 +70,25 @@ class ReadMoreText extends StatefulWidget {
   /// Textspan used after the data end or before the more/less
   final TextStyle? postDataTextStyle;
 
-  ///Called when state change between expanded/compress
+  /// Called when state change between expanded/compress
   final Function(bool val)? callback;
 
+  /// 收起提示字串, 預設為 'Less', 若不需要收起請給空字串
+  final String trimExpandedText;
+
+  /// 顯示更多提示字串, 預設為 'More', 若不需要打開請給空字串
+  final String trimCollapsedText;
+
+  /// 點擊連結處理
   final ValueChanged<String>? onLinkPressed;
 
+  /// 顯示的字串
+  final String data;
+
+  /// 字串中帶連結的 TextStyle
   final TextStyle? linkTextStyle;
 
   final String delimiter;
-  final String data;
-  final String trimExpandedText;
-  final String trimCollapsedText;
   final Color? colorClickableText;
   final TextStyle? style;
   final TextAlign? textAlign;
