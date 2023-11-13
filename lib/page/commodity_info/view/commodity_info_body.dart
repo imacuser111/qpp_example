@@ -18,11 +18,13 @@ import 'dart:ui' as ui;
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-// 完整路徑, 產 QR Code 用
+/// 完整路徑, 產 QR Code 用
 String qrCodeUrl = '';
-// 物品 ID
+
+/// 物品 ID
 String commodityID = "";
-// model
+
+/// view model
 late ChangeNotifierProvider<CommodityInfoModel> itemSelectInfoProvider;
 
 class CommodityInfoPage extends StatefulWidget {
@@ -341,10 +343,15 @@ class ItemIntroLinkRow extends InfoRow {
                 ),
               ),
               // intro link
-              Text(
-                data.getContentWithContext(context),
-                textAlign: TextAlign.start,
-                style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+              Expanded(
+                // Expanded 包 text, 實現自動換行
+                child: Text(
+                  data.getContentWithContext(context),
+                  textAlign: TextAlign.start,
+                  maxLines: 2,
+                  style:
+                      const TextStyle(fontSize: 18, color: QppColor.platinum),
+                ),
               ),
             ],
           );
@@ -385,11 +392,15 @@ class ItemDescriptionRow extends InfoRow {
                 ),
               ),
               // intro link
-              Text(
-                data.getContentWithContext(context),
-                textAlign: TextAlign.start,
-                maxLines: 2,
-                style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+              Expanded(
+                // Expanded 包 text, 實現自動換行
+                child: Text(
+                  data.getContentWithContext(context),
+                  textAlign: TextAlign.start,
+                  maxLines: 2,
+                  style:
+                      const TextStyle(fontSize: 18, color: QppColor.platinum),
+                ),
               ),
             ],
           );
