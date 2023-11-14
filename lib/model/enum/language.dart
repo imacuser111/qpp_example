@@ -30,6 +30,7 @@ enum Language implements CMeunAnchorData {
   final String value;
   const Language(this.value);
 
+  /// 從字串取得 Language
   factory Language.findTypeByValue(String value) {
     for (var lan in Language.values) {
       if (lan.value == value) {

@@ -21,9 +21,9 @@ extension BoxConstraintsExtension on BoxConstraints {
 extension DoubleScreenExtension on double {
   /// 決定螢幕樣式
   ScreenStyle determineScreenStyle() {
-    if (this < 480) {
+    if (this < 667) {
       return ScreenStyle.mobile;
-    } else if (this >= 480 && this <= 720) {
+    } else if (this >= 667 && this <= 768) {
       return ScreenStyle.tablet;
     } else {
       return ScreenStyle.desktop;
