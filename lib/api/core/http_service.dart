@@ -1,11 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:qpp_example/constants/server_const.dart';
 
 class HttpService {
   HttpService._privateConstructor();
 
   static final HttpService instance = HttpService._privateConstructor();
-
-  final _baseUrl = "https://dev2-api.qpptec.com/client/";
 
   final Dio dio = Dio();
 
@@ -23,12 +22,12 @@ class HttpService {
   }
 
   void initDio() {
-    // // 請求標頭也可以在這裡設置
+    // 請求標頭也可以在這裡設置
     // dio.options.headers = {
     //   "Access-Control-Allow-Origin": "*",
     // };
     
-    dio.options.baseUrl = _baseUrl;
+    dio.options.baseUrl = ServerConst.apiUrl;
 
     dio.options.connectTimeout = const Duration(seconds: 10);
     dio.options.receiveTimeout = const Duration(seconds: 8);

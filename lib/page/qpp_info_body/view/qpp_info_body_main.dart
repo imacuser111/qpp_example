@@ -1,28 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/api/podo/core/base_response.dart';
+import 'package:qpp_example/common_ui/qpp_qrcode.dart';
 import 'package:qpp_example/page/qpp_info_body/view_model/qpp_info_body_view_model.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
-class InformationOuterFrame extends StatelessWidget {
-  InformationOuterFrame({super.key, required this.userID});
+late ChangeNotifierProvider<UserSelectInfoChangeNotifier>
+    userSelectInfoProvider;
+
+class InformationOuterFrame extends StatefulWidget {
+  const InformationOuterFrame({super.key, required this.userID});
 
   final String userID;
 
-  late final userSelectInfoProvider =
-      ChangeNotifierProvider<UserSelectInfoChangeNotifier>((ref) {
-    int? userID = int.tryParse(this.userID);
+  @override
+  State<InformationOuterFrame> createState() => _InformationOuterFrameState();
+}
 
-    if (userID != null) {
-      Future.microtask(() => ref.notifier.getUserInfo(userID));
-      Future.microtask(() => ref.notifier.getUserImage(userID));
-      Future.microtask(() => ref.notifier
-          .getUserImage(userID, style: QppImageStyle.backgroundImage));
-    }
+class _InformationOuterFrameState extends State<InformationOuterFrame> {
+  @override
+  void initState() {
+    super.initState();
 
-    return UserSelectInfoChangeNotifier();
-  });
+    userSelectInfoProvider =
+        ChangeNotifierProvider<UserSelectInfoChangeNotifier>((ref) {
+      int? userID = int.tryParse(widget.userID);
+
+      if (userID != null) {
+        Future.microtask(() => ref.notifier.getUserInfo(userID));
+        Future.microtask(() => ref.notifier.getUserImage(userID));
+        Future.microtask(() => ref.notifier
+            .getUserImage(userID, style: QppImageStyle.backgroundImage));
+      }
+
+      return UserSelectInfoChangeNotifier();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +62,9 @@ class InformationOuterFrame extends StatelessWidget {
                         children: [
                           AvatarWidget(
                             userSelectInfoProvider: userSelectInfoProvider,
-                            userID: userID,
+                            userID: widget.userID,
                           ),
-                          InformationDescriptionWidget(
-                            userSelectInfoProvider: userSelectInfoProvider,
-                          ),
+                          const InformationDescriptionWidget(),
                         ],
                       ),
                     ),
@@ -65,9 +76,9 @@ class InformationOuterFrame extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.only(bottom: 89),
-            child: QRCodeForInfoWidget(
+            child: UniversalLinkQRCode(
               str:
-                  "https://qpptec.com/app/information?phoneNumber=$userID&lang=zh_TW",
+                  "https://qpptec.com/app/information?phoneNumber=${widget.userID}&lang=zh_TW",
             ),
           ),
         ],
@@ -171,20 +182,17 @@ class AvatarWidget extends ConsumerWidget {
 
 /// 資訊說明Widget
 class InformationDescriptionWidget extends ConsumerWidget {
-  const InformationDescriptionWidget(
-      {super.key, required this.userSelectInfoProvider});
-
-  final ChangeNotifierProvider<UserSelectInfoChangeNotifier>
-      userSelectInfoProvider;
+  const InformationDescriptionWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     debugPrint('InformationDescriptionWidget build');
 
-    final notifier = ref.watch(userSelectInfoProvider);
-    final response = (notifier.infoState.data);
+    final response =
+        ref.watch(userSelectInfoProvider.select((value) => value.infoState));
 
-    final String text = response?.userSelectInfoResponse.infoStr ?? '尚未新增簡介';
+    final String text =
+        response.data?.userSelectInfoResponse.infoStr ?? '尚未新增簡介';
     const TextStyle textStyle = TextStyle(fontSize: 18, color: Colors.white);
     // final double textH = text.height(textStyle, context);
 
@@ -192,40 +200,9 @@ class InformationDescriptionWidget extends ConsumerWidget {
       width: double.infinity,
       color: const Color.fromRGBO(22, 32, 68, 1),
       child: Padding(
-        padding:
-        const EdgeInsets.symmetric(vertical: 40, horizontal: 60),
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 60),
         child: Text(text, style: textStyle),
       ),
-    );
-  }
-}
-
-/// 資訊頁的QRCode
-class QRCodeForInfoWidget extends StatelessWidget {
-  const QRCodeForInfoWidget(
-      {super.key, required this.str, this.infoStr = '掃描條碼開啟QPP'});
-
-  final String str;
-
-  final String infoStr;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(6))),
-          child: QrImageView(
-            data: str,
-            size: 144,
-            padding: const EdgeInsets.all(11),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(infoStr, style: const TextStyle(color: Colors.amber)),
-      ],
     );
   }
 }

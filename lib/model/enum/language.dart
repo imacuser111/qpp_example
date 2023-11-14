@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:qpp_example/common_ui/qpp_menu.dart';
 
 /// 語系
-enum Language {
+enum Language implements CMeunAnchorData {
   /// 繁體中文
   chineseTrad("CHT"),
 
@@ -38,7 +39,8 @@ enum Language {
     return Language.chineseTrad;
   }
 
-  String get displayTitle {
+  @override
+  String get title {
     return switch (this) {
       chineseTrad => '繁體中文',
       chineseSimp => '简体中文',
@@ -50,6 +52,9 @@ enum Language {
       indonesia => 'Bahasa Indonesia',
     };
   }
+
+  @override
+  String? get image => null;
 
   /// 取得對應 Locale
   Locale get locale {

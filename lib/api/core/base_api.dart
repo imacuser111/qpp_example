@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:qpp_example/api/core/http_service.dart';
 import 'package:qpp_example/api/podo/core/base_response.dart';
+import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 
 enum RequestMethod { get, post, put, delete, patch, copy, head }
@@ -70,7 +71,7 @@ abstract class BaseApi {
 
     Options options = Options(headers: headerParams);
 
-    dio.options.baseUrl = "https://dev2-api.qpptec.com/client/";
+    dio.options.baseUrl = ServerConst.apiUrl;
 
     try {
       switch (method) {

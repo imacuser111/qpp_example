@@ -27,3 +27,6 @@ class MouseRegionStateNotifier extends StateNotifier<PointerEvent> {
     state = const PointerExitEvent();
   }
 }
+
+/// 登入狀態Provider
+final StateProvider<bool> isLoginProvider = StateProvider((ref) => false);
