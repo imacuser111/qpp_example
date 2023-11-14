@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/common_ui/item_image.dart';
 import 'package:qpp_example/constants/server_const.dart';
+import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
@@ -60,6 +61,7 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
   @override
   Widget build(BuildContext context) {
     print('debug build CommodityInfoPage');
+
     return ListView(children: [
       const DesktopCard(),
       // QR Code
@@ -108,7 +110,7 @@ class DesktopCard extends StatelessWidget {
           // 切子元件超出範圍
           clipBehavior: Clip.hardEdge,
           semanticContainer: false,
-          margin: const EdgeInsets.fromLTRB(60, 60, 60, 40),
+          margin: const EdgeInsets.fromLTRB(60, 100, 60, 40),
           // margin: const EdgeInsets.only(top: 120),
           color: QppColor.prussianBlue,
           shape: RoundedRectangleBorder(
@@ -293,25 +295,15 @@ class CreatorInfoRow extends InfoRow {
                     ),
                   )
                 : const SizedBox(),
-            // id
-            Text(
-              data.displayID,
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 18, color: QppColor.indianYellow),
+            // id + name
+            Expanded(
+              child: Text(
+                "${data.displayID}  ${data.displayName}",
+                textAlign: TextAlign.start,
+                style:
+                    const TextStyle(fontSize: 18, color: QppColor.indianYellow),
+              ),
             ),
-            // 間隔
-            const SizedBox(
-              width: 8,
-            ),
-            // name
-            Text(
-              data.displayName,
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 18, color: QppColor.indianYellow),
-            ),
-            const Expanded(child: Text('')),
             // 物件左右翻轉, 或用 RotatedBox
             Directionality(
                 textDirection: ui.TextDirection.rtl,
@@ -431,8 +423,7 @@ class InfoLinkReadMoreText extends StatelessWidget {
       trimCollapsedText: context.tr('commodity_info_more'),
       moreStyle: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
       style: const TextStyle(fontSize: 18, color: QppColor.platinum),
-      linkTextStyle:
-          const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+      linkTextStyle: const TextStyle(fontSize: 18, color: QppColor.mayaBlue),
       onLinkPressed: (String url) {
         _launchURL(url);
       },
