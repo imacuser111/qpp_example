@@ -41,7 +41,7 @@ class ItemImgPhoto extends ConsumerWidget {
   /// desktop 一般物品, size 100 or 88, 圓形
   Container _img(String path) {
     return Container(
-      width: isMobile ? 88 : 100,
+      width: isMobile ? 88 : 110,
       clipBehavior: Clip.antiAlias,
       // decoration 負責切形狀
       decoration: _circleDecor(),
