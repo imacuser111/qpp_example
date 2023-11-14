@@ -269,7 +269,7 @@ class _BgWidget extends StatelessWidget {
         decoration: BoxDecoration(
           image: isShowBackground
               ? DecorationImage(
-                  image: AssetImage(type.image),
+                  image: AssetImage('assets/${type.image}'),
                   fit: BoxFit.cover,
                 )
               : null,

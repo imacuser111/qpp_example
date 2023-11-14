@@ -52,7 +52,7 @@ class ItemImgPhoto extends ConsumerWidget {
         // 圖片讀取錯誤處理
         errorBuilder: (context, error, stackTrace) {
           return SvgPicture.asset(
-            'desktop-pic-commodity-avatar-default.svg',
+            'assets/desktop-pic-commodity-avatar-default.svg',
           );
         },
         filterQuality: FilterQuality.high,
@@ -75,7 +75,7 @@ class ItemImgPhoto extends ConsumerWidget {
         // 圖片讀取錯誤處理
         errorBuilder: (context, error, stackTrace) {
           return SvgPicture.asset(
-            'desktop-pic-commodity-avatar-default.svg',
+            'assets/desktop-pic-commodity-avatar-default.svg',
           );
         },
         filterQuality: FilterQuality.high,

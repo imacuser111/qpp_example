@@ -123,7 +123,7 @@ class AvatarWidget extends ConsumerWidget {
         image: DecorationImage(
           fit: BoxFit.cover,
           image: bgImageIsError
-              ? const AssetImage('desktop_pic_commodity_largepic_default.webp')
+              ? const AssetImage('assets/desktop_pic_commodity_largepic_default.webp')
                   as ImageProvider
               : NetworkImage(bgImage),
           onError: (exception, stackTrace) =>
@@ -147,7 +147,7 @@ class AvatarWidget extends ConsumerWidget {
                     backgroundColor: Colors.transparent, // 設置透明背景
                     backgroundImage: avaterIsError
                         ? const AssetImage(
-                                'desktop_pic_profile_avatar_default.png')
+                                'assets/desktop_pic_profile_avatar_default.png')
                             as ImageProvider
                         : NetworkImage(avatar),
                     onBackgroundImageError: (exception, stackTrace) =>

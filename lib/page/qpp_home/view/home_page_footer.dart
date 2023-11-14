@@ -68,8 +68,8 @@ class _Info extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SvgPicture.asset(isDesktopStyle
-            ? 'desktop_pic_qpp_logo_03.svg'
-            : 'mobile-pic-qpp-logo-03.svg'),
+            ? 'assets/desktop_pic_qpp_logo_03.svg'
+            : 'assets/mobile-pic-qpp-logo-03.svg'),
         const SizedBox(height: 30, width: 30),
         const Column(
           crossAxisAlignment: CrossAxisAlignment.start,

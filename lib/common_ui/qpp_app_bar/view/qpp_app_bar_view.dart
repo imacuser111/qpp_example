@@ -85,7 +85,7 @@ class _Logo extends StatelessWidget {
 
     return IconButton(
       icon: Image.asset(
-        'desktop-pic-qpp-logo-01.png',
+        'assets/desktop-pic-qpp-logo-01.png',
         width: isDesktopStyle ? 148 : 89,
         scale: 46 / 148,
       ),
