@@ -65,7 +65,7 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
       // QR Code
       Center(
         child: Card(
-          margin: const EdgeInsets.only(bottom: 15, top: 50),
+          margin: const EdgeInsets.only(bottom: 15, top: 32),
           // 切子元件超出範圍
           clipBehavior: Clip.hardEdge,
           shape: RoundedRectangleBorder(
@@ -101,66 +101,78 @@ class DesktopCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      // 切子元件超出範圍
-      clipBehavior: Clip.hardEdge,
-      semanticContainer: false,
-      // margin: EdgeInsets.fromLTRB(120.w, 60.h, 120.w, 40),
-      color: QppColor.prussianBlue,
-      shape: RoundedRectangleBorder(
-        // 圓角參數
-        borderRadius: BorderRadius.circular(8),
-      ),
-      // Card 陰影
-      elevation: 0,
-      child: Column(children: [
-        // 資料區 上半部
-        Container(
-          margin: const EdgeInsets.only(bottom: 20),
-          padding: const EdgeInsets.only(top: 80, bottom: 30),
-          width: double.infinity,
-          // 上半部 bg
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
-                      'desktop-pic-commodity-largepic-sample-general.webp'),
-                  fit: BoxFit.cover)),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Card(
+          // 切子元件超出範圍
+          clipBehavior: Clip.hardEdge,
+          semanticContainer: false,
+          margin: const EdgeInsets.fromLTRB(60, 60, 60, 40),
+          // margin: const EdgeInsets.only(top: 120),
+          color: QppColor.prussianBlue,
+          shape: RoundedRectangleBorder(
+            // 圓角參數
+            borderRadius: BorderRadius.circular(8),
+          ),
+          // Card 陰影
+          elevation: 0,
           child: Column(children: [
-            // 物品圖片
-            ItemImgPhoto(provider: itemSelectInfoProvider),
-            const SizedBox(
-              height: 45,
+            // 資料區 上半部
+            Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(top: 80, bottom: 30),
+              constraints: const BoxConstraints(maxWidth: 1280),
+              width: double.infinity,
+              // 上半部 bg
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(
+                          'desktop-pic-commodity-largepic-sample-general.webp'),
+                      fit: BoxFit.cover)),
+              child: Column(children: [
+                // 物品圖片
+                ItemImgPhoto(provider: itemSelectInfoProvider),
+                const SizedBox(
+                  height: 45,
+                ),
+                // 物品名稱
+                Consumer(builder: (context, ref, _) {
+                  ApiResponse<QppItem> itemInfoState =
+                      ref.watch(itemSelectInfoProvider).itemSelectInfoState;
+                  return itemInfoState.status == Status.completed
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          child: Text(
+                            itemInfoState.data!.name,
+                            style: const TextStyle(
+                                fontSize: 30, color: QppColor.white),
+                          ),
+                        )
+                      : const SizedBox();
+                }),
+              ]),
             ),
-            // 物品名稱
-            Consumer(builder: (context, ref, _) {
-              ApiResponse<QppItem> itemInfoState =
-                  ref.watch(itemSelectInfoProvider).itemSelectInfoState;
-              return itemInfoState.status == Status.completed
-                  ? Text(
-                      itemInfoState.data!.name,
-                      style:
-                          const TextStyle(fontSize: 30, color: QppColor.white),
-                    )
-                  : const SizedBox();
-            }),
+            // 資料區下半部
+            Container(
+                constraints: const BoxConstraints(maxWidth: 1280),
+                width: double.infinity,
+                padding: const EdgeInsets.only(bottom: 20),
+                child: const Column(
+                  children: [
+                    // 類別欄位
+                    ItemInfoRow(),
+                    // 創建者欄位
+                    CreatorInfoRow(),
+                    //
+                    ItemIntroLinkRow(),
+                    //
+                    ItemDescriptionRow(),
+                  ],
+                )),
           ]),
         ),
-        // 資料區下半部
-        Container(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: const Column(
-              children: [
-                // 類別欄位
-                ItemInfoRow(),
-                // 創建者欄位
-                CreatorInfoRow(),
-                //
-                ItemIntroLinkRow(),
-                //
-                ItemDescriptionRow(),
-              ],
-            )),
-      ]),
+      ],
     );
   }
 }
@@ -176,7 +188,7 @@ abstract class InfoRow extends ConsumerWidget {
 
     return response.status == Status.completed
         ? Padding(
-            padding: const EdgeInsets.fromLTRB(60, 8, 60, 8),
+            padding: const EdgeInsets.fromLTRB(60, 14, 60, 14),
             child: getContent(data),
           )
         : const SizedBox(
@@ -204,8 +216,9 @@ class ItemInfoRow extends InfoRow {
       return Builder(builder: (context) {
         return Row(
           children: [
-            SizedBox(
-              width: 180,
+            Container(
+              constraints: const BoxConstraints(maxWidth: 120),
+              width: double.infinity,
               child: Text(
                 context.tr(QppLocales.commodityInfoCategory),
                 textAlign: TextAlign.start,
@@ -213,7 +226,6 @@ class ItemInfoRow extends InfoRow {
                     const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
               ),
             ),
-            // 類別 icon
             SvgPicture.asset(
               data.categoryIconPath,
               width: 20,
@@ -263,7 +275,7 @@ class CreatorInfoRow extends InfoRow {
         return Row(
           children: [
             SizedBox(
-              width: 180,
+              width: 120,
               child: Text(
                 context.tr(QppLocales.commodityInfoCreator),
                 textAlign: TextAlign.start,
@@ -336,7 +348,7 @@ class ItemIntroLinkRow extends InfoRow {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 180,
+                width: 120,
                 child: Text(
                   context.tr(QppLocales.commodityInfoTitle),
                   textAlign: TextAlign.start,
@@ -380,7 +392,7 @@ class ItemDescriptionRow extends InfoRow {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 180,
+                width: 120,
                 child: Text(
                   context.tr(QppLocales.commodityInfoInfo),
                   textAlign: TextAlign.start,
