@@ -7,7 +7,6 @@ import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/common_ui/item_image.dart';
 import 'package:qpp_example/common_ui/qpp_qrcode.dart';
 import 'package:qpp_example/constants/server_const.dart';
-import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
@@ -19,7 +18,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/utils/read_more_text.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 /// 完整路徑, 產 QR Code 用
 String qrCodeUrl = '';
