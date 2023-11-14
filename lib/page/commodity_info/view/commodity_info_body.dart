@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/common_ui/item_image.dart';
+import 'package:qpp_example/common_ui/qpp_qrcode.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
@@ -62,36 +63,10 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
     print('debug build CommodityInfoPage');
 
     return ListView(children: [
+      // 上方資料區
       const DesktopCard(),
-      // QR Code
-      Center(
-        child: Card(
-          margin: const EdgeInsets.only(bottom: 15, top: 32),
-          // 切子元件超出範圍
-          clipBehavior: Clip.hardEdge,
-          shape: RoundedRectangleBorder(
-            // 圓角參數
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: QrImageView(
-            backgroundColor: QppColor.white,
-            data: qrCodeUrl,
-            size: 150,
-          ),
-        ),
-      ),
-      // 下方
-      const Padding(
-        padding: EdgeInsets.only(bottom: 50),
-        child: Text(
-          '掃描條碼從QPP中開啟',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 15,
-              color: QppColor.indianYellow,
-              fontWeight: FontWeight.w500),
-        ),
-      ),
+      // 下方 QR Code / 按鈕
+      UniversalLinkQRCode(str: qrCodeUrl),
     ]);
   }
 }
