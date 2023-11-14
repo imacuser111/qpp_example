@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/common_ui/item_image.dart';
+import 'package:qpp_example/common_ui/qpp_button/open_qpp_button.dart';
 import 'package:qpp_example/common_ui/qpp_qrcode.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
@@ -13,6 +14,7 @@ import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
+import 'package:qpp_example/utils/screen.dart';
 import 'dart:ui' as ui;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,7 +52,6 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
     // model 初始化
     itemSelectInfoProvider = ChangeNotifierProvider<CommodityInfoModel>((ref) {
       // 開始取資料
-      print('debug load data');
       Future.microtask(() => ref.notifier.loadData(commodityID));
       return CommodityInfoModel();
     });
@@ -58,13 +59,17 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('debug build CommodityInfoPage');
+    final Size size = MediaQuery.of(context).size;
+    final bool isDesktopStyle =
+        size.width.determineScreenStyle().isDesktopStyle;
 
     return ListView(children: [
       // 上方資料區
       const DesktopCard(),
       // 下方 QR Code / 按鈕
-      UniversalLinkQRCode(str: qrCodeUrl),
+      isDesktopStyle
+          ? UniversalLinkQRCode(str: qrCodeUrl)
+          : const OpenQppButton(),
     ]);
   }
 }
@@ -102,7 +107,7 @@ class DesktopCard extends StatelessWidget {
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(
-                          'desktop-pic-commodity-largepic-sample-general.webp'),
+                          'assets/desktop-pic-commodity-largepic-sample-general.webp'),
                       fit: BoxFit.cover)),
               child: Column(children: [
                 // 物品圖片
@@ -201,7 +206,7 @@ class ItemInfoRow extends InfoRow {
               ),
             ),
             SvgPicture.asset(
-              data.categoryIconPath,
+              'assets/${data.categoryIconPath}',
               width: 20,
             ),
             // 間隔
@@ -262,7 +267,7 @@ class CreatorInfoRow extends InfoRow {
                 ? Container(
                     padding: const EdgeInsets.only(right: 8),
                     child: SvgPicture.asset(
-                      data.officialIconPath,
+                      'assets/${data.officialIconPath}',
                       width: 20,
                     ),
                   )
@@ -280,7 +285,7 @@ class CreatorInfoRow extends InfoRow {
             Directionality(
                 textDirection: ui.TextDirection.rtl,
                 child: SvgPicture.asset(
-                  'mobile-icon-actionbar-back-normal.svg',
+                  'assets/mobile-icon-actionbar-back-normal.svg',
                   matchTextDirection: true,
                 )),
           ],
