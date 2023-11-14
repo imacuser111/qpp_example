@@ -100,7 +100,8 @@ class _InfoLinkText extends StatelessWidget {
     return Row(
       children: [
         Text(text, style: const TextStyle(color: QppColor.white, fontSize: 14)),
-        const CLinkText(text: 'info@qpptec.com', link: ServerConst.mailUrl),
+        const CUnderlineText.link(
+            text: 'info@qpptec.com', link: ServerConst.mailUrl),
       ],
     );
   }
@@ -199,22 +200,22 @@ class _Links extends StatelessWidget {
       spacing: 135,
       runSpacing: runSpacing,
       children: const [
-        CLinkText(
+        CUnderlineText.link(
             text: '隱私權政策',
             link: ServerConst.privacyPolicyUrl,
             fontSize: fontSize,
             isNewTab: true),
-        CLinkText(
+        CUnderlineText.link(
             text: 'Apple Store',
             link: ServerConst.appleStoreUrl,
             fontSize: fontSize,
             isNewTab: true),
-        CLinkText(
+        CUnderlineText.link(
             text: '使用者條款',
             link: ServerConst.termsOfUseUrl,
             fontSize: fontSize,
             isNewTab: true),
-        CLinkText(
+        CUnderlineText.link(
             text: 'Google Play',
             link: ServerConst.googlePlayStoreUrl,
             fontSize: fontSize,

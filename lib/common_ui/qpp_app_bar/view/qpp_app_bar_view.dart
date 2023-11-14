@@ -4,9 +4,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qpp_example/common_ui/qpp_menu.dart';
 import 'package:qpp_example/extension/throttle_debounce.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
+import 'package:qpp_example/go_router/router.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/model/enum/language.dart';
 import 'package:qpp_example/utils/screen.dart';
@@ -17,6 +19,7 @@ AppBar qppAppBar({required double height}) {
     toolbarHeight: height,
     backgroundColor: QppColor.onyx60,
     title: const QppAppBarTitle(),
+    titleSpacing: 0,
   );
 }
 
@@ -31,37 +34,41 @@ class QppAppBarTitle extends ConsumerWidget {
     final bool isDesktopStyle =
         size.width.determineScreenStyle().isDesktopStyle;
 
-    final notifier = ref.read(isOpenAppBarMenuBtnPageProvider.notifier);
-
-    final bool isShowFullScreenMenu =
+    final bool isOpenAppBarMenuBtnPage =
         ref.watch(isOpenAppBarMenuBtnPageProvider);
+
+    final bool isLogin = ref.watch(isLoginProvider);
 
     return Row(
       children: [
         // 最左邊間距
-        Flexible(
-          child: isDesktopStyle
-              ? const SizedBox(width: double.maxFinite)
-              : const SizedBox.shrink(),
-        ),
-        isShowFullScreenMenu ? const SizedBox.shrink() : const _Logo(),
+        Spacer(flex: isDesktopStyle ? 320 : 28),
+        isOpenAppBarMenuBtnPage ? const SizedBox.shrink() : const _Logo(),
         // QPP -> Button 間距
-        const Spacer(flex: 2),
+        Spacer(flex: isDesktopStyle ? 527 : 210),
         // 選單按鈕
-        isDesktopStyle
-            ? const _MenuBtns()
-            : const Spacer(flex: 100), // felx設定一個大的數字讓他填充到最大
+        isDesktopStyle ? const _MenuBtns() : const SizedBox.shrink(),
+        isLogin
+            ? const Padding(
+                padding: EdgeInsets.only(left: 64), child: _UserInfo())
+            : const SizedBox.shrink(),
         // 語系
-        const Padding(
-          padding: EdgeInsets.only(left: 74),
-          child: LanguageDropdownMenu(),
+        Padding(
+          padding: EdgeInsets.only(
+              left: isDesktopStyle
+                  ? isLogin
+                      ? 48
+                      : 64
+                  : 20),
+          child: const LanguageDropdownMenu(),
         ),
         // 三條 or 最右邊間距
-        isShowFullScreenMenu
-            ? const SizedBox(width: 39)
+        isOpenAppBarMenuBtnPage
+            ? const SizedBox(width: 30)
             : isDesktopStyle
                 ? const Flexible(child: SizedBox.shrink())
-                : AnimationMenuBtn(isClose: false, notifier: notifier),
+                : const AnimationMenuBtn(isClose: false),
+        Spacer(flex: isDesktopStyle ? 319 : 24),
       ],
     );
   }
@@ -77,15 +84,12 @@ class _Logo extends StatelessWidget {
         MediaQuery.of(context).size.width.determineScreenStyle().isDesktopStyle;
 
     return IconButton(
-      icon: Container(
-        constraints: const BoxConstraints(minWidth: 100, maxWidth: 148),
-        child: Image.asset(
-          'desktop-pic-qpp-logo-01.png',
-          width: isDesktopStyle ? 148 : 100,
-          scale: 46 / 148,
-        ),
+      icon: Image.asset(
+        'desktop-pic-qpp-logo-01.png',
+        width: isDesktopStyle ? 148 : 89,
+        scale: 46 / 148,
       ),
-      onPressed: () => context.goNamed("home"),
+      onPressed: () => context.goNamed(QppGoRouter.home),
     );
   }
 }
@@ -136,11 +140,9 @@ class _MenuBtns extends StatelessWidget {
 
 /// animationMenuBtn(三條or關閉)
 class AnimationMenuBtn extends StatefulWidget {
-  const AnimationMenuBtn(
-      {super.key, required this.isClose, required this.notifier});
+  const AnimationMenuBtn({super.key, required this.isClose});
 
   final bool isClose;
-  final IsOpenAppBarMenuBtnPageStateNotifier notifier;
 
   @override
   State<StatefulWidget> createState() => _AnimationMenuBtn();
@@ -183,13 +185,73 @@ class _AnimationMenuBtn extends State<AnimationMenuBtn>
       builder: (context, child) {
         return Transform.rotate(
           angle: -_controller.value * 2 * pi,
-          child: IconButton(
-            onPressed: () => widget.notifier.toggle(),
-            icon: widget.isClose || _count < _targetCount
-                ? const Icon(Icons.close, color: Colors.white)
-                : const Icon(Icons.menu, color: Colors.white),
+          child: Consumer(builder: (context, ref, child) {
+            final notifier = ref.read(isOpenAppBarMenuBtnPageProvider.notifier);
+
+            return IconButton(
+              iconSize: 24,
+              onPressed: () => notifier.toggle(),
+              icon: widget.isClose || _count < _targetCount
+                  ? const Icon(Icons.close, color: Colors.white)
+                  : const Icon(Icons.menu, color: Colors.white),
+            );
+          }),
+        );
+      },
+    );
+  }
+}
+
+/// 使用者資訊
+class _UserInfo extends StatelessWidget {
+  const _UserInfo();
+
+  @override
+  Widget build(BuildContext context) {
+    debugPrint(toString());
+
+    final isDesktopStyle =
+        MediaQuery.of(context).size.width.determineScreenStyle().isDesktopStyle;
+
+    // 控制器狀態Provider
+    final StateProvider<bool> isOpenControllerProvider =
+        StateProvider((ref) => false);
+
+    return CMenuAnchor(
+      list: AppBarUserInfo.values,
+      builder: (context, controller, child) {
+        return Consumer(
+          builder: (context, ref, child) {
+            final isOpen = ref.watch(isOpenControllerProvider);
+            final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
+
+            Future.microtask(
+                () => isOpen ? controller.open() : controller.close());
+
+            return MouseRegion(
+              onEnter: (event) => isOpenNotifier.state = true,
+              onExit: (event) => isOpenNotifier.state = false,
+              child: child,
+            );
+          },
+          child: Row(
+            children: [
+              const Icon(Icons.info, color: Colors.white),
+              const SizedBox(width: 8),
+              isDesktopStyle
+                  ? const Text('phoneNumber',
+                      style: TextStyle(fontSize: 14, color: Colors.white))
+                  : const SizedBox.shrink(),
+              isDesktopStyle
+                  ? const Icon(Icons.keyboard_arrow_down, color: Colors.white)
+                  : const SizedBox.shrink(),
+            ],
           ),
         );
+      },
+      isOpenControllerProvider: isOpenControllerProvider,
+      onTap: (BuildContext context, WidgetRef ref, _) {
+        ref.read(isLoginProvider.notifier).state = false;
       },
     );
   }
@@ -203,69 +265,43 @@ class LanguageDropdownMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     // debugPrint(toString());
 
+    // 控制器狀態Provider
     final StateProvider<bool> isOpenControllerProvider =
         StateProvider((ref) => false);
 
-    // Item
-    List<Consumer> items = Language.values
-        .map(
-          (e) => Consumer(builder: (context, ref, child) {
+    return CMenuAnchor(
+      list: Language.values,
+      builder: (context, controller, child) {
+        return Consumer(
+          builder: (context, ref, child) {
+            final isOpen = ref.watch(isOpenControllerProvider);
             final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
 
-            return MouseRegionCustomWidget(
+            Future.microtask(
+                () => isOpen ? controller.open() : controller.close());
+
+            return MouseRegion(
               onEnter: (event) => isOpenNotifier.state = true,
               onExit: (event) => isOpenNotifier.state = false,
-              builder: (event) => MenuItemButton(
-                onPressed: () {
-                  context.setLocale(e.locale);
-                  isOpenNotifier.state = false;
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    e.displayTitle,
-                    style: TextStyle(
-                        color: event is PointerEnterEvent
-                            ? Colors.amber
-                            : Colors.white),
-                  ),
-                ),
-              ),
+              child: child,
             );
-          }),
-        )
-        .toList();
-
-    return MenuAnchor(
-      builder: (context, controller, child) {
-        return Consumer(builder: (context, ref, child) {
-          final isOpen = ref.watch(isOpenControllerProvider);
-          final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
-
-          Future.microtask(
-              () => isOpen ? controller.open() : controller.close());
-
-          return MouseRegion(
-            onEnter: (event) => isOpenNotifier.state = true,
-            onExit: (event) => isOpenNotifier.state = false,
-            child: IconButton(
-              onPressed: () =>
-                  controller.isOpen ? controller.close() : controller.open(),
-              icon: const Row(
-                children: [
-                  Icon(Icons.language, color: Colors.white),
-                  Icon(Icons.keyboard_arrow_down, color: Colors.white)
-                ],
-              ),
+          },
+          child: IconButton(
+            onPressed: () =>
+                controller.isOpen ? controller.close() : controller.open(),
+            icon: const Row(
+              children: [
+                Icon(Icons.language, color: Colors.white),
+                Icon(Icons.keyboard_arrow_down, color: Colors.white)
+              ],
             ),
-          );
-        });
+          ),
+        );
       },
-      menuChildren: items,
-      style: MenuStyle(
-        backgroundColor:
-            MaterialStateProperty.all(const Color(0xff000b2b).withOpacity(0.6)),
-      ),
+      isOpenControllerProvider: isOpenControllerProvider,
+      onTap: (BuildContext context, _, CMeunAnchorData e) {
+        context.setLocale((e as Language).locale);
+      },
     );
   }
 }
@@ -314,27 +350,27 @@ class FullScreenMenuBtnPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(isOpenAppBarMenuBtnPageProvider.notifier);
-
-    final bool isShowFullScreenMenu =
+    final bool isOpenAppBarMenuBtnPage =
         ref.watch(isOpenAppBarMenuBtnPageProvider);
+    final isOpenAppBarMenuBtnNotifier =
+        ref.read(isOpenAppBarMenuBtnPageProvider.notifier);
 
-    return isShowFullScreenMenu
-        ? Container(
+    return isOpenAppBarMenuBtnPage
+        ? ColoredBox(
             color: const Color.fromARGB(255, 23, 57, 117).withOpacity(0.9),
             child: Stack(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 60,
                   child: Row(
                     children: [
                       // 最左邊間距
-                      const SizedBox(width: 16),
-                      const _Logo(),
-                      const Spacer(flex: 5),
+                      SizedBox(width: 29),
+                      _Logo(),
+                      Spacer(),
                       // 三條 or 最右邊間距
-                      AnimationMenuBtn(isClose: true, notifier: notifier),
-                      const SizedBox(width: 19.7),
+                      AnimationMenuBtn(isClose: true),
+                      SizedBox(width: 24)
                     ],
                   ),
                 ),
@@ -344,7 +380,27 @@ class FullScreenMenuBtnPage extends ConsumerWidget {
                     children: MainMenu.values
                         .map(
                           (e) => TextButton(
-                            onPressed: () => debugPrint(e.value),
+                            onPressed: () {
+                              isOpenAppBarMenuBtnNotifier.toggle();
+
+                              BuildContext? currentContext = e.currentContext;
+                              bool isHomePage = currentContext != null;
+
+                              if (!isHomePage) {
+                                context.goNamed(QppGoRouter.home);
+                              }
+
+                              /// 延遲等待跳轉完，重新抓currentContext
+                              Future.delayed(
+                                  Duration(milliseconds: isHomePage ? 0 : 300),
+                                  () {
+                                currentContext = e.currentContext;
+                                if (currentContext != null) {
+                                  Scrollable.ensureVisible(currentContext!,
+                                      duration: const Duration(seconds: 1));
+                                }
+                              });
+                            }.throttleWithTimeout(timeout: 2000),
                             child: Padding(
                               padding: const EdgeInsets.all(25),
                               child: Text(

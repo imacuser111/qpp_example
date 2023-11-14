@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(useMaterial3: true),
-      routerConfig: router,
+      routerConfig: QppGoRouter.router,
       locale: context.locale,
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,

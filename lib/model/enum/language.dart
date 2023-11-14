@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:qpp_example/common_ui/qpp_menu.dart';
 
-/// 取得的資料對應的 語系規則
-enum Language {
+/// 語系
+enum Language implements CMeunAnchorData {
   /// 繁體中文
   chineseTrad("CHT"),
 
@@ -39,28 +40,8 @@ enum Language {
     return Language.chineseTrad;
   }
 
-  /// 從 Locale 取得 Language
-  factory Language.findTypeByLocale(Locale locale) {
-    for (var lan in Language.values) {
-      if (lan.locale == locale) {
-        return lan;
-      }
-    }
-    return Language.chineseTrad;
-  }
-
-  /// 從定義的 index 取得 Language
-  factory Language.findTypeByDefineIndex(int dIndex) {
-    for (var lan in Language.values) {
-      if (lan.getDefineIndex() == dIndex) {
-        return lan;
-      }
-    }
-    return Language.chineseTrad;
-  }
-
-  /// 取得定義 title
-  String get displayTitle {
+  @override
+  String get title {
     return switch (this) {
       chineseTrad => '繁體中文',
       chineseSimp => '简体中文',
@@ -73,19 +54,8 @@ enum Language {
     };
   }
 
-  /// 取得定義的 index
-  int getDefineIndex() {
-    return switch (this) {
-      chineseTrad => 2,
-      chineseSimp => 3,
-      english => 1,
-      japanese => 4,
-      korean => 5,
-      vietnam => 6,
-      thailand => 7,
-      indonesia => 8,
-    };
-  }
+  @override
+  String? get image => null;
 
   /// 取得對應 Locale
   Locale get locale {

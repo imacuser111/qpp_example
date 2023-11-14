@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:qpp_example/common_ui/qpp_button/open_qpp_button.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/string/url.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/page/qpp_home/model/qpp_home_page_model.dart';
 import 'package:qpp_example/page/qpp_home/view/qpp_home_page.dart';
 import 'package:qpp_example/utils/screen.dart';
@@ -80,7 +82,7 @@ class _Info extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           Text(
-            context.tr('home_section_1_p'),
+            context.tr(QppLocales.homeSection1P),
             textAlign: isHorizontal ? TextAlign.start : TextAlign.center,
             style: const TextStyle(color: Colors.white, fontSize: 16),
           ),
@@ -171,7 +173,8 @@ class _PlayStoreButtons extends StatelessWidget {
       mainAxisAlignment:
           isHorizontal ? MainAxisAlignment.start : MainAxisAlignment.center,
       children: const [
-        PlayStoreButton(type: PlayStoreType.google),
+        OpenQppButton(),
+        // PlayStoreButton(type: PlayStoreType.google),
         SizedBox(width: 10),
         PlayStoreButton(type: PlayStoreType.apple)
       ],
@@ -210,7 +213,7 @@ class _PlayStoreButtonState extends State<PlayStoreButton>
     return Transform.scale(
       scale: isHover ? 1.05 : 1.0,
       child: Container(
-        // 要在前面裝飾設置邊線才不會被截掉
+        // 要在foregroundDecoration設置邊線才不會被截掉
         foregroundDecoration: BoxDecoration(
           border: Border.all(color: Colors.white),
           borderRadius: const BorderRadius.all(Radius.circular(4)),
