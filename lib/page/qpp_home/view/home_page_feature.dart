@@ -34,10 +34,18 @@ class HomePageFeature extends StatelessWidget {
           child: Flex(
             direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
             children: [
-              Expanded(flex: flex, child: _Left(screenStyle: screenStyle)),
+              Expanded(
+                  flex: flex,
+                  child: isDesktopStyle
+                      ? const _Left(ScreenStyle.desktop)
+                      : const _Left(ScreenStyle.mobile)),
               const SizedBox(height: 24, width: 24),
               Expanded(
-                  flex: flex, child: _FeatureInfo(screenStyle: screenStyle))
+                flex: flex,
+                child: isDesktopStyle
+                    ? const _FeatureInfo(ScreenStyle.desktop)
+                    : const _FeatureInfo(ScreenStyle.mobile),
+              ),
             ],
           ),
         );
@@ -48,7 +56,7 @@ class HomePageFeature extends StatelessWidget {
 
 /// 左側Widget
 class _Left extends StatelessWidget {
-  const _Left({required this.screenStyle});
+  const _Left(this.screenStyle);
 
   final ScreenStyle screenStyle;
 
@@ -73,7 +81,7 @@ class _Left extends StatelessWidget {
 
 /// 特色資訊
 class _FeatureInfo extends StatelessWidget {
-  const _FeatureInfo({required this.screenStyle});
+  const _FeatureInfo(this.screenStyle);
 
   final ScreenStyle screenStyle;
 
@@ -83,7 +91,7 @@ class _FeatureInfo extends StatelessWidget {
       builder: (context, setState) {
         return Column(
             children: HomePageFeatureInfoType.values
-                .map((e) => _FeatureInfoItem(type: e, screenStyle: screenStyle))
+                .map((e) => _FeatureInfoItem(screenStyle, type: e))
                 .toList());
       },
     );
@@ -92,7 +100,7 @@ class _FeatureInfo extends StatelessWidget {
 
 // 特色資訊Item
 class _FeatureInfoItem extends StatefulWidget {
-  const _FeatureInfoItem({required this.type, required this.screenStyle});
+  const _FeatureInfoItem(this.screenStyle, {required this.type});
 
   final HomePageFeatureInfoType type;
   final ScreenStyle screenStyle;

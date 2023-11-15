@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
-import 'package:qpp_example/common_ui/item_image.dart';
+import 'package:qpp_example/common_ui/qpp_image/item_image.dart';
 import 'package:qpp_example/constants/server_const.dart';
-import 'package:qpp_example/extension/build_context.dart';
+import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
@@ -14,10 +14,9 @@ import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
 import 'dart:ui' as ui;
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:qpp_example/utils/qpp_color.dart';
-import 'package:qpp_example/utils/read_more_text.dart';
+import 'package:qpp_example/common_ui/qpp_text/read_more_text.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// 完整路徑, 產 QR Code 用
@@ -424,17 +423,8 @@ class InfoLinkReadMoreText extends StatelessWidget {
       style: const TextStyle(fontSize: 18, color: QppColor.platinum),
       linkTextStyle: const TextStyle(fontSize: 18, color: QppColor.mayaBlue),
       onLinkPressed: (String url) {
-        _launchURL(url);
+        url.launchURL();
       },
     );
-  }
-
-  /// 打開連結
-  _launchURL(String url) async {
-    Uri uri = Uri.parse(url);
-    // 使用 url launcher 開啟連結
-    if (!await launchUrl(uri)) {
-      throw Exception('Could not launch $uri');
-    }
   }
 }

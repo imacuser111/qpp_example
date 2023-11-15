@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qpp_example/common_ui/qpp_main_framework.dart';
+import 'package:qpp_example/common_ui/qpp_framework/qpp_main_framework.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_info_body.dart';
 import 'package:qpp_example/page/qpp_home/view/qpp_home_page.dart';
-import 'package:qpp_example/page/qpp_info_body/view/qpp_info_body_main.dart';
+import 'package:qpp_example/page/user_information/view/user_information.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
 
 class QppGoRouter {
@@ -27,18 +27,18 @@ class QppGoRouter {
           GoRoute(
             // 個人資訊頁
             name: information,
-            path: 'app/information',
+            path: 'app/$information',
             builder: (BuildContext context, GoRouterState state) {
               final data =
                   UniversalLinkParamData.fromJson(state.uri.queryParameters);
               return MainFramework(
-                  child: InformationOuterFrame(userID: data.phoneNumber ?? ""));
+                  child: UserInformationOuterFrame(userID: data.phoneNumber ?? "", uri: state.uri.toString()));
             },
           ),
           GoRoute(
             // 物品資訊頁
             name: commodityInfo,
-            path: 'app/commodity_info',
+            path: 'app/$commodityInfo',
             builder: (BuildContext context, GoRouterState state) {
               return MainFramework(
                 child: CommodityInfoPage(routerState: state),

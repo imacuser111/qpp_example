@@ -16,7 +16,8 @@ abstract class BaseApi {
     switch (method) {
       case RequestMethod.post:
         return <String, String>{
-          Headers.contentTypeHeader : Headers.jsonContentType
+          // Headers.contentTypeHeader: Headers.formUrlEncodedContentType,
+          Headers.contentTypeHeader: Headers.jsonContentType,
         };
       default:
         return null;
