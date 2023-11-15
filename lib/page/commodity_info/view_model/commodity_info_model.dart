@@ -15,6 +15,7 @@ import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 
+/// 物品資訊頁 model
 class CommodityInfoModel extends ChangeNotifier {
   /// 物品資訊
   ApiResponse<QppItem> itemSelectInfoState = ApiResponse.initial();
@@ -64,6 +65,7 @@ class CommodityInfoModel extends ChangeNotifier {
       }
       notifyListeners();
     }).catchError((error) {
+      // 無此物品
       itemSelectInfoState = ApiResponse.error(error);
       notifyListeners();
       print('取得物品資訊錯誤: $error');
@@ -157,7 +159,5 @@ class CommodityInfoModel extends ChangeNotifier {
 
     itemPhotoState = ApiResponse.completed(ItemImgData(itemPhotoUrl));
     notifyListeners();
-
-    print('Photo: $itemPhotoUrl');
   }
 }

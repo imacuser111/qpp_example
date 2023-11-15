@@ -43,6 +43,16 @@ class UserInformationChangeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 取得用戶圖片
+  String _getUserImage({QppImageStyle style = QppImageStyle.avatar}) {
+    bool isAvater = style == QppImageStyle.avatar;
+
+    return QppImageUtils.getUserImageURL(userID,
+        imageStyle:
+            isAvater ? QppImageStyle.avatar : QppImageStyle.backgroundImage,
+        timestamp: nowTimestamp.millisecondsSinceEpoch);
+  }
+
   /// 取得用戶資訊
   void getUserInfo() {
     infoState = ApiResponse.loading();
@@ -58,16 +68,6 @@ class UserInformationChangeNotifier extends ChangeNotifier {
       infoState = ApiResponse.error(error);
       notifyListeners();
     });
-  }
-
-  /// 取得用戶圖片
-  String _getUserImage({QppImageStyle style = QppImageStyle.avatar}) {
-    bool isAvater = style == QppImageStyle.avatar;
-
-    return QppImageUtils.getUserImageURL(userID,
-        imageStyle:
-            isAvater ? QppImageStyle.avatar : QppImageStyle.backgroundImage,
-        timestamp: nowTimestamp.millisecondsSinceEpoch);
   }
 
   /// 圖片錯誤(翻轉)
