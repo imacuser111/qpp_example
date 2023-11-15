@@ -72,6 +72,10 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
       context.isDesktopPlatform
           ? UniversalLinkQRCode(str: qrCodeUrl)
           : const OpenQppButton(),
+      // 底部間距
+      const SizedBox(
+        height: 40,
+      )
     ]);
   }
 }
