@@ -8,6 +8,7 @@ import 'package:qpp_example/common_ui/item_image.dart';
 import 'package:qpp_example/common_ui/qpp_button/open_qpp_button.dart';
 import 'package:qpp_example/common_ui/qpp_qrcode.dart';
 import 'package:qpp_example/constants/server_const.dart';
+import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
@@ -41,6 +42,18 @@ class CommodityInfoPage extends StatefulWidget {
 }
 
 class _CommodityInfoPageState extends State<CommodityInfoPage> {
+  Size? size;
+  // 是否為桌面版面
+  bool isDesktopStyle = true;
+
+  @override
+  void didChangeDependencies() {
+    size = MediaQuery.of(context).size;
+    // 是否為桌面版面
+    isDesktopStyle = size?.width.determineScreenStyle().isDesktopStyle ?? false;
+    super.didChangeDependencies();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -59,15 +72,11 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final bool isDesktopStyle =
-        size.width.determineScreenStyle().isDesktopStyle;
-
     return ListView(children: [
       // 上方資料區
-      const DesktopCard(),
+      isDesktopStyle ? const InfoCard.desktop() : const InfoCard.mobile(),
       // 下方 QR Code / 按鈕
-      isDesktopStyle
+      context.isDesktopPlatform
           ? UniversalLinkQRCode(str: qrCodeUrl)
           : const OpenQppButton(),
     ]);
@@ -75,8 +84,15 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
 }
 
 ///  桌面版本上方資料卡片容器
-class DesktopCard extends StatelessWidget {
-  const DesktopCard({super.key});
+class InfoCard extends StatelessWidget {
+  // 版面判斷
+  final bool isDesktop;
+
+  /// 桌面裝置版面
+  const InfoCard.desktop({super.key}) : isDesktop = true;
+
+  /// 移動裝置版面
+  const InfoCard.mobile({super.key}) : isDesktop = false;
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +103,10 @@ class DesktopCard extends StatelessWidget {
           // 切子元件超出範圍
           clipBehavior: Clip.hardEdge,
           semanticContainer: false,
-          margin: const EdgeInsets.fromLTRB(60, 100, 60, 40),
-          // margin: const EdgeInsets.only(top: 120),
+          // 容器與四周間距
+          margin: isDesktop
+              ? const EdgeInsets.fromLTRB(60, 100, 60, 40)
+              : const EdgeInsets.fromLTRB(24, 24, 24, 24),
           color: QppColor.prussianBlue,
           shape: RoundedRectangleBorder(
             // 圓角參數
@@ -96,62 +114,144 @@ class DesktopCard extends StatelessWidget {
           ),
           // Card 陰影
           elevation: 0,
-          child: Column(children: [
-            // 資料區 上半部
-            Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              padding: const EdgeInsets.only(top: 80, bottom: 30),
-              constraints: const BoxConstraints(maxWidth: 1280),
-              width: double.infinity,
-              // 上半部 bg
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                          'assets/desktop-pic-commodity-largepic-sample-general.webp'),
-                      fit: BoxFit.cover)),
-              child: Column(children: [
-                // 物品圖片
-                ItemImgPhoto(provider: itemSelectInfoProvider),
-                const SizedBox(
-                  height: 45,
-                ),
-                // 物品名稱
-                Consumer(builder: (context, ref, _) {
-                  ApiResponse<QppItem> itemInfoState =
-                      ref.watch(itemSelectInfoProvider).itemSelectInfoState;
-                  return itemInfoState.status == Status.completed
-                      ? Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 16),
-                          child: Text(
-                            itemInfoState.data!.name,
-                            style: const TextStyle(
-                                fontSize: 30, color: QppColor.white),
-                          ),
-                        )
-                      : const SizedBox();
-                }),
-              ]),
-            ),
-            // 資料區下半部
-            Container(
-                constraints: const BoxConstraints(maxWidth: 1280),
-                width: double.infinity,
-                padding: const EdgeInsets.only(bottom: 20),
-                child: const Column(
-                  children: [
-                    // 類別欄位
-                    ItemInfoRow(),
-                    // 創建者欄位
-                    CreatorInfoRow(),
-                    //
-                    ItemIntroLinkRow(),
-                    //
-                    ItemDescriptionRow(),
-                  ],
-                )),
-          ]),
+          // TODO: 取資料中....
+          child: Consumer(
+            builder: (context, ref, child) {
+              ApiResponse<QppItem> itemInfoState =
+                  ref.watch(itemSelectInfoProvider).itemSelectInfoState;
+              if (itemInfoState.status == Status.completed) {
+                // 有取得物品資料
+                return const NormalItemInfo();
+              } else {
+                // 沒有取得物品資料
+                return isDesktop
+                    ? const EmptyInfo.desktop()
+                    : const EmptyInfo.mobile();
+              }
+            },
+          ),
         ),
       ],
+    );
+  }
+}
+
+/// 一般物品資訊
+class NormalItemInfo extends StatelessWidget {
+  const NormalItemInfo({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      // 資料區 上半部
+      Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.only(top: 80, bottom: 30),
+        constraints: const BoxConstraints(maxWidth: 1280),
+        width: double.infinity,
+        // 上半部 bg
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+                    'assets/desktop-pic-commodity-largepic-sample-general.webp'),
+                fit: BoxFit.cover)),
+        child: Column(children: [
+          // 物品圖片
+          ItemImgPhoto(provider: itemSelectInfoProvider),
+          const SizedBox(
+            height: 45,
+          ),
+          // 物品名稱
+          Consumer(builder: (context, ref, _) {
+            ApiResponse<QppItem> itemInfoState =
+                ref.watch(itemSelectInfoProvider).itemSelectInfoState;
+            return itemInfoState.status == Status.completed
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Text(
+                      itemInfoState.data!.name,
+                      style:
+                          const TextStyle(fontSize: 30, color: QppColor.white),
+                    ),
+                  )
+                : const SizedBox();
+          }),
+        ]),
+      ),
+      // 資料區下半部
+      Container(
+          constraints: const BoxConstraints(maxWidth: 1280),
+          width: double.infinity,
+          padding: const EdgeInsets.only(bottom: 20),
+          child: const Column(
+            children: [
+              // 類別欄位
+              ItemInfoRow(),
+              // 創建者欄位
+              CreatorInfoRow(),
+              //
+              ItemIntroLinkRow(),
+              //
+              ItemDescriptionRow(),
+            ],
+          )),
+    ]);
+  }
+}
+
+/// 無此物品
+class EmptyInfo extends StatelessWidget {
+  final bool isDesktop;
+  const EmptyInfo.desktop({super.key}) : isDesktop = true;
+  const EmptyInfo.mobile({super.key}) : isDesktop = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return isDesktop
+        ? Container(
+            constraints: const BoxConstraints(maxWidth: 1280, maxHeight: 324),
+            width: double.infinity,
+            height: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _emptyImg(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 36),
+                  child: Text(
+                    context.tr(QppLocales.qppState9),
+                    style: const TextStyle(
+                        fontSize: 16, color: QppColor.babyBlueEyes),
+                  ),
+                )
+              ],
+            ),
+          )
+        : Container(
+            constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _emptyImg(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Text(
+                    context.tr(QppLocales.qppState9),
+                    style: const TextStyle(
+                        fontSize: 16, color: QppColor.babyBlueEyes),
+                  ),
+                )
+              ],
+            ),
+          );
+  }
+
+  _emptyImg() {
+    return SvgPicture.asset(
+      'assets/pic-empty-default.svg',
+      width: isDesktop ? 202 : 165,
+      height: isDesktop ? 146 : 119,
     );
   }
 }

@@ -64,6 +64,7 @@ class CommodityInfoModel extends ChangeNotifier {
       }
       notifyListeners();
     }).catchError((error) {
+      // 無此物品
       itemSelectInfoState = ApiResponse.error(error);
       notifyListeners();
       print('取得物品資訊錯誤: $error');
