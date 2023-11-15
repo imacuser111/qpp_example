@@ -38,9 +38,11 @@ class ServerConst {
 // kReleaseMode 若在 release -> true / 若在 debug & profile -> false
 
   /// Storage api 位址 正式 / 測試
-  static const storage = kReleaseMode
-      ? "https://storage.googleapis.com/qpp_blockchain/"
-      : "https://storage.googleapis.com/qpp_blockchain_test/";
+  // static const storage = kReleaseMode
+  //     ? "https://storage.googleapis.com/qpp_blockchain/"
+  //     : "https://storage.googleapis.com/qpp_blockchain_test/";
+  // TODO: 目前發布為測試服, 正式上線後打開上面
+  static const storage = "https://storage.googleapis.com/qpp_blockchain_test/";
 
 // /// GCP AP I- 正式 / 測試
 // const apiUrl = kDebugMode
