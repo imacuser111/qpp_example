@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:qpp_example/common_ui/qpp_button/open_qpp_button.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
@@ -174,8 +173,7 @@ class _PlayStoreButtons extends StatelessWidget {
       mainAxisAlignment:
           isHorizontal ? MainAxisAlignment.start : MainAxisAlignment.center,
       children: const [
-        OpenQppButton(),
-        // PlayStoreButton(type: PlayStoreType.google),
+        PlayStoreButton(type: PlayStoreType.google),
         SizedBox(width: 10),
         PlayStoreButton(type: PlayStoreType.apple)
       ],

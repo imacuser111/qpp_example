@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view/qpp_app_bar_view.dart';
-import 'package:qpp_example/common_ui/qpp_text.dart';
+import 'package:qpp_example/common_ui/qpp_text/c_under_line_text.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/utils/screen.dart';
@@ -40,12 +40,14 @@ class _FooterInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             isDesktopStyle ? const Spacer() : const SizedBox.shrink(),
-            _Info(isDesktopStyle: isDesktopStyle),
+            isDesktopStyle
+                ? const _Info(ScreenStyle.desktop)
+                : const _Info(ScreenStyle.mobile),
             isDesktopStyle ? const Spacer() : const SizedBox(height: 50),
             const _Guide(),
             isDesktopStyle ? const Spacer() : const SizedBox.shrink(),
             isDesktopStyle
-                ? const LanguageDropdownMenu()
+                ? const LanguageDropdownMenu(ScreenStyle.desktop)
                 : const SizedBox.shrink(),
             isDesktopStyle ? const Spacer() : const SizedBox.shrink(),
           ],
@@ -57,12 +59,14 @@ class _FooterInfo extends StatelessWidget {
 
 /// 資訊
 class _Info extends StatelessWidget {
-  const _Info({required this.isDesktopStyle});
+  const _Info(this.screenStyle);
 
-  final bool isDesktopStyle;
+  final ScreenStyle screenStyle;
 
   @override
   Widget build(BuildContext context) {
+    final isDesktopStyle = screenStyle.isDesktopStyle;
+
     return Flex(
       direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
       crossAxisAlignment: CrossAxisAlignment.start,

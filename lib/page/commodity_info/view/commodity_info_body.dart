@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/common_ui/qpp_button/open_qpp_button.dart';
-import 'package:qpp_example/common_ui/qpp_qrcode.dart';
+import 'package:qpp_example/common_ui/qpp_qrcode/universal_link_qrcode.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/model/qpp_item.dart';

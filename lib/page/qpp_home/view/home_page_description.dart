@@ -11,32 +11,24 @@ class HomePageDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       final ScreenStyle screenStyle = constraints.screenStyle;
-      final flex = screenStyle.isDesktopStyle ? 1 : 0;
 
-      // return switch (screenStyle) {
-      //   ScreenStyle.desktop => const Row(children: [Expanded(child: _PhoneDescription()),
-      //       Expanded(child: _DirectoryAndForumDescription())]),
-      //   _ => const Column(children: [_PhoneDescription(),
-      //       _DirectoryAndForumDescription()]),
-      // };
-
-      return Flex(
-          direction:
-              screenStyle.isDesktopStyle ? Axis.horizontal : Axis.vertical,
-          children: [
-            Expanded(
-                flex: flex, child: _PhoneDescription(screenStyle: screenStyle)),
-            Expanded(
-                flex: flex,
-                child: _DirectoryAndForumDescription(screenStyle: screenStyle))
-          ]);
+      return switch (screenStyle) {
+        ScreenStyle.desktop => const Row(children: [
+            Expanded(child: _PhoneDescription(ScreenStyle.desktop)),
+            Expanded(child: _DirectoryAndForumDescription(ScreenStyle.desktop))
+          ]),
+        _ => const Column(children: [
+            _PhoneDescription(ScreenStyle.mobile),
+            _DirectoryAndForumDescription(ScreenStyle.mobile)
+          ]),
+      };
     });
   }
 }
 
 /// 手機說明
 class _PhoneDescription extends StatefulWidget {
-  const _PhoneDescription({required this.screenStyle});
+  const _PhoneDescription(this.screenStyle);
 
   final ScreenStyle screenStyle;
 
@@ -95,7 +87,9 @@ class _PhoneDescriptionState extends State<_PhoneDescription> {
               ),
             ),
             Expanded(
-                child: _Content(type: type, screenStyle: widget.screenStyle)),
+                child: isDesktopStyle
+                    ? const _Content(ScreenStyle.desktop, type: type)
+                    : const _Content(ScreenStyle.mobile, type: type)),
           ]),
         ]),
       ),
@@ -105,7 +99,7 @@ class _PhoneDescriptionState extends State<_PhoneDescription> {
 
 /// 通訊錄與討論區說明
 class _DirectoryAndForumDescription extends StatelessWidget {
-  const _DirectoryAndForumDescription({required this.screenStyle});
+  const _DirectoryAndForumDescription(this.screenStyle);
 
   final ScreenStyle screenStyle;
 
@@ -113,17 +107,23 @@ class _DirectoryAndForumDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     // 获取屏幕信息
     final height = MediaQuery.of(context).size.height;
+    final isDesktopStyle = screenStyle.isDesktopStyle;
 
     return SizedBox(
-      height: screenStyle.isDesktopStyle ? height : (height * 3 / 4) * 2,
+      height: isDesktopStyle ? height : (height * 3 / 4) * 2,
       child: Column(children: [
         Expanded(
-            child: _Content(
-                type: HomePageDescriptionType.directory,
-                screenStyle: screenStyle)),
+            child: isDesktopStyle
+                ? const _Content(ScreenStyle.desktop,
+                    type: HomePageDescriptionType.directory)
+                : const _Content(ScreenStyle.mobile,
+                    type: HomePageDescriptionType.directory)),
         Expanded(
-            child: _Content(
-                type: HomePageDescriptionType.forum, screenStyle: screenStyle)),
+            child: isDesktopStyle
+                ? const _Content(ScreenStyle.desktop,
+                    type: HomePageDescriptionType.forum)
+                : const _Content(ScreenStyle.mobile,
+                    type: HomePageDescriptionType.forum)),
       ]),
     );
   }
@@ -131,7 +131,7 @@ class _DirectoryAndForumDescription extends StatelessWidget {
 
 /// 內容
 class _Content extends StatefulWidget {
-  const _Content({required this.type, required this.screenStyle});
+  const _Content(this.screenStyle, {required this.type});
 
   final HomePageDescriptionType type;
   final ScreenStyle screenStyle;
@@ -167,7 +167,7 @@ class _DesktopStyleContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = _Bg(type, screenStyle: ScreenStyle.desktop, isHovered: isHovered);
+    final bg = _Bg(ScreenStyle.desktop, type: type, isHovered: isHovered);
 
     return Row(children: [
       type.conetntOfRight ? bg : const SizedBox.shrink(),
@@ -205,7 +205,7 @@ class _MobileStyleContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      _Bg(type, screenStyle: ScreenStyle.mobile, isHovered: isHovered, flex: 2),
+      _Bg(ScreenStyle.mobile, type: type, isHovered: isHovered, flex: 2),
       Expanded(
         child: Container(
           color: QppColor.yaleBlue,
@@ -231,7 +231,8 @@ class _MobileStyleContent extends StatelessWidget {
 }
 
 class _Bg extends StatelessWidget {
-  const _Bg(this.type, {required this.screenStyle, required this.isHovered, this.flex = 1});
+  const _Bg(this.screenStyle,
+      {required this.type, required this.isHovered, this.flex = 1});
 
   final HomePageDescriptionType type;
   final ScreenStyle screenStyle;

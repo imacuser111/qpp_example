@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'qpp_app_bar/view/qpp_app_bar_view.dart';
+import '../qpp_app_bar/view/qpp_app_bar_view.dart';
 
 /// 客製化選單資料
 abstract class CMeunAnchorData {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view/qpp_app_bar_view.dart';
+import 'package:qpp_example/utils/qpp_contanst.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 /// 主框架
@@ -27,15 +28,16 @@ class _MainScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double appBarHeight = screenSize.width.determineScreenStyle().isDesktopStyle ? 100 : 60;
+    // debugPrint(toString());
 
-    debugPrint(toString());
+    final Size screenSize = MediaQuery.of(context).size;
+    final ScreenStyle screenStyle = screenSize.width.determineScreenStyle();
+
     return Scaffold(
       extendBodyBehindAppBar: true, // 設定可以在appBar後面擴充body
-      appBar: qppAppBar(height: appBarHeight),
+      appBar: qppAppBar(screenStyle),
       body: Container(
-        height: screenSize.height,
+        height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/desktop-bg-kv.webp'),
