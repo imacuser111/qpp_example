@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view/qpp_app_bar_view.dart';
-import 'package:qpp_example/utils/qpp_contanst.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 /// 主框架
