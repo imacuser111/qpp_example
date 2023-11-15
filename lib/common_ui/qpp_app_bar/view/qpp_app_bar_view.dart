@@ -4,35 +4,40 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qpp_example/common_ui/qpp_menu.dart';
+import 'package:qpp_example/common_ui/qpp_menu/c_menu_anchor.dart';
 import 'package:qpp_example/extension/throttle_debounce.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
 import 'package:qpp_example/go_router/router.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/model/enum/language.dart';
+import 'package:qpp_example/utils/qpp_contanst.dart';
 import 'package:qpp_example/utils/screen.dart';
 
-AppBar qppAppBar({required double height}) {
+AppBar qppAppBar(ScreenStyle screenStyle) {
   return AppBar(
     automaticallyImplyLeading: false, // 關閉返回按鈕
-    toolbarHeight: height,
+    toolbarHeight: screenStyle.isDesktopStyle
+        ? kToolbarDesktopHeight
+        : kToolbarMobileHeight,
     backgroundColor: QppColor.onyx60,
-    title: const QppAppBarTitle(),
+    title: screenStyle.isDesktopStyle
+        ? const _QppAppBarTitle(ScreenStyle.desktop)
+        : const _QppAppBarTitle(ScreenStyle.mobile),
     titleSpacing: 0,
   );
 }
 
-class QppAppBarTitle extends ConsumerWidget {
-  const QppAppBarTitle({super.key});
+class _QppAppBarTitle extends ConsumerWidget {
+  const _QppAppBarTitle(this.screenStyle);
+
+  final ScreenStyle screenStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint(toString());
+    // debugPrint(toString());
 
-    final Size size = MediaQuery.of(context).size;
-    final bool isDesktopStyle =
-        size.width.determineScreenStyle().isDesktopStyle;
+    final bool isDesktopStyle = screenStyle.isDesktopStyle;
 
     final bool isOpenAppBarMenuBtnPage =
         ref.watch(isOpenAppBarMenuBtnPageProvider);
@@ -43,14 +48,21 @@ class QppAppBarTitle extends ConsumerWidget {
       children: [
         // 最左邊間距
         Spacer(flex: isDesktopStyle ? 320 : 28),
-        isOpenAppBarMenuBtnPage ? const SizedBox.shrink() : const _Logo(),
+        isOpenAppBarMenuBtnPage
+            ? const SizedBox.shrink()
+            : isDesktopStyle
+                ? const _Logo(ScreenStyle.desktop)
+                : const _Logo(ScreenStyle.mobile),
         // QPP -> Button 間距
         Spacer(flex: isDesktopStyle ? 527 : 210),
         // 選單按鈕
         isDesktopStyle ? const _MenuBtns() : const SizedBox.shrink(),
         isLogin
-            ? const Padding(
-                padding: EdgeInsets.only(left: 64), child: _UserInfo())
+            ? Padding(
+                padding: const EdgeInsets.only(left: 64),
+                child: isDesktopStyle
+                    ? const _UserInfo(ScreenStyle.desktop)
+                    : const _UserInfo(ScreenStyle.mobile))
             : const SizedBox.shrink(),
         // 語系
         Padding(
@@ -60,7 +72,9 @@ class QppAppBarTitle extends ConsumerWidget {
                       ? 48
                       : 64
                   : 20),
-          child: const LanguageDropdownMenu(),
+          child: isDesktopStyle
+              ? const LanguageDropdownMenu(ScreenStyle.desktop)
+              : const LanguageDropdownMenu(ScreenStyle.mobile),
         ),
         // 三條 or 最右邊間距
         isOpenAppBarMenuBtnPage
@@ -76,12 +90,13 @@ class QppAppBarTitle extends ConsumerWidget {
 
 // QPP Logo
 class _Logo extends StatelessWidget {
-  const _Logo();
+  const _Logo(this.screenStyle);
+
+  final ScreenStyle screenStyle;
 
   @override
   Widget build(BuildContext context) {
-    final bool isDesktopStyle =
-        MediaQuery.of(context).size.width.determineScreenStyle().isDesktopStyle;
+    final bool isDesktopStyle = screenStyle.isDesktopStyle;
 
     return IconButton(
       icon: Image.asset(
@@ -204,14 +219,15 @@ class _AnimationMenuBtn extends State<AnimationMenuBtn>
 
 /// 使用者資訊
 class _UserInfo extends StatelessWidget {
-  const _UserInfo();
+  const _UserInfo(this.screenStyle);
+
+  final ScreenStyle screenStyle;
 
   @override
   Widget build(BuildContext context) {
     debugPrint(toString());
 
-    final isDesktopStyle =
-        MediaQuery.of(context).size.width.determineScreenStyle().isDesktopStyle;
+    final isDesktopStyle = screenStyle.isDesktopStyle;
 
     // 控制器狀態Provider
     final StateProvider<bool> isOpenControllerProvider =
@@ -259,11 +275,15 @@ class _UserInfo extends StatelessWidget {
 
 /// 語系下拉選單
 class LanguageDropdownMenu extends StatelessWidget {
-  const LanguageDropdownMenu({super.key});
+  const LanguageDropdownMenu(this.screenStyle, {super.key});
+
+  final ScreenStyle screenStyle;
 
   @override
   Widget build(BuildContext context) {
     // debugPrint(toString());
+
+    final isDesktopStyle = screenStyle.isDesktopStyle;
 
     // 控制器狀態Provider
     final StateProvider<bool> isOpenControllerProvider =
@@ -289,10 +309,12 @@ class LanguageDropdownMenu extends StatelessWidget {
           child: IconButton(
             onPressed: () =>
                 controller.isOpen ? controller.close() : controller.open(),
-            icon: const Row(
+            icon: Row(
               children: [
-                Icon(Icons.language, color: Colors.white),
-                Icon(Icons.keyboard_arrow_down, color: Colors.white)
+                const Icon(Icons.language, color: Colors.white),
+                isDesktopStyle
+                    ? const Icon(Icons.keyboard_arrow_down, color: Colors.white)
+                    : const SizedBox.shrink()
               ],
             ),
           ),
@@ -361,12 +383,12 @@ class FullScreenMenuBtnPage extends ConsumerWidget {
             child: Stack(
               children: [
                 const SizedBox(
-                  height: 60,
+                  height: kToolbarMobileHeight,
                   child: Row(
                     children: [
                       // 最左邊間距
                       SizedBox(width: 29),
-                      _Logo(),
+                      _Logo(ScreenStyle.mobile),
                       Spacer(),
                       // 三條 or 最右邊間距
                       AnimationMenuBtn(isClose: true),
