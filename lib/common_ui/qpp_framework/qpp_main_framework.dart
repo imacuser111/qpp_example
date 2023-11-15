@@ -40,7 +40,7 @@ class _MainScaffold extends StatelessWidget {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('desktop-bg-kv.webp'),
+            image: AssetImage('assets/desktop-bg-kv.webp'),
             fit: BoxFit.cover,
           ),
         ),

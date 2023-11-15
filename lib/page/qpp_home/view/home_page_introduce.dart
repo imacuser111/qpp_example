@@ -43,7 +43,8 @@ class _Horizontal extends StatelessWidget {
         const Spacer(flex: 2),
         const _Info(isHorizontal: true),
         const SizedBox(width: 100),
-        Expanded(flex: 3, child: Image.asset('KV.png', fit: BoxFit.cover)),
+        Expanded(
+            flex: 3, child: Image.asset('assets/KV.png', fit: BoxFit.cover)),
         const Spacer(),
       ],
     );
@@ -87,7 +88,7 @@ class _Info extends StatelessWidget {
           ),
           isHorizontal
               ? const SizedBox()
-              : Image.asset('KV.png', fit: BoxFit.cover),
+              : Image.asset('assets/KV.png', fit: BoxFit.cover),
           const SizedBox(height: 40),
           _Qrcode(isHorizontal: isHorizontal),
           const SizedBox(height: 20),
@@ -223,7 +224,7 @@ class _PlayStoreButtonState extends State<PlayStoreButton>
           child: Stack(
             children: [
               Image.asset(
-                widget.type.image,
+                'assets/${widget.type.image}',
                 fit: BoxFit.cover,
               ),
               AnimatedPositioned(

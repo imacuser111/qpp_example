@@ -93,7 +93,7 @@ class _UserInformationOuterFrameState extends State<UserInformationOuterFrame> {
           ),
           Container(
             padding: const EdgeInsets.only(bottom: 24),
-            child: context.isDesktop
+            child: context.isDesktopPlatform
                 ? UniversalLinkQRCode(
                     str: ServerConst.routerHost + widget.uri,
                   )

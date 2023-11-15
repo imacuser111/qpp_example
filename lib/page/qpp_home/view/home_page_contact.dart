@@ -16,7 +16,7 @@ class HomePageContact extends StatelessWidget {
       return Container(
           decoration: const BoxDecoration(
               image: DecorationImage(
-            image: AssetImage('desktop_bg_area03.webp'),
+            image: AssetImage('assets/desktop_bg_area03.webp'),
             fit: BoxFit.cover,
           )),
           padding:
@@ -61,7 +61,7 @@ class _TitleContent extends StatelessWidget {
                 children: [
                   Flexible(
                     flex: flex,
-                      child: SvgPicture.asset('desktop_icon_area04_official.svg')),
+                      child: SvgPicture.asset('assets/desktop_icon_area04_official.svg')),
                   Flexible(
                     flex: flex,
                     child: Column(
@@ -216,7 +216,7 @@ class _BenefitItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.center, children: [
-      SvgPicture.asset('desktop_bg_area03_box.svg'),
+      SvgPicture.asset('assets/desktop_bg_area03_box.svg'),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(type.title,
             style: const TextStyle(color: QppColor.laserLemon, fontSize: 24)),

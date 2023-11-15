@@ -27,7 +27,7 @@ class HomePageFeature extends StatelessWidget {
               right: leftAndRightSpacing),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('area1-bg-xl.jpg'),
+              image: AssetImage('assets/area1-bg-xl.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -72,7 +72,7 @@ class _Left extends StatelessWidget {
               fontWeight: FontWeight.bold),
         ),
         screenStyle.isDesktopStyle
-            ? Image.asset('area1-KV.png')
+            ? Image.asset('assets/area1-KV.png')
             : const SizedBox(),
       ],
     );
@@ -134,7 +134,7 @@ class _FeatureInfoItemState extends State<_FeatureInfoItem> {
         child: Flex(
           direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
           children: [
-            SvgPicture.asset(widget.type.image, width: 50, height: 50),
+            SvgPicture.asset('assets/${widget.type.image}', width: 50, height: 50),
             const SizedBox(height: 20, width: 20),
             Expanded(
               flex: flex,
