@@ -154,8 +154,9 @@ class CommodityInfoModel extends ChangeNotifier {
   /// 取得物品圖片
   getItemImage(int creatorID) {
     var itemData = itemSelectInfoState.data!;
+    var timeUTC = DateTime.now().millisecondsSinceEpoch;
     String itemPhotoUrl = QppImageUtils.getItemImageURL(creatorID, itemData.id,
-        timeStamp: itemData.updateTimestamp);
+        timeStamp: timeUTC);
 
     itemPhotoState = ApiResponse.completed(ItemImgData(itemPhotoUrl));
     notifyListeners();
