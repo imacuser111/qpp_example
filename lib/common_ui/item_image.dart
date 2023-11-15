@@ -3,27 +3,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/model/item_img_data.dart';
-import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
+import 'package:qpp_example/page/commodity_info/view/commodity_info_body.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 
 /// 物品圖片
 class ItemImgPhoto extends ConsumerWidget {
-  // 物品資訊 Model Provider
-  final ChangeNotifierProvider<CommodityInfoModel> provider;
   // 是否為 mobile 版面
   final bool isMobile;
 
   /// 一般版面 constructor
-  const ItemImgPhoto({super.key, required this.provider}) : isMobile = false;
+  const ItemImgPhoto({super.key}) : isMobile = false;
 
   /// Mobile 版面 constructor
-  const ItemImgPhoto.mobile({super.key, required this.provider})
-      : isMobile = true;
+  const ItemImgPhoto.mobile({super.key}) : isMobile = true;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // 監聽 photo url state
     ApiResponse<ItemImgData> itemPhotoState =
-        ref.watch(provider).itemPhotoState;
+        ref.watch(itemSelectInfoProvider).itemPhotoState;
 
     if (itemPhotoState.status == Status.completed) {
       ItemImgData imgData = itemPhotoState.data!;
