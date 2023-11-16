@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qpp_example/extension/build_context.dart';
 import '../qpp_app_bar/view/qpp_app_bar_view.dart';
 
 /// 客製化選單資料
@@ -36,8 +37,8 @@ class CMenuAnchor extends StatelessWidget {
             final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
 
             return MouseRegionCustomWidget(
-              onEnter: (event) => isOpenNotifier.state = true,
-              onExit: (event) => isOpenNotifier.state = false,
+              onEnter: (event) => context.isDesktopPlatform ? isOpenNotifier.state = true : null,
+              onExit: (event) => context.isDesktopPlatform ? isOpenNotifier.state = false : null,
               builder: (event) {
                 final Color color =
                     event is PointerEnterEvent ? Colors.amber : Colors.white;
