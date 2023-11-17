@@ -1,9 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:qpp_example/api/core/api_response.dart';
-import 'package:qpp_example/api/core/http_service.dart';
-import 'package:qpp_example/api/item_api.dart';
-import 'package:qpp_example/api/podo/core/base_response.dart';
+import 'package:qpp_example/api/client_api.dart';
 import 'package:qpp_example/api/podo/item_select.dart';
 import 'package:qpp_example/api/podo/multi_language_item_data.dart';
 import 'package:qpp_example/api/podo/multi_language_item_description_select.dart';
@@ -33,18 +30,17 @@ class CommodityInfoModel extends ChangeNotifier {
   /// 物品圖片狀態
   ApiResponse<ItemImgData> itemPhotoState = ApiResponse.initial();
 
+  final client = ClientApi.client;
+
   loadData(String id) {
     debugPrint('開始取得物品資訊...');
-    HttpService service = HttpService.instance;
-    Dio dio = service.dio;
-    final client = ItemApi(dio);
-    getItemInfo(client, id);
-    getMultiLanguageItemDescription(client, id);
-    getMultiLanguageItemIntroLink(client, id);
+    getItemInfo(id);
+    getMultiLanguageItemDescription(id);
+    getMultiLanguageItemIntroLink(id);
   }
 
   /// 取得物品資訊
-  getItemInfo(ItemApi client, String id) {
+  getItemInfo(String id) {
     itemSelectInfoState = ApiResponse.loading();
     notifyListeners();
 
@@ -73,7 +69,7 @@ class CommodityInfoModel extends ChangeNotifier {
   }
 
   /// 取得物品說明資訊
-  getMultiLanguageItemDescription(ItemApi client, String id) {
+  getMultiLanguageItemDescription(String id) {
     itemDescriptionInfoState = ApiResponse.loading();
     notifyListeners();
     String requestBody =
@@ -102,7 +98,7 @@ class CommodityInfoModel extends ChangeNotifier {
   }
 
   /// 取得物品連結資訊
-  getMultiLanguageItemIntroLink(ItemApi client, String id) {
+  getMultiLanguageItemIntroLink(String id) {
     itemLinkInfoState = ApiResponse.loading();
     notifyListeners();
     String requestBody =
@@ -133,19 +129,20 @@ class CommodityInfoModel extends ChangeNotifier {
     userInfoState = ApiResponse.loading();
     notifyListeners();
 
-    final request = UserSelectInfoRequest(userID);
+    final request = UserSelectInfoRequest().createBody(userID.toString());
 
-    request.request(successCallBack: (data) {
-      if (data.errorCode == "OK") {
+    client.postUserSelect(request).then((userSelectInfoResponse) {
+      if (userSelectInfoResponse.errorCode == "OK") {
         // 取得創建用戶
-        QppUser creator = QppUser.create(userID, data.userSelectInfoResponse);
+        QppUser creator = QppUser.create(userID, userSelectInfoResponse);
         userInfoState = ApiResponse.completed(creator);
       } else {
-        userInfoState = ApiResponse.error(data.errorCode);
-        print('取得創建者用戶資訊錯誤 SERVER_ERROR_CODE: ${data.errorCode}');
+        userInfoState = ApiResponse.error(userSelectInfoResponse.errorCode);
+        print(
+            '取得創建者用戶資訊錯誤 SERVER_ERROR_CODE: ${userSelectInfoResponse.errorCode}');
       }
       notifyListeners();
-    }, errorCallBack: (error) {
+    }).catchError((error) {
       userInfoState = ApiResponse.error(error);
       notifyListeners();
     });

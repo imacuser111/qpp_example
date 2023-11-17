@@ -1,25 +1,15 @@
-import 'package:qpp_example/api/core/base_api.dart';
+import 'dart:convert';
+import 'package:qpp_example/api/podo/core/base_response.dart';
 
 /// 搜尋用戶資訊(單筆)
-class UserSelectInfoRequest extends BaseApi {
-  final int uid;
-
-  UserSelectInfoRequest(this.uid);
-
-  @override
-  String get path => 'UserSelectInfo';
-
-  @override
-  RequestMethod get method => RequestMethod.post;
-
-  @override
-  Map<String, dynamic>? get body => <String, String>{
-        'uid': uid.toString(),
-      };
+class UserSelectInfoRequest {
+  String createBody(String uid) {
+    return json.encode({'uid': uid});
+  }
 }
 
 /// 搜尋用戶資訊(單筆)
-class UserSelectInfoResponse {
+class UserSelectInfoResponse extends BaseResponse {
   final String info;
   final String name;
   final int verificationType;
@@ -28,6 +18,7 @@ class UserSelectInfoResponse {
     required this.info,
     required this.name,
     required this.verificationType,
+    required super.json,
   });
 
   factory UserSelectInfoResponse.fromJson(Map<String, dynamic> json) {
@@ -35,6 +26,7 @@ class UserSelectInfoResponse {
       info: json['info'],
       name: json['name'],
       verificationType: json['verificationType'],
+      json: json,
     );
   }
 }

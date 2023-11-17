@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'item_api.dart';
+part of 'client_api.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'item_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _ItemApi implements ItemApi {
-  _ItemApi(
+class _ClientApi implements ClientApi {
+  _ClientApi(
     this._dio, {
     this.baseUrl,
   }) {
@@ -108,6 +108,35 @@ class _ItemApi implements ItemApi {
             ))));
     final value =
         MultiLanguageItemIntroLinkSelectInfoResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<UserSelectInfoResponse> postUserSelect(dynamic userId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': 'application/json'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = userId;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<UserSelectInfoResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'application/json',
+    )
+            .compose(
+              _dio.options,
+              'UserSelectInfo',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UserSelectInfoResponse.fromJson(_result.data!);
     return value;
   }
 

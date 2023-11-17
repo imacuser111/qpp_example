@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qpp_example/api/client_api.dart';
 import 'package:qpp_example/api/core/api_response.dart';
-import 'package:qpp_example/api/podo/core/base_response.dart';
 import 'package:qpp_example/api/podo/user_select_info.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
@@ -58,13 +58,14 @@ class UserInformationChangeNotifier extends ChangeNotifier {
     infoState = ApiResponse.loading();
     notifyListeners();
 
-    final request = UserSelectInfoRequest(userID);
+    final request = UserSelectInfoRequest().createBody(userID.toString());
+    var client = ClientApi.client;
 
-    request.request(successCallBack: (data) {
-      infoState = ApiResponse.completed(
-          QppUser.create(userID, data.userSelectInfoResponse));
+    client.postUserSelect(request).then((userSelectInfoResponse) {
+      infoState =
+          ApiResponse.completed(QppUser.create(userID, userSelectInfoResponse));
       notifyListeners();
-    }, errorCallBack: (error) {
+    }).catchError((error) {
       infoState = ApiResponse.error(error);
       notifyListeners();
     });

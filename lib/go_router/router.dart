@@ -32,7 +32,9 @@ class QppGoRouter {
               final data =
                   UniversalLinkParamData.fromJson(state.uri.queryParameters);
               return MainFramework(
-                  child: UserInformationOuterFrame(userID: data.phoneNumber ?? "", uri: state.uri.toString()));
+                  child: UserInformationOuterFrame(
+                      userID: data.phoneNumber ?? "",
+                      uri: state.uri.toString()));
             },
           ),
           GoRoute(

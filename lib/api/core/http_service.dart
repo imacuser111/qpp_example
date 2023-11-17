@@ -26,12 +26,12 @@ class HttpService {
     // dio.options.headers = {
     //   "Access-Control-Allow-Origin": "*",
     // };
-    
-    dio.options.baseUrl = ServerConst.apiUrl;
+
+    dio.options.baseUrl = ServerConst.clientApiUrl;
 
     dio.options.connectTimeout = const Duration(seconds: 10);
     dio.options.receiveTimeout = const Duration(seconds: 8);
-    
+
     // 這裡可以添加其他插件
     dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
   }
