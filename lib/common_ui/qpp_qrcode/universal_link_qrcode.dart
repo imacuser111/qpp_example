@@ -1,10 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// UniversalLink QRCode(物品資訊頁、個人資訊頁...等)
 class UniversalLinkQRCode extends StatelessWidget {
   const UniversalLinkQRCode(
-      {super.key, required this.str, this.infoStr = '掃描條碼開啟QPP'});
+      {super.key,
+      required this.str,
+      this.infoStr = 'vendor_login_scan_via_qpp'});
 
   final String str;
 
@@ -25,7 +28,7 @@ class UniversalLinkQRCode extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        Text(infoStr, style: const TextStyle(color: Colors.amber)),
+        Text(context.tr(infoStr), style: const TextStyle(color: Colors.amber)),
       ],
     );
   }

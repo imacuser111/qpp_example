@@ -28,6 +28,9 @@ AppBar qppAppBar(ScreenStyle screenStyle) {
   );
 }
 
+// -----------------------------------------------------------------------------
+/// QppAppBarTitle
+// -----------------------------------------------------------------------------
 class _QppAppBarTitle extends ConsumerWidget {
   const _QppAppBarTitle(this.screenStyle);
 
@@ -88,7 +91,9 @@ class _QppAppBarTitle extends ConsumerWidget {
   }
 }
 
-// QPP Logo
+// -----------------------------------------------------------------------------
+/// QPP Logo
+// -----------------------------------------------------------------------------
 class _Logo extends StatelessWidget {
   const _Logo(this.screenStyle);
 
@@ -104,13 +109,15 @@ class _Logo extends StatelessWidget {
         width: isDesktopStyle ? 148 : 89,
         scale: 46 / 148,
       ),
-      onPressed: () => context.goNamed(QppGoRouter.home),
+      onPressed: () => context.goNamed(QppGoRouter.information),
     );
   }
 }
 
+// -----------------------------------------------------------------------------
 /// 選單按鈕(Row)
 /// - Note: 產品介紹...等
+// -----------------------------------------------------------------------------
 class _MenuBtns extends StatelessWidget {
   const _MenuBtns();
 
@@ -153,7 +160,9 @@ class _MenuBtns extends StatelessWidget {
   }
 }
 
+// -----------------------------------------------------------------------------
 /// animationMenuBtn(三條or關閉)
+// -----------------------------------------------------------------------------
 class AnimationMenuBtn extends StatefulWidget {
   const AnimationMenuBtn({super.key, required this.isClose});
 
@@ -217,7 +226,9 @@ class _AnimationMenuBtn extends State<AnimationMenuBtn>
   }
 }
 
+// -----------------------------------------------------------------------------
 /// 使用者資訊
+// -----------------------------------------------------------------------------
 class _UserInfo extends StatelessWidget {
   const _UserInfo(this.screenStyle);
 
@@ -273,7 +284,9 @@ class _UserInfo extends StatelessWidget {
   }
 }
 
+// -----------------------------------------------------------------------------
 /// 語系下拉選單
+// -----------------------------------------------------------------------------
 class LanguageDropdownMenu extends StatelessWidget {
   const LanguageDropdownMenu(this.screenStyle, {super.key});
 
@@ -296,6 +309,8 @@ class LanguageDropdownMenu extends StatelessWidget {
           builder: (context, ref, child) {
             final isOpen = ref.watch(isOpenControllerProvider);
             final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
+
+            print({isOpen, 213213});
 
             Future.microtask(
                 () => isOpen ? controller.open() : controller.close());
@@ -328,7 +343,9 @@ class LanguageDropdownMenu extends StatelessWidget {
   }
 }
 
+// -----------------------------------------------------------------------------
 /// 判斷手勢是否在元件上
+// -----------------------------------------------------------------------------
 class MouseRegionCustomWidget extends ConsumerWidget {
   MouseRegionCustomWidget(
       {super.key, required this.builder, this.onEnter, this.onExit});
@@ -366,7 +383,9 @@ class MouseRegionCustomWidget extends ConsumerWidget {
   }
 }
 
+// -----------------------------------------------------------------------------
 /// 全螢幕選單按鈕
+// -----------------------------------------------------------------------------
 class FullScreenMenuBtnPage extends ConsumerWidget {
   const FullScreenMenuBtnPage({super.key});
 

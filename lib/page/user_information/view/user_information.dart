@@ -94,9 +94,7 @@ class _UserInformationOuterFrameState extends State<UserInformationOuterFrame> {
           Container(
             padding: const EdgeInsets.only(bottom: 24),
             child: context.isDesktopPlatform
-                ? UniversalLinkQRCode(
-                    str: ServerConst.routerHost + widget.uri,
-                  )
+                ? UniversalLinkQRCode(str: ServerConst.routerHost + widget.uri)
                 : Column(
                     children: [
                       Text(
@@ -144,7 +142,7 @@ class _AvatarWidget extends ConsumerWidget {
                 fit: BoxFit.cover,
                 image: bgImageIsError
                     ? const AssetImage(
-                            'desktop_pic_commodity_largepic_default.webp')
+                            'assets/desktop-pic-commodity-largepic-sample-general.webp')
                         as ImageProvider
                     : NetworkImage(userInformation.bgImage),
                 onError: (exception, stackTrace) => userInformation
@@ -154,7 +152,7 @@ class _AvatarWidget extends ConsumerWidget {
             child: Stack(
               children: [
                 ModalBarrier(
-                  color: Colors.black.withOpacity(0.7),
+                  color: Colors.black.withOpacity(0.5),
                   dismissible: false,
                 ), // 遮罩
                 Center(
@@ -168,7 +166,7 @@ class _AvatarWidget extends ConsumerWidget {
                           backgroundColor: Colors.transparent, // 設置透明背景
                           backgroundImage: avaterIsError
                               ? const AssetImage(
-                                      'desktop_pic_profile_avatar_default.png')
+                                      'assets/desktop_pic_profile_avatar_default.png')
                                   as ImageProvider
                               : NetworkImage(userInformation.avaterImage),
                           onBackgroundImageError: (exception, stackTrace) =>
@@ -215,7 +213,7 @@ class _InformationDescriptionWidget extends ConsumerWidget {
 
     return Container(
       width: double.infinity,
-      color: const Color.fromRGBO(22, 32, 68, 1),
+      color: QppColor.oxfordBlue,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 60),
         child: ReadMoreText(
