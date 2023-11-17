@@ -26,10 +26,10 @@ class UserInformationChangeNotifier extends ChangeNotifier {
   String bgImage = "";
 
   /// 頭像錯誤
-  bool avaterIsError = false;
+  bool avaterIsError = true;
 
   /// 背景圖錯誤
-  bool bgImageIsError = false;
+  bool bgImageIsError = true;
 
   /// 現在時間(撈取圖片使用)
   final nowTimestamp = DateTime.timestamp();
