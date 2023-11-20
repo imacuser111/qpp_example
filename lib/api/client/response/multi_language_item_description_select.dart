@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:qpp_example/api/client/base_client_response.dart';
-import 'package:qpp_example/api/client/multi_language_item_data.dart';
+import 'package:qpp_example/api/client/response/base_client_response.dart';
+import 'package:qpp_example/api/client/response/multi_language_item_data.dart';
 
 class MultiLanguageItemDescriptionSelectRequest {
   String createBody(String itemId) {

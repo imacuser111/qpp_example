@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:qpp_example/api/client/base_client_response.dart';
+import 'package:qpp_example/api/client/response/base_client_response.dart';
 
 /// 搜尋用戶資訊(單筆)
 class UserSelectInfoRequest {

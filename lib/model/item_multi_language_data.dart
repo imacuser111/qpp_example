@@ -2,7 +2,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
-import 'package:qpp_example/api/client/multi_language_item_data.dart';
+import 'package:qpp_example/api/client/response/multi_language_item_data.dart';
 import 'package:qpp_example/extension/string/text.dart';
 
 class ItemMultiLanguageData {

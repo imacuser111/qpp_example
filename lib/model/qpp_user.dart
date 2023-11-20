@@ -1,4 +1,4 @@
-import 'package:qpp_example/api/client/user_select_info.dart';
+import 'package:qpp_example/api/client/response/user_select_info.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/model/enum/user/user_verification_type.dart';
 

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:qpp_example/api/core/http_service.dart';
-import 'package:qpp_example/api/client/item_select.dart';
-import 'package:qpp_example/api/client/multi_language_item_description_select.dart';
-import 'package:qpp_example/api/client/multi_language_item_intro_link_select.dart';
-import 'package:qpp_example/api/client/user_select_info.dart';
+import 'package:qpp_example/api/client/response/item_select.dart';
+import 'package:qpp_example/api/client/response/multi_language_item_description_select.dart';
+import 'package:qpp_example/api/client/response/multi_language_item_intro_link_select.dart';
+import 'package:qpp_example/api/client/response/user_select_info.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:retrofit/retrofit.dart';
 

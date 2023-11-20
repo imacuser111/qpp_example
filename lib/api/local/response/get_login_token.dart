@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:qpp_example/api/login/base_login_response.dart';
+import 'package:qpp_example/api/local/response/base_local_response.dart';
 
 /// 取得登入 token
 class GetLoginTokenRequest {
@@ -9,7 +9,7 @@ class GetLoginTokenRequest {
 }
 
 /// 取得登入 token
-class GetLoginTokenResponse extends BaseLoginResponse {
+class GetLoginTokenResponse extends BaseLocalResponse {
   const GetLoginTokenResponse({required super.json});
 
   factory GetLoginTokenResponse.fromJson(Map<String, dynamic> json) {

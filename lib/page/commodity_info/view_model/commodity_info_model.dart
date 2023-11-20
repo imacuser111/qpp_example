@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:qpp_example/api/core/api_response.dart';
-import 'package:qpp_example/api/client_api.dart';
-import 'package:qpp_example/api/podo/item_select.dart';
-import 'package:qpp_example/api/podo/multi_language_item_data.dart';
-import 'package:qpp_example/api/podo/multi_language_item_description_select.dart';
-import 'package:qpp_example/api/podo/multi_language_item_intro_link_select.dart';
-import 'package:qpp_example/api/podo/user_select_info.dart';
+import 'package:qpp_example/api/client/api/client_api.dart';
+import 'package:qpp_example/api/client/response/item_select.dart';
+import 'package:qpp_example/api/client/response/multi_language_item_data.dart';
+import 'package:qpp_example/api/client/response/multi_language_item_description_select.dart';
+import 'package:qpp_example/api/client/response/multi_language_item_intro_link_select.dart';
+import 'package:qpp_example/api/client/response/user_select_info.dart';
+import 'package:qpp_example/api/local/response/get_login_token.dart';
+import 'package:qpp_example/api/local/api/login_api.dart';
 import 'package:qpp_example/model/item_img_data.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
@@ -37,6 +39,25 @@ class CommodityInfoModel extends ChangeNotifier {
     getItemInfo(id);
     getMultiLanguageItemDescription(id);
     getMultiLanguageItemIntroLink(id);
+    test();
+  }
+
+  test() {
+    // TODO: test
+    final vClient = LocalApi.client;
+    final request = GetLoginTokenRequest().createBody("CHT");
+
+    vClient.postGetLoginToken(request).then((getLoginTokenResponse) {
+      print("t_content: ${getLoginTokenResponse.content}");
+      print("t_status: ${getLoginTokenResponse.status}");
+      print("t_error info: ${getLoginTokenResponse.errorInfo.errorMessage}");
+    });
+
+    vClient.getLogout('').then((value) {
+      print('t_ ${value.data}');
+    }).catchError((onError) {
+      print(onError);
+    });
   }
 
   /// 取得物品資訊

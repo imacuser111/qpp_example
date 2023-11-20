@@ -1,14 +1,14 @@
-/// use for login api
-class BaseLoginResponse {
+/// use for local api
+class BaseLocalResponse {
   final Map<String, dynamic> json;
 
   /// 錯誤訊息
-  LoginResponseErrorInfo get errorInfo {
+  LocalResponseErrorInfo get errorInfo {
     // errorInfo 可能回 null
     try {
-      return LoginResponseErrorInfo(json: json['errorInfo']);
+      return LocalResponseErrorInfo(json: json['errorInfo']);
     } catch (exception) {
-      return const LoginResponseErrorInfo.none();
+      return const LocalResponseErrorInfo.none();
     }
   }
 
@@ -26,15 +26,15 @@ class BaseLoginResponse {
     }
   }
 
-  const BaseLoginResponse({required this.json});
+  const BaseLocalResponse({required this.json});
 }
 
-/// LoginResponse 錯誤訊息
-class LoginResponseErrorInfo {
+/// LocalResponse 錯誤訊息
+class LocalResponseErrorInfo {
   final Map<String, dynamic>? json;
 
-  const LoginResponseErrorInfo({required this.json});
-  const LoginResponseErrorInfo.none() : json = null;
+  const LocalResponseErrorInfo({required this.json});
+  const LocalResponseErrorInfo.none() : json = null;
 
   String get errorMessage {
     return json == null ? "" : json!['errorMessage'];
