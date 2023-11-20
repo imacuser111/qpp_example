@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:qpp_example/api/podo/core/base_response.dart';
-import 'package:qpp_example/api/podo/multi_language_item_data.dart';
+import 'package:qpp_example/api/client/base_client_response.dart';
+import 'package:qpp_example/api/client/multi_language_item_data.dart';
 
 class MultiLanguageItemDescriptionSelectRequest {
   String createBody(String itemId) {
@@ -9,7 +9,8 @@ class MultiLanguageItemDescriptionSelectRequest {
 }
 
 /// 搜尋物品多語系說明資訊
-class MultiLanguageItemDescriptionSelectInfoResponse extends BaseResponse {
+class MultiLanguageItemDescriptionSelectInfoResponse
+    extends BaseClientResponse {
   final MultiLanguageItemData descriptionData;
 
   const MultiLanguageItemDescriptionSelectInfoResponse(

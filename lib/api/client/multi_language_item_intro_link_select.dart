@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:qpp_example/api/podo/core/base_response.dart';
-import 'package:qpp_example/api/podo/multi_language_item_data.dart';
+import 'package:qpp_example/api/client/base_client_response.dart';
+import 'package:qpp_example/api/client/multi_language_item_data.dart';
 
 class MultiLanguageItemIntroLinkSelectRequest {
   String createBody(String itemId) {
@@ -9,7 +9,7 @@ class MultiLanguageItemIntroLinkSelectRequest {
 }
 
 /// 搜尋物品多語系連結資訊
-class MultiLanguageItemIntroLinkSelectInfoResponse extends BaseResponse {
+class MultiLanguageItemIntroLinkSelectInfoResponse extends BaseClientResponse {
   final MultiLanguageItemData introLinkData;
 
   const MultiLanguageItemIntroLinkSelectInfoResponse(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qpp_example/api/client_api.dart';
+import 'package:qpp_example/api/client/client_api.dart';
 import 'package:qpp_example/api/core/api_response.dart';
-import 'package:qpp_example/api/podo/user_select_info.dart';
+import 'package:qpp_example/api/client/user_select_info.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 

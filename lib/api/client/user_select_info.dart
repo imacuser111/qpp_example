@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:qpp_example/api/podo/core/base_response.dart';
+import 'package:qpp_example/api/client/base_client_response.dart';
 
 /// 搜尋用戶資訊(單筆)
 class UserSelectInfoRequest {
@@ -9,7 +9,7 @@ class UserSelectInfoRequest {
 }
 
 /// 搜尋用戶資訊(單筆)
-class UserSelectInfoResponse extends BaseResponse {
+class UserSelectInfoResponse extends BaseClientResponse {
   final String info;
   final String name;
   final int verificationType;
