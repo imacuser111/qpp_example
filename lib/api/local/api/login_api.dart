@@ -3,7 +3,6 @@ import 'package:qpp_example/api/local/response/check_login_token.dart';
 import 'package:qpp_example/api/local/response/get_login_token.dart';
 import 'package:qpp_example/api/local/response/get_vote_info.dart';
 import 'package:qpp_example/api/local/response/get_vote_status.dart';
-import 'package:qpp_example/api/local/response/logout.dart';
 import 'package:qpp_example/api/local/response/user_vote.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:retrofit/retrofit.dart';
@@ -44,7 +43,7 @@ abstract class LocalApi {
   })
   Future<GetVoteStatusResponse> postGetVoteStatus(@Body() data);
 
-  /// 登出
+  /// 登出, 回應只有一個字串, 使用 HttpResponse
   @GET('login/LogOut?token={token}')
   Future<HttpResponse> getLogout(@Path('token') String token);
 
