@@ -17,4 +17,25 @@ class CheckLoginTokenResponse extends BaseLocalResponse {
       json: json,
     );
   }
+  /// 登入者 id
+  String get uid {
+    if (content is Map<String, dynamic>) {
+      return content['uid'] ?? "";
+    }
+    return "";
+  }
+  /// 投票用 token
+  String get voteToken {
+    if (content is Map<String, dynamic>) {
+      return content['voteToken'] ?? "";
+    }
+    return "";
+  }
+  /// 登入者頭貼
+  String get uidImage {
+    if (content is Map<String, dynamic>) {
+      return content['uidImage'] ?? "";
+    }
+    return "";
+  }
 }

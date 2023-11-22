@@ -1,4 +1,6 @@
 import 'package:qpp_example/api/nft/nft_meta_data_response.dart';
+import 'package:qpp_example/model/nft/nft_attributes.dart';
+import 'package:qpp_example/model/nft/nft_exchange_data.dart';
 import 'package:qpp_example/model/nft/nft_link_data.dart';
 
 class NFT {
@@ -10,8 +12,8 @@ class NFT {
   late String image;
   late String backgroundColor;
 
-  // late String attributes;
-  // late String exchangeData;
+  late NFTAttributes attributes;
+  late NFTExchangeData exchangeData;
   late NftLinkData linkData;
 
   NFT.create(NftMetaDataResponse data) {
@@ -22,6 +24,8 @@ class NFT {
     externalUrl = data.external_url;
     image = data.image;
     backgroundColor = data.background_color;
+    exchangeData = NFTExchangeData.create(data.exchangeData);
     linkData = NftLinkData.create(data.linkData);
+    attributes = NFTAttributes.create(data.attributes);
   }
 }
