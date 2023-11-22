@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qpp_example/api/podo/core/base_response.dart';
+import 'package:qpp_example/api/client/response/base_client_response.dart';
 
 part 'item_select.g.dart';
 
@@ -11,7 +11,7 @@ class ItemSelectRequest {
 }
 
 /// 搜尋物品資訊
-class ItemSelectInfoResponse extends BaseResponse {
+class ItemSelectInfoResponse extends BaseClientResponse {
   final List<dynamic> itemList;
 
   const ItemSelectInfoResponse({required this.itemList, required super.json});

@@ -51,11 +51,8 @@ class ServerConst {
 
   static const clientApiUrl = "https://dev2-api.qpptec.com/client/";
 
-  /// login api, 正式 拿掉 stage
-  static const loginApiUrl = "https://stage.qpptec.com/api/login/";
-
-  /// login api, 正式 拿掉 stage
-  static const voteApiUrl = "https://stage.qpptec.com/api/vote/";
+  /// local api, 正式 拿掉 stage
+  static const localApiUrl = "https://stage.qpptec.com/api/";
 
   /// Polygonscan位址
   static const polygonUrl = "https://polygonscan.com/tx/";
