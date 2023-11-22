@@ -7,11 +7,11 @@ class NftLinkData {
   late String urlSchemes;
 
   NftLinkData.create(Map<String, dynamic> json) {
-    type = json["typeInt"];
-    website = json["website"];
-    downloadLink = json["downloadLink"];
-    androidPackageName = json["androidPackageName"];
-    iOSAppId = json["iosAppId"];
-    urlSchemes = json["urlSchemes"];
+    type = json["typeInt"] ?? -1;
+    website = json["website"] ?? "";
+    downloadLink = json["downloadLink"] ?? "";
+    androidPackageName = json["androidPackageName"] ?? "";
+    iOSAppId = json["iosAppId"] ?? "";
+    urlSchemes = json["urlSchemes"] ?? "";
   }
 }

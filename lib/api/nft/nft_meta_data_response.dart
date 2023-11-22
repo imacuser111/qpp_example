@@ -38,14 +38,10 @@ class NftMetaDataResponse {
 
   /// 舊的 NFT 資料可能沒有這個屬性
   String get tag {
-    try {
-      return json['tag'];
-    } catch (exception) {
-      return "";
-    }
+    return json['tag'] ?? "";
   }
 
-  Map<String, dynamic> get attributes {
+  List<dynamic> get attributes {
     return json['attributes'];
   }
 

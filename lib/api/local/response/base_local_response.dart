@@ -21,7 +21,7 @@ class BaseLocalResponse {
   int get status => int.parse(json['status']);
 
   /// response 內容
-  String get content {
+  dynamic get content {
     try {
       return json['content'];
     } catch (exception) {
