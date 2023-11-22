@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,8 +6,15 @@ import 'package:qpp_example/go_router/router.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:qpp_example/utils/shared_Prefs.dart';
 
 void main() async {
+  // 本地資料庫
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize SharedPrefs instance.
+  await SharedPrefs.init();
+
   // 多語系套件
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -19,18 +24,6 @@ void main() async {
 
   HttpService service = HttpService.instance; // dio
   service.initDio();
-
-  final cookie = document.cookie;
-  final entity = cookie?.split("; ").map((item) {
-    final split = item.split("=");
-    return MapEntry(split[0], split[1]);
-  });
-
-  if (entity != null) {
-    final cookieMap = Map.fromEntries(entity);
-
-    print({cookieMap, 12313});
-  }
 
   runApp(
     EasyLocalization(

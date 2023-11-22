@@ -9,7 +9,7 @@ import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/page/user_information/view_model/user_information_view_model.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
-import 'package:qpp_example/utils/qpp_contanst.dart';
+import 'package:qpp_example/constants/qpp_contanst.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 import 'package:qpp_example/utils/screen.dart';
 

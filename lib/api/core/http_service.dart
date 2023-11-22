@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:qpp_example/constants/server_const.dart';
 
 class HttpService {
   HttpService._privateConstructor();

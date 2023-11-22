@@ -11,7 +11,7 @@ import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_mo
 import 'package:qpp_example/go_router/router.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/model/enum/language.dart';
-import 'package:qpp_example/utils/qpp_contanst.dart';
+import 'package:qpp_example/constants/qpp_contanst.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 AppBar qppAppBar(ScreenStyle screenStyle) {

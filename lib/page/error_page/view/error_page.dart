@@ -6,7 +6,7 @@ import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/page/error_page/model/error_page_model.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
-import 'package:qpp_example/utils/qpp_contanst.dart';
+import 'package:qpp_example/constants/qpp_contanst.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 // -----------------------------------------------------------------------------
