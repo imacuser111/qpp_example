@@ -16,6 +16,18 @@ class UniversalLinkParamData {
   /// 語系
   String? lang;
 
+  /// 廠商ID
+  String? vendorID;
+
+  /// 廠商token
+  String? vendorToken;
+
+  /// 序號
+  String? serial;
+
+  /// 開啟外部瀏覽器(0/1)
+  String? openExternalBrowser;
+
   UniversalLinkParamData(
       this.phoneNumber, this.userID, this.commodityID, this.lang);
 
