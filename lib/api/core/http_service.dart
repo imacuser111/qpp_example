@@ -27,7 +27,7 @@ class HttpService {
     //   "Access-Control-Allow-Origin": "*",
     // };
 
-    dio.options.baseUrl = ServerConst.clientApiUrl;
+    // dio.options.baseUrl = ServerConst.clientApiUrl;
 
     dio.options.connectTimeout = const Duration(seconds: 10);
     dio.options.receiveTimeout = const Duration(seconds: 8);

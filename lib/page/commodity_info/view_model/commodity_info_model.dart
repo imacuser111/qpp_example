@@ -7,9 +7,11 @@ import 'package:qpp_example/api/client/response/multi_language_item_description_
 import 'package:qpp_example/api/client/response/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/client/response/user_select_info.dart';
 import 'package:qpp_example/api/local/response/get_login_token.dart';
-import 'package:qpp_example/api/local/api/login_api.dart';
+import 'package:qpp_example/api/local/api/local_api.dart';
+import 'package:qpp_example/api/nft/nft_meta_api.dart';
 import 'package:qpp_example/model/item_img_data.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
+import 'package:qpp_example/model/nft/nft.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
@@ -44,19 +46,14 @@ class CommodityInfoModel extends ChangeNotifier {
 
   test() {
     // TODO: test
-    final vClient = LocalApi.client;
-    final request = GetLoginTokenRequest().createBody("CHT");
+    final vClient = NftMetaApi.client;
+    // final request = NFTm().createBody("UC:101:1988");
 
-    vClient.postGetLoginToken(request).then((getLoginTokenResponse) {
-      print("t_content: ${getLoginTokenResponse.content}");
-      print("t_status: ${getLoginTokenResponse.status}");
-      print("t_error info: ${getLoginTokenResponse.errorInfo.errorMessage}");
-    });
-
-    vClient.getLogout('').then((value) {
-      print('t_ ${value.data}');
+    vClient.getNFTMeta("UC:101:2046").then((nftMetaResponse) {
+      NFT nft = NFT.create(nftMetaResponse);
+      print("t_content: ${nftMetaResponse.name}");
     }).catchError((onError) {
-      print(onError);
+      print("t_ exception: $onError");
     });
   }
 

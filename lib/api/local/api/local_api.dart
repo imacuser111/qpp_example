@@ -8,7 +8,7 @@ import 'package:qpp_example/constants/server_const.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart' hide Headers;
 
-part 'login_api.g.dart';
+part 'local_api.g.dart';
 
 /// 票券 相關的 API, 登入, 投票...
 @RestApi(baseUrl: ServerConst.localApiUrl)
