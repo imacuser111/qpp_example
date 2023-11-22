@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
-import 'package:qpp_example/page/qpp_home/model/qpp_home_page_model.dart';
-import 'package:qpp_example/page/qpp_home/view/qpp_home_page.dart';
+import 'package:qpp_example/page/home/model/home_page_model.dart';
+import 'package:qpp_example/page/home/view/home_page.dart';
+import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/utils/screen.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -75,12 +77,17 @@ class _Info extends StatelessWidget {
         crossAxisAlignment:
             isHorizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
-          const Text(
-            'QPP - 數位背包',
-            style: TextStyle(
-                color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              SvgPicture.asset('assets/desktop-pic-qpp-text.svg'),
+              const SizedBox(width: 12),
+              Text(
+                context.tr(QppLocales.homeSection1Title),
+                style: const TextStyle(fontSize: 44, color: QppColor.white),
+              )
+            ],
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 15),
           Text(
             context.tr(QppLocales.homeSection1P),
             textAlign: isHorizontal ? TextAlign.start : TextAlign.center,
@@ -89,9 +96,9 @@ class _Info extends StatelessWidget {
           isHorizontal
               ? const SizedBox()
               : Image.asset('assets/KV.png', fit: BoxFit.cover),
-          const SizedBox(height: 40),
+          const SizedBox(height: 61),
           _Qrcode(isHorizontal: isHorizontal),
-          const SizedBox(height: 20),
+          const SizedBox(height: 63),
           _PlayStoreButtons(isHorizontal: isHorizontal),
         ],
       ),
@@ -127,7 +134,7 @@ class _Qrcode extends StatelessWidget {
             ),
           ),
         ),
-        isHorizontal ? const SizedBox(width: 30) : const SizedBox(height: 30),
+        isHorizontal ? const SizedBox(width: 48) : const SizedBox(height: 30),
         Expanded(
           flex: flex,
           child: Row(

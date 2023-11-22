@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +19,18 @@ void main() async {
 
   HttpService service = HttpService.instance; // dio
   service.initDio();
+
+  final cookie = document.cookie;
+  final entity = cookie?.split("; ").map((item) {
+    final split = item.split("=");
+    return MapEntry(split[0], split[1]);
+  });
+
+  if (entity != null) {
+    final cookieMap = Map.fromEntries(entity);
+
+    print({cookieMap, 12313});
+  }
 
   runApp(
     EasyLocalization(

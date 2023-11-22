@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/common_ui/qpp_button/open_qpp_button.dart';
 import 'package:qpp_example/common_ui/qpp_qrcode/universal_link_qrcode.dart';
 import 'package:qpp_example/common_ui/qpp_text/read_more_text.dart';
-import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
@@ -17,10 +16,10 @@ import 'package:qpp_example/utils/screen.dart';
 /// 用戶資訊頁
 class UserInformationOuterFrame extends StatefulWidget {
   const UserInformationOuterFrame(
-      {super.key, required this.userID, required this.uri});
+      {super.key, required this.userID, required this.url});
 
   final String userID;
-  final String uri;
+  final String url;
 
   @override
   State<UserInformationOuterFrame> createState() =>
@@ -72,10 +71,8 @@ class _UserInformationOuterFrameState extends State<UserInformationOuterFrame> {
                         bottom: isDesktopStyle ? 48 : 20,
                         left: 20,
                         right: 20),
-                    child: Container(
-                      clipBehavior: Clip.hardEdge, // 超出的部分，裁剪掉
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12))),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
                       child: Column(
                         children: [
                           isDesktopStyle
@@ -94,7 +91,7 @@ class _UserInformationOuterFrameState extends State<UserInformationOuterFrame> {
           Container(
             padding: const EdgeInsets.only(bottom: 24),
             child: context.isDesktopPlatform
-                ? UniversalLinkQRCode(str: ServerConst.routerHost + widget.uri)
+                ? UniversalLinkQRCode(url: widget.url)
                 : Column(
                     children: [
                       Text(

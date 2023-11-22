@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:qpp_example/page/qpp_home/view/home_page_contact.dart';
-import 'package:qpp_example/page/qpp_home/view/home_page_description.dart';
-import 'package:qpp_example/page/qpp_home/view/home_page_feature.dart';
-import 'package:qpp_example/page/qpp_home/view/home_page_footer.dart';
-import 'package:qpp_example/page/qpp_home/view/home_page_introduce.dart';
+import 'package:qpp_example/page/home/view/home_page_contact.dart';
+import 'package:qpp_example/page/home/view/home_page_description.dart';
+import 'package:qpp_example/page/home/view/home_page_feature.dart';
+import 'package:qpp_example/page/home/view/home_page_footer.dart';
+import 'package:qpp_example/page/home/view/home_page_introduce.dart';
 
 // 要滾動到位置的全局鍵
 final GlobalKey introduceKey = GlobalKey();

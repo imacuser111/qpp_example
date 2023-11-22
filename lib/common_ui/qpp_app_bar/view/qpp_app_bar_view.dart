@@ -109,7 +109,9 @@ class _Logo extends StatelessWidget {
         width: isDesktopStyle ? 148 : 89,
         scale: 46 / 148,
       ),
-      onPressed: () => context.goNamed(QppGoRouter.information),
+      onPressed: () => context.canPop()
+          ? context.goNamed(QppGoRouter.app)
+          : context.goNamed(QppGoRouter.home), // 要在修改，現在只有error畫面會跳到home
     );
   }
 }
@@ -309,8 +311,6 @@ class LanguageDropdownMenu extends StatelessWidget {
           builder: (context, ref, child) {
             final isOpen = ref.watch(isOpenControllerProvider);
             final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
-
-            print({isOpen, 213213});
 
             Future.microtask(
                 () => isOpen ? controller.open() : controller.close());
