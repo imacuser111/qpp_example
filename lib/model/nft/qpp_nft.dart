@@ -7,7 +7,7 @@ import 'package:qpp_example/model/nft/nft_link_data.dart';
 import 'package:qpp_example/model/nft/nft_trait.dart';
 import 'package:qpp_example/utils/invitation_utils.dart';
 
-class NFT {
+class QppNFT {
   /// 發行者 邀請碼
   late String publisherInviteCode;
 
@@ -24,7 +24,7 @@ class NFT {
   late NFTExchangeData exchangeData;
   late NftLinkData linkData;
 
-  NFT.create(NftMetaDataResponse data) {
+  QppNFT.create(NftMetaDataResponse data) {
     publisherInviteCode = data.publisher;
     tag = data.tag;
     name = data.name;

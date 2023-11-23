@@ -1,3 +1,5 @@
+import 'package:qpp_example/model/vote/qpp_vote.dart';
+
 /// use for local api
 class BaseLocalResponse {
   final Map<String, dynamic> json;
@@ -46,5 +48,13 @@ class LocalResponseErrorInfo {
 
   String get errorItem {
     return json == null ? "" : json!['errorItem'];
+  }
+}
+
+/// BaseLocalResponse 擴充
+extension BaseLocalResponseExtension on BaseLocalResponse {
+  /// 若 content 為問券資料, 可直接使用, 取得問券資料
+  QppVote get voteData {
+    return QppVote.create(content);
   }
 }
