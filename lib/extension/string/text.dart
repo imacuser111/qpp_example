@@ -35,6 +35,11 @@ extension TextExtension on String {
 
     return sizeFull.height * numberOfLines;
   }
+
+  /// 是否為 NFT 物品 ID
+  bool get isNFTId {
+    return (contains('UC:101:'));
+  }
 }
 
 extension StringExtension on String? {

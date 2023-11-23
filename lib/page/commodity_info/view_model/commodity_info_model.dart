@@ -6,8 +6,11 @@ import 'package:qpp_example/api/client/response/multi_language_item_data.dart';
 import 'package:qpp_example/api/client/response/multi_language_item_description_select.dart';
 import 'package:qpp_example/api/client/response/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/client/response/user_select_info.dart';
+import 'package:qpp_example/api/nft/nft_meta_api.dart';
+import 'package:qpp_example/extension/string/text.dart';
 import 'package:qpp_example/model/item_img_data.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
+import 'package:qpp_example/model/nft/qpp_nft.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
@@ -16,6 +19,9 @@ import 'package:qpp_example/utils/qpp_image_utils.dart';
 class CommodityInfoModel extends ChangeNotifier {
   /// 物品資訊
   ApiResponse<QppItem> itemSelectInfoState = ApiResponse.initial();
+
+  /// NFT 物品資訊
+  ApiResponse<QppNFT> nftMetaDataState = ApiResponse.initial();
 
   /// 物品多語系說明資訊
   ApiResponse<ItemMultiLanguageData> itemDescriptionInfoState =
@@ -32,18 +38,39 @@ class CommodityInfoModel extends ChangeNotifier {
 
   final client = ClientApi.client;
 
+  /// 開始取得物品資訊
   loadData(String id) {
     debugPrint('開始取得物品資訊...');
-    getItemInfo(id);
-    getMultiLanguageItemDescription(id);
-    getMultiLanguageItemIntroLink(id);
+    // 是否為 NFT 物品
+    if (id.isNFTId) {
+      getNFTMetaData(id);
+    } else {
+      // 一般物品 取物品資訊及多語系說明/連結
+      getNormalItemInfo(id);
+      getMultiLanguageItemDescription(id);
+      getMultiLanguageItemIntroLink(id);
+    }
   }
 
-  /// 取得物品資訊
-  getItemInfo(String id) {
+  /// 取得 NFT 物品 MetaData
+  getNFTMetaData(String id) {
+    nftMetaDataState = ApiResponse.loading();
+    notifyListeners();
+    var nftClient = NftMetaApi.client;
+
+    nftClient.getNFTMeta(id).then((nftMetaDataResponse) {
+      QppNFT nft = nftMetaDataResponse.NFT;
+      // 取得 NFT MetaData 成功, 取發行者資料
+      getUserInfo(int.parse(nft.publisherID));
+      // TODO: notification
+      print('object');
+    }).catchError(getItemInfoError);
+  }
+
+  /// 取得非 NFT 的其他物品資訊
+  getNormalItemInfo(String id) {
     itemSelectInfoState = ApiResponse.loading();
     notifyListeners();
-
     String requestBody = ItemSelectRequest().createItemSelectBody([id]);
 
     client.postItemSelect(requestBody).then((itemSelectResponse) {
@@ -60,12 +87,15 @@ class CommodityInfoModel extends ChangeNotifier {
         print('取得物品資訊錯誤 SERVER_ERROR_CODE: ${itemSelectResponse.errorCode}');
       }
       notifyListeners();
-    }).catchError((error) {
-      // 無此物品
-      itemSelectInfoState = ApiResponse.error(error);
-      notifyListeners();
-      print('取得物品資訊錯誤: $error');
-    });
+    }).catchError(getItemInfoError);
+  }
+
+  /// 取物品資訊錯誤
+  getItemInfoError(dynamic error) {
+    // 無此物品
+    itemSelectInfoState = ApiResponse.error(error);
+    notifyListeners();
+    print('取得物品資訊錯誤: $error');
   }
 
   /// 取得物品說明資訊

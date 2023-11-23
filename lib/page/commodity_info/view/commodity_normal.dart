@@ -43,7 +43,7 @@ class NormalItemInfo extends StatelessWidget {
           Consumer(builder: (context, ref, _) {
             ApiResponse<QppItem> itemInfoState =
                 ref.watch(itemSelectInfoProvider).itemSelectInfoState;
-            return itemInfoState.status == Status.completed
+            return itemInfoState.isCompleted
                 ? Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: Text(
@@ -86,7 +86,7 @@ abstract class InfoRow extends ConsumerWidget {
     ApiResponse response = getResponse(ref);
     dynamic data = response.data;
 
-    return response.status == Status.completed
+    return response.isCompleted
         ? Padding(
             padding: const EdgeInsets.fromLTRB(60, 14, 60, 14),
             child: getContent(data),

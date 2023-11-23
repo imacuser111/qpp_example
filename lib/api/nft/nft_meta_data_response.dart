@@ -1,3 +1,5 @@
+import 'package:qpp_example/model/nft/qpp_nft.dart';
+
 /// NFT meta data 請求資訊
 // ignore_for_file: non_constant_identifier_names
 
@@ -51,5 +53,9 @@ class NftMetaDataResponse {
 
   Map<String, dynamic> get linkData {
     return json['linkData'];
+  }
+  /// 取得 NFT 資料
+  get NFT {
+    return QppNFT.create(this);
   }
 }
