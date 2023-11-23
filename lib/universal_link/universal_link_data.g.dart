@@ -13,6 +13,7 @@ UniversalLinkParamData _$UniversalLinkParamDataFromJson(
       json['userID'] as String?,
       json['commodityID'] as String?,
       json['lang'] as String?,
+      json['metadataID'] as String?,
     );
 
 Map<String, dynamic> _$UniversalLinkParamDataToJson(
@@ -22,4 +23,5 @@ Map<String, dynamic> _$UniversalLinkParamDataToJson(
       'phoneNumber': instance.phoneNumber,
       'commodityID': instance.commodityID,
       'lang': instance.lang,
+      'metadataID': instance.metadataID,
     };
