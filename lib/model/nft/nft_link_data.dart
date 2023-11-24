@@ -6,6 +6,7 @@ class NftLinkData {
   late String iOSAppId;
   late String urlSchemes;
 
+  /// app 按鈕用, web 應該沒使用到
   NftLinkData.create(Map<String, dynamic> json) {
     type = json["typeInt"] ?? -1;
     website = json["website"] ?? "";

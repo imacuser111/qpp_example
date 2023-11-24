@@ -1,6 +1,7 @@
 import 'package:qpp_example/extension/string/text.dart';
-import 'package:qpp_example/model/nft/nft_section_type.dart';
+import 'package:qpp_example/model/enum/item/nft_section_type.dart';
 
+/// NFT 顯示區塊內的最小單位
 class NFTTrait {
   late String _displayType;
   // 可能為 int or string
@@ -10,14 +11,23 @@ class NFTTrait {
 
   late String _traitType;
 
+  /// 顯示區塊的 type
   late NFTSectionType sectionType;
 
+  /// server 收到的資料創建 trait
   NFTTrait.create(Map<String, dynamic> json) {
     _displayType = json["display_type"] ?? "";
     _value = json["value"] ?? "";
     _maxValue = json["max_value"] ?? "";
     _traitType = json["trait_type"] ?? "";
-    // _setSectionType();
+    _setSectionType();
+  }
+
+  /// 創建 description 區塊的 trait
+  NFTTrait.createDescription(String traitType, String value) {
+    _traitType = traitType;
+    _value = value;
+    sectionType = NFTSectionType.description;
   }
 
   String get value {
@@ -42,16 +52,17 @@ class NFTTrait {
     return _traitType;
   }
 
-  _setSectionType(dynamic value) {
-    if (displayType.isNullOrEmpty) {
-      bool isString = value is String;
+  /// 設定前端顯示區塊 type
+  _setSectionType() {
+    if (_displayType.isNullOrEmpty) {
+      bool isString = _value is String;
       if (isString) {
-        sectionType = NFTSectionType.PROPERTIES;
+        sectionType = NFTSectionType.properties;
       } else {
-        sectionType = NFTSectionType.LEVELS;
+        sectionType = NFTSectionType.levels;
       }
     } else {
-      sectionType = NFTSectionType.findTypeByValue(value);
+      sectionType = NFTSectionType.findTypeByDisplayValue(_displayType);
     }
   }
 }
