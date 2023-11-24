@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/extension/build_context.dart';
+import 'package:qpp_example/utils/qpp_color.dart';
 import '../qpp_app_bar/view/qpp_app_bar_view.dart';
 
 /// 客製化選單資料
@@ -26,7 +28,8 @@ class CMenuAnchor extends StatelessWidget {
   // 控制器狀態Provider
   final StateProvider<bool> isOpenControllerProvider;
   final Widget Function(BuildContext, MenuController, Widget?)? builder;
-  final void Function(BuildContext context, WidgetRef ref, CMeunAnchorData e) onTap;
+  final void Function(BuildContext context, WidgetRef ref, CMeunAnchorData e)
+      onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +40,15 @@ class CMenuAnchor extends StatelessWidget {
             final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
 
             return MouseRegionCustomWidget(
-              onEnter: (event) => context.isDesktopPlatform ? isOpenNotifier.state = true : null,
-              onExit: (event) => context.isDesktopPlatform ? isOpenNotifier.state = false : null,
+              onEnter: (event) => context.isDesktopPlatform
+                  ? isOpenNotifier.state = true
+                  : null,
+              onExit: (event) => context.isDesktopPlatform
+                  ? isOpenNotifier.state = false
+                  : null,
               builder: (event) {
                 final Color color =
-                    event is PointerEnterEvent ? Colors.amber : Colors.white;
+                    event is PointerEnterEvent ? QppColor.canaryYellow : QppColor.white;
                 final image = e.image;
                 final isShowImage = image != null;
 
@@ -51,16 +58,21 @@ class CMenuAnchor extends StatelessWidget {
                     isOpenNotifier.state = false;
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                        left: isShowImage ? 0 : 12,
+                        right: 12),
                     child: Row(
                       children: [
                         isShowImage
-                            ? SvgPicture.asset(image)
+                            ? SvgPicture.asset(image, colorFilter: ColorFilter.mode(color, BlendMode.srcIn),)
                             : const SizedBox.shrink(),
                         isShowImage
                             ? const SizedBox(width: 6)
                             : const SizedBox.shrink(),
-                        Text(e.title, style: TextStyle(color: color)),
+                        Text(context.tr(e.title),
+                            style: TextStyle(color: color)),
                       ],
                     ),
                   ),

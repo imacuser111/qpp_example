@@ -6,10 +6,10 @@ import 'package:qr_flutter/qr_flutter.dart';
 class UniversalLinkQRCode extends StatelessWidget {
   const UniversalLinkQRCode(
       {super.key,
-      required this.str,
+      required this.url,
       this.infoStr = 'vendor_login_scan_via_qpp'});
 
-  final String str;
+  final String url;
 
   final String infoStr;
 
@@ -22,7 +22,7 @@ class UniversalLinkQRCode extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(6))),
           child: QrImageView(
-            data: str,
+            data: url,
             size: 144,
             padding: const EdgeInsets.all(11),
           ),

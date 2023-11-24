@@ -64,6 +64,8 @@ abstract final class QppColor {
 
   /// qpp line color
   static const Color cobaltBlue = Color(0xFF323DB0);
+
+  static const Color canaryYellow = Color(0xfffdeb1e);
 }
 
 // Opacity(不透明度) of the color
