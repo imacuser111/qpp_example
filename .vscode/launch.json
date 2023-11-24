@@ -10,7 +10,7 @@
       "type": "dart",
       "args": [
         "--web-browser-flag=--disable-web-security"
-      ]
+      ],
     },
     {
       "name": "QPP-Web (profile mode)",

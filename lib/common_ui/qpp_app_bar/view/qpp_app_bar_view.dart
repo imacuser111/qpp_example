@@ -3,16 +3,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/common_ui/qpp_menu/c_menu_anchor.dart';
+import 'package:qpp_example/common_view_model/auth_service/view_model/auth_service_view_model.dart';
 import 'package:qpp_example/extension/throttle_debounce.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
 import 'package:qpp_example/go_router/router.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/model/enum/language.dart';
-import 'package:qpp_example/utils/qpp_contanst.dart';
+import 'package:qpp_example/constants/qpp_contanst.dart';
 import 'package:qpp_example/utils/screen.dart';
+import 'package:qpp_example/utils/shared_Prefs.dart';
 
 AppBar qppAppBar(ScreenStyle screenStyle) {
   return AppBar(
@@ -45,7 +48,11 @@ class _QppAppBarTitle extends ConsumerWidget {
     final bool isOpenAppBarMenuBtnPage =
         ref.watch(isOpenAppBarMenuBtnPageProvider);
 
-    final bool isLogin = ref.watch(isLoginProvider);
+    final checkLoginTokenState = ref.watch(
+        authServiceProvider.select((value) => value.checkLoginTokenState));
+
+    final bool isLogin = ((SharedPrefs.getLoginInfo()?.isLogin ?? false) ||
+        (checkLoginTokenState.data?.isSuccess ?? false));
 
     return Row(
       children: [
@@ -57,34 +64,43 @@ class _QppAppBarTitle extends ConsumerWidget {
                 ? const _Logo(ScreenStyle.desktop)
                 : const _Logo(ScreenStyle.mobile),
         // QPP -> Button 間距
-        Spacer(flex: isDesktopStyle ? 527 : 210),
+        Spacer(
+            flex: isDesktopStyle
+                ? isLogin
+                    ? 362
+                    : 527
+                : 210),
         // 選單按鈕
         isDesktopStyle ? const _MenuBtns() : const SizedBox.shrink(),
         isLogin
-            ? Padding(
-                padding: const EdgeInsets.only(left: 64),
-                child: isDesktopStyle
-                    ? const _UserInfo(ScreenStyle.desktop)
-                    : const _UserInfo(ScreenStyle.mobile))
+            ? Container(
+                constraints: const BoxConstraints(minWidth: 20, maxWidth: 64))
             : const SizedBox.shrink(),
+        // 用戶資訊
+        isLogin
+            ? isDesktopStyle
+                ? const _UserInfo(ScreenStyle.desktop)
+                : const _UserInfo(ScreenStyle.mobile)
+            : const SizedBox.shrink(),
+        Spacer(
+            flex: isDesktopStyle
+                ? isLogin
+                    ? 48
+                    : 64
+                : 20),
         // 語系
-        Padding(
-          padding: EdgeInsets.only(
-              left: isDesktopStyle
-                  ? isLogin
-                      ? 48
-                      : 64
-                  : 20),
-          child: isDesktopStyle
-              ? const LanguageDropdownMenu(ScreenStyle.desktop)
-              : const LanguageDropdownMenu(ScreenStyle.mobile),
-        ),
+        isDesktopStyle
+            ? const LanguageDropdownMenu(ScreenStyle.desktop)
+            : const LanguageDropdownMenu(ScreenStyle.mobile),
         // 三條 or 最右邊間距
         isOpenAppBarMenuBtnPage
             ? const SizedBox(width: 30)
             : isDesktopStyle
                 ? const Flexible(child: SizedBox.shrink())
-                : const AnimationMenuBtn(isClose: false),
+                : const Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: AnimationMenuBtn(isClose: false),
+                  ),
         Spacer(flex: isDesktopStyle ? 319 : 24),
       ],
     );
@@ -109,7 +125,9 @@ class _Logo extends StatelessWidget {
         width: isDesktopStyle ? 148 : 89,
         scale: 46 / 148,
       ),
-      onPressed: () => context.goNamed(QppGoRouter.information),
+      onPressed: () => context.canPop()
+          ? context.goNamed(QppGoRouter.app)
+          : context.goNamed(QppGoRouter.home), // 要在修改，現在只有error畫面會跳到home
     );
   }
 }
@@ -146,8 +164,8 @@ class _MenuBtns extends StatelessWidget {
                       e.value,
                       style: TextStyle(
                           color: event is PointerEnterEvent
-                              ? Colors.amber
-                              : Colors.white,
+                              ? QppColor.canaryYellow
+                              : QppColor.white,
                           fontSize: 16),
                     ),
                   ),
@@ -252,33 +270,46 @@ class _UserInfo extends StatelessWidget {
             final isOpen = ref.watch(isOpenControllerProvider);
             final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
 
+            final loginInfo = SharedPrefs.getLoginInfo();
+
             Future.microtask(
                 () => isOpen ? controller.open() : controller.close());
 
             return MouseRegion(
               onEnter: (event) => isOpenNotifier.state = true,
               onExit: (event) => isOpenNotifier.state = false,
-              child: child,
+              child: Row(
+                children: [
+                  ClipOval(
+                    child: Image.network(loginInfo?.uidImage ?? "", width: 24),
+                  ),
+                  isDesktopStyle
+                      ? const SizedBox(width: 8)
+                      : const SizedBox.shrink(),
+                  isDesktopStyle
+                      ? Text(
+                          loginInfo?.uid ?? "",
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.white),
+                        )
+                      : const SizedBox.shrink(),
+                  isDesktopStyle
+                      ? Row(children: [
+                          const SizedBox(width: 4),
+                          SvgPicture.asset('assets/desktop-icon-arrowdown.svg')
+                        ])
+                      : const SizedBox.shrink(),
+                ],
+              ),
             );
           },
-          child: Row(
-            children: [
-              const Icon(Icons.info, color: Colors.white),
-              const SizedBox(width: 8),
-              isDesktopStyle
-                  ? const Text('phoneNumber',
-                      style: TextStyle(fontSize: 14, color: Colors.white))
-                  : const SizedBox.shrink(),
-              isDesktopStyle
-                  ? const Icon(Icons.keyboard_arrow_down, color: Colors.white)
-                  : const SizedBox.shrink(),
-            ],
-          ),
         );
       },
       isOpenControllerProvider: isOpenControllerProvider,
       onTap: (BuildContext context, WidgetRef ref, _) {
-        ref.read(isLoginProvider.notifier).state = false;
+        ref
+            .read(authServiceProvider.notifier)
+            .logout(SharedPrefs.getLoginInfo()?.vendorToken ?? "");
       },
     );
   }
@@ -310,8 +341,6 @@ class LanguageDropdownMenu extends StatelessWidget {
             final isOpen = ref.watch(isOpenControllerProvider);
             final isOpenNotifier = ref.read(isOpenControllerProvider.notifier);
 
-            print({isOpen, 213213});
-
             Future.microtask(
                 () => isOpen ? controller.open() : controller.close());
 
@@ -326,9 +355,13 @@ class LanguageDropdownMenu extends StatelessWidget {
                 controller.isOpen ? controller.close() : controller.open(),
             icon: Row(
               children: [
-                const Icon(Icons.language, color: Colors.white),
+                SvgPicture.asset(
+                    'assets/mobile-icon-actionbar-language-normal.svg'),
                 isDesktopStyle
-                    ? const Icon(Icons.keyboard_arrow_down, color: Colors.white)
+                    ? Row(children: [
+                        const SizedBox(width: 4),
+                        SvgPicture.asset('assets/desktop-icon-arrowdown.svg')
+                      ])
                     : const SizedBox.shrink()
               ],
             ),
@@ -373,6 +406,9 @@ class MouseRegionCustomWidget extends ConsumerWidget {
       onEnter: (event) {
         onEnter != null ? onEnter!(event) : ();
         notifier.onEnter();
+
+        // TODO: 測試登入用記得砍掉
+        ref.watch(authServiceProvider.notifier).getLoginToken('');
       },
       onExit: (event) {
         onExit != null ? onExit!(event) : ();

@@ -6,10 +6,15 @@ import 'package:qpp_example/go_router/router.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:qpp_example/utils/shared_Prefs.dart';
 
 void main() async {
-  // 多語系套件
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 本地資料庫
+  await SharedPrefs.init();
+
+  // 多語系套件
   await EasyLocalization.ensureInitialized();
 
   // 建立URL策略，用以移除頁出現http://localhost:5654/#/的#字hash

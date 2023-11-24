@@ -23,5 +23,9 @@ Map<String, dynamic> _$UniversalLinkParamDataToJson(
       'phoneNumber': instance.phoneNumber,
       'commodityID': instance.commodityID,
       'lang': instance.lang,
+      'vendorID': instance.vendorID,
+      'vendorToken': instance.vendorToken,
+      'serial': instance.serial,
+      'openExternalBrowser': instance.openExternalBrowser,
       'metadataID': instance.metadataID,
     };

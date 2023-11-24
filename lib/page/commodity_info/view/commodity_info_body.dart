@@ -74,7 +74,7 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
       isDesktopStyle ? const InfoCard.desktop() : const InfoCard.mobile(),
       // 下方 QR Code / 按鈕
       context.isDesktopPlatform
-          ? UniversalLinkQRCode(str: qrCodeUrl)
+          ? UniversalLinkQRCode(url: qrCodeUrl)
           : const OpenQppButton(),
       // 底部間距
       const SizedBox(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qpp_example/page/qpp_home/model/qpp_home_page_model.dart';
+import 'package:qpp_example/page/home/model/home_page_model.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/utils/screen.dart';
 

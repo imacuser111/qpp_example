@@ -48,7 +48,7 @@ class HttpService {
   }
 
   String errorFactory(DioException error) {
-    //請求處理錯誤
+    // 請求處理錯誤
     String? errorMessage = error.message;
     switch (error.type) {
       case DioExceptionType.connectionTimeout:

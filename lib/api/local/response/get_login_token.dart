@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:qpp_example/api/local/response/base_local_response.dart';
+import 'package:qpp_example/universal_link/universal_link_data.dart';
 
 /// 取得登入 token
 class GetLoginTokenRequest {
@@ -17,4 +18,7 @@ class GetLoginTokenResponse extends BaseLocalResponse {
       json: json,
     );
   }
+
+  UniversalLinkParamData get data =>
+      UniversalLinkParamData.fromJson(Uri.parse(content).queryParameters);
 }

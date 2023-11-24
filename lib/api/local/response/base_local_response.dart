@@ -2,6 +2,8 @@ import 'package:qpp_example/model/vote/qpp_vote.dart';
 
 /// use for local api
 class BaseLocalResponse {
+  const BaseLocalResponse({required this.json});
+
   final Map<String, dynamic> json;
 
   /// 錯誤訊息
@@ -14,10 +16,11 @@ class BaseLocalResponse {
     }
   }
 
+  /// 是否成功
+  bool get isSuccess => status == 1;
+
   /// response 狀態
-  int get status {
-    return int.parse(json['status']);
-  }
+  int get status => int.parse(json['status']);
 
   /// response 內容
   dynamic get content {
@@ -27,8 +30,6 @@ class BaseLocalResponse {
       return "";
     }
   }
-
-  const BaseLocalResponse({required this.json});
 }
 
 /// LocalResponse 錯誤訊息
