@@ -39,6 +39,7 @@ class ItemImgPhoto extends ConsumerWidget {
   /// desktop 一般物品, size 100 or 88, 圓形
   Container _img(String path) {
     return Container(
+      margin: const EdgeInsets.only(top: 83),
       width: isMobile ? 88 : 110,
       clipBehavior: Clip.antiAlias,
       // decoration 負責切形狀
@@ -62,7 +63,9 @@ class ItemImgPhoto extends ConsumerWidget {
   /// desktop NFT 物品, size 180 or 144, radius 8
   Container _imgNFT(String path, Color background) {
     return Container(
+      margin: const EdgeInsets.only(top: 48),
       width: isMobile ? 144 : 180,
+      height: isMobile ? 144 : 180,
       clipBehavior: Clip.antiAlias,
       // decoration 負責切形狀
       decoration: _rectDecor(background: background),
@@ -72,9 +75,10 @@ class ItemImgPhoto extends ConsumerWidget {
         path,
         // 圖片讀取錯誤處理
         errorBuilder: (context, error, stackTrace) {
-          return SvgPicture.asset(
-            'assets/desktop-pic-commodity-avatar-default.svg',
-          );
+          return const SizedBox();
+          // return SvgPicture.asset(
+          //   'assets/desktop-pic-commodity-avatar-default.svg',
+          // );
         },
         filterQuality: FilterQuality.high,
         fit: BoxFit.fitWidth,

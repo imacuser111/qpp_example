@@ -42,20 +42,24 @@ class QppNFT {
     // TODO: 下面資料需要這時候給? (多語系要 build context)
     // TODO: 取得用戶名稱...call api
     // 發行者 多語系 key  QppLocales.commodityInfoPublisher
-    attributes.addDescription(NFTTrait.createDescription("QppLocales.commodityInfoPublisher", publisherID));
+    attributes.addDescription(NFTTrait.createDescription(
+        "QppLocales.commodityInfoPublisher", publisherID));
     if (!externalUrl.isNullOrEmpty) {
       // 連結 多語系 key QppLocales.commodityInfoTitle
-      attributes.addDescription(NFTTrait.createDescription("QppLocales.commodityInfoTitle", externalUrl));
+      attributes.addDescription(NFTTrait.createDescription(
+          "QppLocales.commodityInfoTitle", externalUrl));
     }
     if (!description.isNullOrEmpty) {
       // 説明 多語系 key QppLocales.commodityInfoInfo
-      attributes.addDescription(NFTTrait.createDescription("QppLocales.commodityInfoInfo", description));
+      attributes.addDescription(NFTTrait.createDescription(
+          "QppLocales.commodityInfoInfo", description));
     }
   }
 
   /// NFT 圖片背景顏色
   get backgroundColor {
-    int colorIndex = int.parse('0xFF$_backgroundColor');
-    return Color(colorIndex);
+    // int colorIndex = int.parse('0xFF$_backgroundColor');
+    // return Color(colorIndex);
+    return _backgroundColor;
   }
 }

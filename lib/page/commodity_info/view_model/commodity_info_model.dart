@@ -64,6 +64,12 @@ class CommodityInfoModel extends ChangeNotifier {
       getUserInfo(int.parse(nft.publisherID));
       // TODO: notification
       print('object');
+      nftMetaDataState = ApiResponse.completed(nft);
+      String itemPhotoUrl = nft.image;
+
+      itemPhotoState = ApiResponse.completed(
+          ItemImgData.nft(path: itemPhotoUrl, colorHex: nft.backgroundColor));
+      notifyListeners();
     }).catchError(getItemInfoError);
   }
 

@@ -9,6 +9,7 @@ import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/model/nft/qpp_nft.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_empty.dart';
+import 'package:qpp_example/page/commodity_info/view/commodity_nft.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_normal.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
@@ -128,7 +129,7 @@ class InfoCard extends StatelessWidget {
                 return const NormalItemInfo();
               } else if (nftMetaState.isCompleted) {
                 // 有取得 NFT Meta
-                return SizedBox();
+                return const NFTItemInfo();
               } else {
                 // 沒有取得物品資料
                 return isDesktop
