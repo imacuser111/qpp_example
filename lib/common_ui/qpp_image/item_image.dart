@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -71,18 +72,26 @@ class ItemImgPhoto extends ConsumerWidget {
       decoration: _rectDecor(background: background),
       // foregroundDecoration 畫框線用
       foregroundDecoration: _rectDecorBorder(),
-      child: Image.network(
-        path,
-        // 圖片讀取錯誤處理
-        errorBuilder: (context, error, stackTrace) {
-          return const SizedBox();
-          // return SvgPicture.asset(
-          //   'assets/desktop-pic-commodity-avatar-default.svg',
-          // );
-        },
-        filterQuality: FilterQuality.high,
-        fit: BoxFit.fitWidth,
-      ),
+      child: Stack(children: [
+        Image.network(
+          path,
+          // 圖片讀取錯誤處理
+          errorBuilder: (context, error, stackTrace) {
+            return const SizedBox.shrink();
+            // return SvgPicture.asset(
+            //   'assets/desktop-pic-commodity-avatar-default.svg',
+            // );
+          },
+          filterQuality: FilterQuality.high,
+          fit: BoxFit.fitWidth,
+        ),
+        Positioned(
+            bottom: 5,
+            right: 5,
+            child: ExpandPhotoBtnWidget(
+              imgPath: path,
+            )),
+      ]),
     );
   }
 }
@@ -116,4 +125,57 @@ BoxDecoration _rectDecorBorder() {
       // TODO: 確認框線顏色
       border: Border.all(color: QppColor.oxfordBlue, width: 1.0),
       borderRadius: const BorderRadius.all(Radius.circular(8.0)));
+}
+
+/// 點擊展開圖片元件
+class ExpandPhotoBtnWidget extends StatelessWidget {
+  final String imgPath;
+  const ExpandPhotoBtnWidget({super.key, required this.imgPath});
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          child: SvgPicture.asset(
+            'assets/mobile-icon-image-magnifier.svg',
+            width: 30,
+            height: 30,
+          ),
+          onTap: () {
+            // TODO: dialog 動畫
+            // TODO: https://book.flutterchina.club/chapter7/dailog.html#_7-7-2-对话框打开动画及遮罩
+            showGeneralDialog(
+              context: context,
+              pageBuilder: (_, animation, secondaryAnimation) {
+                return Stack(children: [
+                  ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: const SizedBox(
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Image.network(
+                      imgPath,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                ]);
+              },
+              barrierDismissible: true,
+              barrierLabel:
+                  MaterialLocalizations.of(context).modalBarrierDismissLabel,
+              // barrierColor: Colors.black87, // 自定义遮罩颜色
+              transitionDuration: const Duration(milliseconds: 150),
+              // transitionBuilder: _buildMaterialDialogTransitions,
+            );
+          },
+        ));
+  }
 }

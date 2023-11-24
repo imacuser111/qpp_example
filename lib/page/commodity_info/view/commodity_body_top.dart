@@ -9,7 +9,9 @@ import 'package:qpp_example/utils/qpp_color.dart';
 
 /// 物品容器上半部區塊 (物品圖片, 名稱)
 class CommodityBodyTop extends StatelessWidget {
-  const CommodityBodyTop({super.key});
+  final bool isDesktop;
+  const CommodityBodyTop.desktop({super.key}) : isDesktop = true;
+  const CommodityBodyTop.mobile({super.key}) : isDesktop = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +23,7 @@ class CommodityBodyTop extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       // 上半部 bg
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              // 背景圖
-              image: AssetImage(
-                  'assets/desktop-pic-commodity-largepic-sample-general.webp'),
-              fit: BoxFit.none)),
+      decoration: isDesktop ? const DesktopDecor() : const MobileDecor(),
       child: Column(children: [
         // 物品圖片
         const ItemImgPhoto(),
@@ -60,6 +57,34 @@ class CommodityBodyTop extends StatelessWidget {
           }
         }),
       ]),
+    );
+  }
+}
+
+class DesktopDecor extends BoxDecoration {
+  const DesktopDecor();
+  @override
+  DecorationImage? get image {
+    return const DecorationImage(
+        // 背景圖
+        image: AssetImage(
+            'assets/desktop-pic-commodity-largepic-sample-general.webp'),
+        fit: BoxFit.none);
+  }
+}
+
+class MobileDecor extends BoxDecoration {
+  const MobileDecor();
+  @override
+  DecorationImage? get image {
+    return const DecorationImage(
+      // TODO: 確認圖
+      // centerSlice: Rect.fromLTWH(237, 140, 90, 90),
+      // 背景圖
+      // mobile-pic-commodity-largepic-sample-general
+      image: AssetImage(
+          'assets/desktop-pic-commodity-largepic-sample-general.webp'),
+      fit: BoxFit.none,
     );
   }
 }

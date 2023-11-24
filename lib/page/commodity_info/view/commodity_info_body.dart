@@ -126,10 +126,14 @@ class InfoCard extends StatelessWidget {
 
               if (itemInfoState.isCompleted) {
                 // 有取得物品資料
-                return const NormalItemInfo();
+                return isDesktop
+                    ? const NormalItemInfo.desktop()
+                    : const NormalItemInfo.mobile();
               } else if (nftMetaState.isCompleted) {
                 // 有取得 NFT Meta
-                return const NFTItemInfo();
+                return isDesktop
+                    ? const NFTItemInfo.desktop()
+                    : const NFTItemInfo.mobile();
               } else {
                 // 沒有取得物品資料
                 return isDesktop

@@ -16,12 +16,16 @@ import 'dart:ui' as ui;
 
 /// 一般物品資訊
 class NormalItemInfo extends StatelessWidget {
-  const NormalItemInfo({super.key});
+  final bool isDesktop;
+  const NormalItemInfo.desktop({super.key}) : isDesktop = true;
+  const NormalItemInfo.mobile({super.key}) : isDesktop = false;
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       // 資料區 上半部
-      const CommodityBodyTop(),
+      isDesktop
+          ? const CommodityBodyTop.desktop()
+          : const CommodityBodyTop.mobile(),
       // 資料區下半部
       Container(
           constraints: const BoxConstraints(maxWidth: 1280),

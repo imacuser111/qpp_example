@@ -1,15 +1,19 @@
 import 'package:flutter/widgets.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_body_top.dart';
 
-/// 一般物品資訊
+/// NFT 物品資訊
 class NFTItemInfo extends StatelessWidget {
-  const NFTItemInfo({super.key});
-  
+  final bool isDesktop;
+  const NFTItemInfo.desktop({super.key}) : isDesktop = true;
+  const NFTItemInfo.mobile({super.key}) : isDesktop = false;
+
   @override
   Widget build(BuildContext context) {
-    return const Column(children: [
+    return Column(children: [
       // 資料區 上半部
-      CommodityBodyTop(),
+      isDesktop
+          ? const CommodityBodyTop.desktop()
+          : const CommodityBodyTop.mobile(),
       // 資料區下半部
       // Container(
       //     constraints: const BoxConstraints(maxWidth: 1280),
