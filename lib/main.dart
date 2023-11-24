@@ -9,14 +9,12 @@ import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:qpp_example/utils/shared_Prefs.dart';
 
 void main() async {
-  // 本地資料庫
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize SharedPrefs instance.
+  // 本地資料庫
   await SharedPrefs.init();
 
   // 多語系套件
-  WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
   // 建立URL策略，用以移除頁出現http://localhost:5654/#/的#字hash
