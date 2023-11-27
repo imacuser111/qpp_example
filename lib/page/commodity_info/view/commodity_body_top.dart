@@ -9,9 +9,7 @@ import 'package:qpp_example/utils/qpp_color.dart';
 
 /// 物品容器上半部區塊 (物品圖片, 名稱)
 class CommodityBodyTop extends StatelessWidget {
-  final bool isDesktop;
-  const CommodityBodyTop.desktop({super.key}) : isDesktop = true;
-  const CommodityBodyTop.mobile({super.key}) : isDesktop = false;
+  const CommodityBodyTop({super.key});
 
   @override
   Widget build(BuildContext context) {

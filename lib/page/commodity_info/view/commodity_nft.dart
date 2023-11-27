@@ -9,11 +9,9 @@ class NFTItemInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return const Column(children: [
       // 資料區 上半部
-      isDesktop
-          ? const CommodityBodyTop.desktop()
-          : const CommodityBodyTop.mobile(),
+      CommodityBodyTop(),
       // 資料區下半部
       // Container(
       //     constraints: const BoxConstraints(maxWidth: 1280),
