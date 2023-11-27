@@ -18,12 +18,11 @@ class CommodityBodyTop extends StatelessWidget {
     return // 資料區 上半部
         Container(
       margin: const EdgeInsets.only(bottom: 20),
-      // padding: const EdgeInsets.only(top: 0, bottom: 30),
       constraints: const BoxConstraints(maxWidth: 1280, maxHeight: 292),
       width: double.infinity,
       height: double.infinity,
       // 上半部 bg
-      decoration: isDesktop ? const DesktopDecor() : const MobileDecor(),
+      decoration: const _ContainerDecoration(),
       child: Column(children: [
         // 物品圖片
         const ItemImgPhoto(),
@@ -61,8 +60,9 @@ class CommodityBodyTop extends StatelessWidget {
   }
 }
 
-class DesktopDecor extends BoxDecoration {
-  const DesktopDecor();
+/// 容器 Decoration
+class _ContainerDecoration extends BoxDecoration {
+  const _ContainerDecoration();
   @override
   DecorationImage? get image {
     return const DecorationImage(
@@ -70,21 +70,5 @@ class DesktopDecor extends BoxDecoration {
         image: AssetImage(
             'assets/desktop-pic-commodity-largepic-sample-general.webp'),
         fit: BoxFit.none);
-  }
-}
-
-class MobileDecor extends BoxDecoration {
-  const MobileDecor();
-  @override
-  DecorationImage? get image {
-    return const DecorationImage(
-      // TODO: 確認圖
-      // centerSlice: Rect.fromLTWH(237, 140, 90, 90),
-      // 背景圖
-      // mobile-pic-commodity-largepic-sample-general
-      image: AssetImage(
-          'assets/desktop-pic-commodity-largepic-sample-general.webp'),
-      fit: BoxFit.none,
-    );
   }
 }
