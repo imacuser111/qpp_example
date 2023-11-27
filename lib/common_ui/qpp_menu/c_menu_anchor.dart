@@ -28,7 +28,7 @@ class CMenuAnchor extends StatelessWidget {
   // 控制器狀態Provider
   final StateProvider<bool> isOpenControllerProvider;
   final Widget Function(BuildContext, MenuController, Widget?)? builder;
-  final void Function(BuildContext context, WidgetRef ref, CMeunAnchorData e)
+  final void Function(BuildContext context, CMeunAnchorData e)
       onTap;
 
   @override
@@ -54,7 +54,7 @@ class CMenuAnchor extends StatelessWidget {
 
                 return MenuItemButton(
                   onPressed: () {
-                    onTap(context, ref, e);
+                    onTap(context, e);
                     isOpenNotifier.state = false;
                   },
                   child: Padding(
