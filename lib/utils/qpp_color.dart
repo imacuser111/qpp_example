@@ -66,6 +66,8 @@ abstract final class QppColor {
   static const Color cobaltBlue = Color(0xFF323DB0);
 
   static const Color canaryYellow = Color(0xfffdeb1e);
+
+  static const Color darkPastelBlue = Color(0xff7193b7);
 }
 
 // Opacity(不透明度) of the color
