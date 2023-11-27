@@ -78,13 +78,11 @@ class ItemImgPhoto extends ConsumerWidget {
           // 圖片讀取錯誤處理
           errorBuilder: (context, error, stackTrace) {
             return const SizedBox.shrink();
-            // return SvgPicture.asset(
-            //   'assets/desktop-pic-commodity-avatar-default.svg',
-            // );
           },
           filterQuality: FilterQuality.high,
           fit: BoxFit.fitWidth,
         ),
+        // 圖片放大按鈕
         Positioned(
             bottom: 5,
             right: 5,
@@ -143,13 +141,14 @@ class ExpandPhotoBtnWidget extends StatelessWidget {
             height: 30,
           ),
           onTap: () {
-            // TODO: dialog 動畫
-            // TODO: https://book.flutterchina.club/chapter7/dailog.html#_7-7-2-对话框打开动画及遮罩
+            // 顯示自訂 dialog
             showGeneralDialog(
               context: context,
               pageBuilder: (_, animation, secondaryAnimation) {
+                // dialog 自訂顯示元件
                 return Stack(children: [
                   ClipRect(
+                    // 毛玻璃效果
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                       child: const SizedBox(
@@ -159,6 +158,7 @@ class ExpandPhotoBtnWidget extends StatelessWidget {
                     ),
                   ),
                   Center(
+                    // 顯示圖片
                     child: Image.network(
                       imgPath,
                       errorBuilder: (context, error, stackTrace) {
@@ -169,11 +169,23 @@ class ExpandPhotoBtnWidget extends StatelessWidget {
                 ]);
               },
               barrierDismissible: true,
+              // 語義化標籤(HTML)
               barrierLabel:
                   MaterialLocalizations.of(context).modalBarrierDismissLabel,
-              // barrierColor: Colors.black87, // 自定义遮罩颜色
+              // 動畫時間
               transitionDuration: const Duration(milliseconds: 150),
-              // transitionBuilder: _buildMaterialDialogTransitions,
+              // 自訂動畫
+              transitionBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                // 使用縮放動畫
+                return ScaleTransition(
+                  scale: CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOut,
+                  ),
+                  child: child,
+                );
+              },
             );
           },
         ));
