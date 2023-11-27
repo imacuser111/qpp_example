@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,6 +40,7 @@ class ItemImgPhoto extends ConsumerWidget {
   /// desktop 一般物品, size 100 or 88, 圓形
   Container _img(String path) {
     return Container(
+      margin: const EdgeInsets.only(top: 83),
       width: isMobile ? 88 : 110,
       clipBehavior: Clip.antiAlias,
       // decoration 負責切形狀
@@ -62,23 +64,32 @@ class ItemImgPhoto extends ConsumerWidget {
   /// desktop NFT 物品, size 180 or 144, radius 8
   Container _imgNFT(String path, Color background) {
     return Container(
+      margin: const EdgeInsets.only(top: 48),
       width: isMobile ? 144 : 180,
+      height: isMobile ? 144 : 180,
       clipBehavior: Clip.antiAlias,
       // decoration 負責切形狀
       decoration: _rectDecor(background: background),
       // foregroundDecoration 畫框線用
       foregroundDecoration: _rectDecorBorder(),
-      child: Image.network(
-        path,
-        // 圖片讀取錯誤處理
-        errorBuilder: (context, error, stackTrace) {
-          return SvgPicture.asset(
-            'assets/desktop-pic-commodity-avatar-default.svg',
-          );
-        },
-        filterQuality: FilterQuality.high,
-        fit: BoxFit.fitWidth,
-      ),
+      child: Stack(children: [
+        Image.network(
+          path,
+          // 圖片讀取錯誤處理
+          errorBuilder: (context, error, stackTrace) {
+            return const SizedBox.shrink();
+          },
+          filterQuality: FilterQuality.high,
+          fit: BoxFit.fitWidth,
+        ),
+        // 圖片放大按鈕
+        Positioned(
+            bottom: 5,
+            right: 5,
+            child: ExpandPhotoBtnWidget(
+              imgPath: path,
+            )),
+      ]),
     );
   }
 }
@@ -112,4 +123,71 @@ BoxDecoration _rectDecorBorder() {
       // TODO: 確認框線顏色
       border: Border.all(color: QppColor.oxfordBlue, width: 1.0),
       borderRadius: const BorderRadius.all(Radius.circular(8.0)));
+}
+
+/// 點擊展開圖片元件
+class ExpandPhotoBtnWidget extends StatelessWidget {
+  final String imgPath;
+  const ExpandPhotoBtnWidget({super.key, required this.imgPath});
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          child: SvgPicture.asset(
+            'assets/mobile-icon-image-magnifier.svg',
+            width: 30,
+            height: 30,
+          ),
+          onTap: () {
+            // 顯示自訂 dialog
+            showGeneralDialog(
+              context: context,
+              pageBuilder: (_, animation, secondaryAnimation) {
+                // dialog 自訂顯示元件
+                return Stack(children: [
+                  ClipRect(
+                    // 毛玻璃效果
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: const SizedBox(
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
+                    ),
+                  ),
+                  Center(
+                    // 顯示圖片
+                    child: Image.network(
+                      imgPath,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                ]);
+              },
+              barrierDismissible: true,
+              // 語義化標籤(HTML)
+              barrierLabel:
+                  MaterialLocalizations.of(context).modalBarrierDismissLabel,
+              // 動畫時間
+              transitionDuration: const Duration(milliseconds: 150),
+              // 自訂動畫
+              transitionBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                // 使用縮放動畫
+                return ScaleTransition(
+                  scale: CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOut,
+                  ),
+                  child: child,
+                );
+              },
+            );
+          },
+        ));
+  }
 }

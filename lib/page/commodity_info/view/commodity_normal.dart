@@ -3,59 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/api/core/api_response.dart';
-import 'package:qpp_example/common_ui/qpp_image/item_image.dart';
 import 'package:qpp_example/common_ui/qpp_text/read_more_text.dart';
 import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
+import 'package:qpp_example/page/commodity_info/view/commodity_body_top.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_info_body.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'dart:ui' as ui;
 
 /// 一般物品資訊
 class NormalItemInfo extends StatelessWidget {
-  const NormalItemInfo({super.key});
+  final bool isDesktop;
+  const NormalItemInfo.desktop({super.key}) : isDesktop = true;
+  const NormalItemInfo.mobile({super.key}) : isDesktop = false;
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       // 資料區 上半部
-      Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.only(top: 80, bottom: 30),
-        constraints: const BoxConstraints(maxWidth: 1280),
-        width: double.infinity,
-        // 上半部 bg
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                // 背景圖
-                image: AssetImage(
-                    'assets/desktop-pic-commodity-largepic-sample-general.webp'),
-                fit: BoxFit.cover)),
-        child: Column(children: [
-          // 物品圖片
-          const ItemImgPhoto(),
-          const SizedBox(
-            height: 45,
-          ),
-          // 物品名稱
-          Consumer(builder: (context, ref, _) {
-            ApiResponse<QppItem> itemInfoState =
-                ref.watch(itemSelectInfoProvider).itemSelectInfoState;
-            return itemInfoState.status == Status.completed
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    child: Text(
-                      itemInfoState.data!.name,
-                      style:
-                          const TextStyle(fontSize: 30, color: QppColor.white),
-                    ),
-                  )
-                : const SizedBox();
-          }),
-        ]),
-      ),
+      const CommodityBodyTop(),
       // 資料區下半部
       Container(
           constraints: const BoxConstraints(maxWidth: 1280),
@@ -86,7 +54,7 @@ abstract class InfoRow extends ConsumerWidget {
     ApiResponse response = getResponse(ref);
     dynamic data = response.data;
 
-    return response.status == Status.completed
+    return response.isCompleted
         ? Padding(
             padding: const EdgeInsets.fromLTRB(60, 14, 60, 14),
             child: getContent(data),

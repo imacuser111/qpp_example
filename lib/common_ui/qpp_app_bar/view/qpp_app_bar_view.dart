@@ -24,7 +24,7 @@ AppBar qppAppBar(ScreenStyle screenStyle) {
     toolbarHeight: screenStyle.isDesktopStyle
         ? kToolbarDesktopHeight
         : kToolbarMobileHeight,
-    backgroundColor: QppColor.onyx60,
+    backgroundColor: QppColor.barMask,
     title: screenStyle.isDesktopStyle
         ? const _QppAppBarTitle(ScreenStyle.desktop)
         : const _QppAppBarTitle(ScreenStyle.mobile),

@@ -237,7 +237,7 @@ class _CompanyName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 45,
-      color: QppColor.yaleBlue,
+      color: QppColor.white,
       child: const Center(
         child: Text(
           '©2019 HOLY BUSINESS CO., LTD',

@@ -134,7 +134,9 @@ class _FeatureInfoItemState extends State<_FeatureInfoItem> {
         child: Flex(
           direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
           children: [
-            SvgPicture.asset('assets/${widget.type.image}', width: 50, height: 50),
+            // TODO: 滑動變色
+            SvgPicture.asset('assets/${widget.type.image}',
+                width: 50, height: 50),
             const SizedBox(height: 20, width: 20),
             Expanded(
               flex: flex,
@@ -145,9 +147,7 @@ class _FeatureInfoItemState extends State<_FeatureInfoItem> {
                 children: [
                   Text(widget.type.title,
                       style: TextStyle(
-                          color: isHover
-                              ? QppColor.spiroDiscoBall
-                              : QppColor.manatee,
+                          color: isHover ? QppColor.skyBlue : QppColor.ashGray,
                           fontSize: 24,
                           fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
@@ -155,8 +155,7 @@ class _FeatureInfoItemState extends State<_FeatureInfoItem> {
                       textAlign:
                           isDesktopStyle ? TextAlign.start : TextAlign.center,
                       style: TextStyle(
-                          color:
-                              isHover ? QppColor.oliveDrab : QppColor.manatee,
+                          color: isHover ? QppColor.black : QppColor.ashGray,
                           fontSize: 16)),
                 ],
               ),

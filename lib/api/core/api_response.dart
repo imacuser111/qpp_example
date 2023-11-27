@@ -1,4 +1,3 @@
-
 class ApiResponse<T> {
   Status status;
   T? data;
@@ -15,6 +14,11 @@ class ApiResponse<T> {
   @override
   String toString() {
     return "Status : $status \n Message : $message \n Data : $data";
+  }
+
+  /// 是否完成
+  bool get isCompleted {
+    return status == Status.completed;
   }
 }
 
