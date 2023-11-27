@@ -19,8 +19,7 @@ class HomePageContact extends StatelessWidget {
             image: AssetImage('assets/desktop_bg_area03.webp'),
             fit: BoxFit.cover,
           )),
-          padding:
-              const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
           child: Column(
             children: [const _TitleContent(), _benefit(constraints.maxWidth)],
           ));
@@ -50,31 +49,32 @@ class _TitleContent extends StatelessWidget {
               color: QppColor.white, fontSize: 40, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 30),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final bool isDesktopStyle = constraints.screenStyle.isDesktopStyle;
-            final int flex = isDesktopStyle ? 1 : 0;
+        LayoutBuilder(builder: (context, constraints) {
+          final bool isDesktopStyle = constraints.screenStyle.isDesktopStyle;
+          final int flex = isDesktopStyle ? 1 : 0;
 
-            return Flex(
-                direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
+          return Flex(
+              direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
                     flex: flex,
-                      child: SvgPicture.asset('assets/desktop_icon_area04_official.svg')),
-                  Flexible(
-                    flex: flex,
-                    child: Column(
-                        crossAxisAlignment: isDesktopStyle ? CrossAxisAlignment.start : CrossAxisAlignment.center,
-                        children: const [
-                          _ShadowText('立即申請合作廠商「官方帳號」',
-                              textColor: QppColor.laserLemon),
-                          _LinkText(),
-                        ]),
-                  ),
-                ]);
-          }
-        ),
+                    child: SvgPicture.asset(
+                        'assets/desktop_icon_area04_official.svg')),
+                Flexible(
+                  flex: flex,
+                  child: Column(
+                      crossAxisAlignment: isDesktopStyle
+                          ? CrossAxisAlignment.start
+                          : CrossAxisAlignment.center,
+                      children: const [
+                        _ShadowText('立即申請合作廠商「官方帳號」',
+                            textColor: QppColor.canaryYellow),
+                        _LinkText(),
+                      ]),
+                ),
+              ]);
+        }),
       ],
     );
   }
@@ -219,7 +219,7 @@ class _BenefitItem extends StatelessWidget {
       SvgPicture.asset('assets/desktop_bg_area03_box.svg'),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(type.title,
-            style: const TextStyle(color: QppColor.laserLemon, fontSize: 24)),
+            style: const TextStyle(color: QppColor.canaryYellow, fontSize: 24)),
         const SizedBox(height: 17),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 280),
