@@ -62,8 +62,6 @@ class CommodityInfoModel extends ChangeNotifier {
       QppNFT nft = nftMetaDataResponse.NFT;
       // 取得 NFT MetaData 成功, 取發行者資料
       getUserInfo(int.parse(nft.publisherID));
-      // TODO: notification
-      print('object');
       nftMetaDataState = ApiResponse.completed(nft);
       String itemPhotoUrl = nft.image;
 

@@ -1,0 +1,238 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qpp_example/api/core/api_response.dart';
+import 'package:qpp_example/common_ui/qpp_text/info_row_link_read_more_text.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
+import 'package:qpp_example/model/item_multi_language_data.dart';
+import 'package:qpp_example/model/qpp_item.dart';
+import 'package:qpp_example/model/qpp_user.dart';
+import 'package:qpp_example/page/commodity_info/view/commodity_info_body.dart';
+import 'dart:ui' as ui;
+
+import 'package:qpp_example/utils/qpp_text_styles.dart';
+
+/// 資訊顯示抽象類
+/// 物品資訊 Row
+abstract class InfoRow extends ConsumerWidget {
+  const InfoRow({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ApiResponse response = getResponse(ref);
+    dynamic data = response.data;
+
+    return response.isCompleted
+        ? Padding(
+            padding: const EdgeInsets.fromLTRB(60, 14, 60, 14),
+            child: getContent(data),
+          )
+        : const SizedBox.shrink();
+  }
+
+  ApiResponse getResponse(WidgetRef ref);
+
+  Widget getContent(dynamic data);
+}
+
+/// 物品資訊
+class InfoRowInfo extends InfoRow {
+  const InfoRowInfo({super.key});
+
+  @override
+  ApiResponse getResponse(WidgetRef ref) {
+    return ref.watch(itemSelectInfoProvider).itemSelectInfoState;
+  }
+
+  @override
+  Widget getContent(data) {
+    if (data is QppItem) {
+      return Builder(builder: (context) {
+        return Row(
+          children: [
+            Container(
+              constraints: const BoxConstraints(maxWidth: 120),
+              width: double.infinity,
+              child: Text(
+                context.tr(QppLocales.commodityInfoCategory),
+                textAlign: TextAlign.start,
+                style: QPPTextStyles.web_16pt_body_category_text_L,
+              ),
+            ),
+            SvgPicture.asset(
+              'assets/${data.categoryIconPath}',
+              width: 20,
+            ),
+            // 間隔
+            const SizedBox(
+              width: 8,
+            ),
+            // 類別名稱
+            Text(
+              data.categoryName,
+              textAlign: TextAlign.center,
+              style: QPPTextStyles.web_16pt_body_platinum_L,
+            ),
+            // 間隔
+            const SizedBox(
+              width: 8,
+            ),
+            // 物品 ID
+            Text(
+              data.id.toString(),
+              textAlign: TextAlign.center,
+              style: QPPTextStyles.web_16pt_body_ID_text_L,
+            ),
+          ],
+        );
+      });
+    }
+    return const SizedBox.shrink();
+  }
+}
+
+/// 創建者資訊
+class InfoRowCreator extends InfoRow {
+  final bool isCreator;
+
+  /// 若為一般物品, 顯示創建者
+  const InfoRowCreator({super.key}) : isCreator = true;
+
+  @override
+  ApiResponse getResponse(WidgetRef ref) {
+    return ref.watch(itemSelectInfoProvider).userInfoState;
+  }
+
+  @override
+  Widget getContent(data) {
+    if (data is QppUser) {
+      return Builder(builder: (context) {
+        return Row(
+          children: [
+            SizedBox(
+              width: 120,
+              child: Text(
+                context.tr(QppLocales.commodityInfoCreator),
+                textAlign: TextAlign.start,
+                style: QPPTextStyles.web_16pt_body_category_text_L,
+              ),
+            ),
+            // 若為官方帳號, 顯示 icon
+            data.isOfficial
+                ? Container(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: SvgPicture.asset(
+                      'assets/${data.officialIconPath}',
+                      width: 20,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+            // id + name
+            Expanded(
+              child: Text(
+                "${data.displayID}  ${data.displayName}",
+                textAlign: TextAlign.start,
+                style: QPPTextStyles.web_16pt_body_Indian_yellow_L,
+              ),
+            ),
+            // 物件左右翻轉, 或用 RotatedBox
+            Directionality(
+                textDirection: ui.TextDirection.rtl,
+                child: SvgPicture.asset(
+                  'assets/mobile-icon-actionbar-back-normal.svg',
+                  matchTextDirection: true,
+                )),
+          ],
+        );
+      });
+    }
+    return const SizedBox.shrink();
+  }
+}
+
+/// 物品連結資訊(多語系)
+class InfoRowIntroLink extends InfoRow {
+  const InfoRowIntroLink({super.key});
+
+  @override
+  ApiResponse getResponse(WidgetRef ref) {
+    return ref.watch(itemSelectInfoProvider).itemLinkInfoState;
+  }
+
+  @override
+  Widget getContent(data) {
+    if (data is ItemMultiLanguageData) {
+      // 檢查是否有資料
+      if (data.hasContent) {
+        // 有資料才顯示
+        return Builder(builder: (context) {
+          return Row(
+            // 子元件對齊頂端
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 120,
+                child: Text(
+                  context.tr(QppLocales.commodityInfoTitle),
+                  textAlign: TextAlign.start,
+                  style: QPPTextStyles.web_16pt_body_category_text_L,
+                ),
+              ),
+              // intro link
+              Expanded(
+                // Expanded 包 text, 實現自動換行
+                child: InfoRowLinkReadMoreText(
+                    data: data.getContentWithContext(context)),
+              ),
+            ],
+          );
+        });
+      }
+    }
+    return const SizedBox.shrink();
+  }
+}
+
+/// 物品說明資訊(多語系)
+class InfoRowDescription extends InfoRow {
+  const InfoRowDescription({super.key});
+
+  @override
+  ApiResponse getResponse(WidgetRef ref) {
+    return ref.watch(itemSelectInfoProvider).itemDescriptionInfoState;
+  }
+
+  @override
+  Widget getContent(data) {
+    if (data is ItemMultiLanguageData) {
+      // 檢查是否有資料
+      if (data.hasContent) {
+        // 有資料才顯示
+        return Builder(builder: (context) {
+          return Row(
+            // 子元件對齊頂端
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 120,
+                child: Text(
+                  context.tr(QppLocales.commodityInfoInfo),
+                  textAlign: TextAlign.start,
+                  style: QPPTextStyles.web_16pt_body_category_text_L,
+                ),
+              ),
+              // intro link
+              Expanded(
+                // Expanded 包 text, 實現自動換行
+                child: InfoRowLinkReadMoreText(
+                    data: data.getContentWithContext(context)),
+              ),
+            ],
+          );
+        });
+      }
+    }
+    return const SizedBox.shrink();
+  }
+}

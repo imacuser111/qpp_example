@@ -108,7 +108,7 @@ class InfoCard extends StatelessWidget {
           margin: isDesktop
               ? const EdgeInsets.fromLTRB(60, 100, 60, 40)
               : const EdgeInsets.fromLTRB(24, 24, 24, 24),
-          color: QppColors.prussianBlue,
+          color: QppColors.oxfordBlue,
           shape: RoundedRectangleBorder(
             // 圓角參數
             borderRadius: BorderRadius.circular(8),
