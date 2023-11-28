@@ -19,8 +19,8 @@ class BtnArrowUpDown extends StatefulWidget {
       : showUp = false,
         super(key: key);
 
-  String _getArrowPath(bool isUp) {
-    return isUp
+  String get _arrowPath {
+    return showUp
         ? 'desktop-icon-list-selection-arrow-up'
         : 'desktop-icon-list-selection-arrow-down';
   }
@@ -63,8 +63,7 @@ class _StateClickArrow extends State<BtnArrowUpDown>
       child: RotationTransition(
         turns: _animation,
         child: SvgPicture.asset(
-          'assets/desktop-icon-list-selection-arrow-up.svg',
-          // 'assets/${widget._getArrowPath(_isUp)}.svg',
+          'assets/${widget._arrowPath}.svg',
           width: widget.size,
           height: widget.size,
         ),
