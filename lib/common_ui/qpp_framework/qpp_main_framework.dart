@@ -32,18 +32,20 @@ class _MainScaffold extends StatelessWidget {
     final Size screenSize = MediaQuery.of(context).size;
     final ScreenStyle screenStyle = screenSize.width.determineScreenStyle();
 
-    return Scaffold(
-      extendBodyBehindAppBar: true, // 設定可以在appBar後面擴充body
-      appBar: qppAppBar(screenStyle),
-      body: Container(
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/desktop-bg-kv.webp'),
-            fit: BoxFit.cover,
+    return SelectionArea(
+      child: Scaffold(
+        extendBodyBehindAppBar: true, // 設定可以在appBar後面擴充body
+        appBar: qppAppBar(screenStyle),
+        body: Container(
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/desktop-bg-kv.webp'),
+              fit: BoxFit.cover,
+            ),
           ),
+          child: child,
         ),
-        child: child,
       ),
     );
   }

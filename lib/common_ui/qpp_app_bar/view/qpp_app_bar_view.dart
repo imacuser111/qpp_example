@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/common_ui/qpp_menu/c_menu_anchor.dart';
 import 'package:qpp_example/common_view_model/auth_service/view_model/auth_service_view_model.dart';
+import 'package:qpp_example/extension/void/dialog_void.dart';
 import 'package:qpp_example/extension/throttle_debounce.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
@@ -120,15 +121,16 @@ class _Logo extends StatelessWidget {
     final bool isDesktopStyle = screenStyle.isDesktopStyle;
 
     return IconButton(
-      icon: Image.asset(
-        'assets/desktop-pic-qpp-logo-01.png',
-        width: isDesktopStyle ? 148 : 89,
-        scale: 46 / 148,
-      ),
-      onPressed: () => context.canPop()
-          ? context.goNamed(QppGoRouter.app)
-          : context.goNamed(QppGoRouter.home), // 要在修改，現在只有error畫面會跳到home
-    );
+        icon: Image.asset(
+          'assets/desktop-pic-qpp-logo-01.png',
+          width: isDesktopStyle ? 148 : 89,
+          scale: 46 / 148,
+        ),
+        onPressed: () => showLogoutDialog(context)
+        // context.canPop()
+        //     ? context.goNamed(QppGoRouter.app)
+        //     : context.goNamed(QppGoRouter.home), // 要在修改，現在只有error畫面會跳到home
+        );
   }
 }
 
@@ -306,11 +308,7 @@ class _UserInfo extends StatelessWidget {
         );
       },
       isOpenControllerProvider: isOpenControllerProvider,
-      onTap: (BuildContext context, WidgetRef ref, _) {
-        ref
-            .read(authServiceProvider.notifier)
-            .logout(SharedPrefs.getLoginInfo()?.vendorToken ?? "");
-      },
+      onTap: (BuildContext context, _) => showLogoutDialog(context),
     );
   }
 }
@@ -369,7 +367,7 @@ class LanguageDropdownMenu extends StatelessWidget {
         );
       },
       isOpenControllerProvider: isOpenControllerProvider,
-      onTap: (BuildContext context, _, CMeunAnchorData e) {
+      onTap: (BuildContext context, CMeunAnchorData e) {
         context.setLocale((e as Language).locale);
       },
     );
