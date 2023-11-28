@@ -61,7 +61,7 @@ class _PhoneDescriptionState extends State<_PhoneDescription> {
             Expanded(
               flex: isDesktopStyle ? 1 : 2,
               child: Container(
-                color: QppColor.barMask,
+                color: QppColors.barMask,
                 padding: const EdgeInsets.symmetric(horizontal: 50),
                 alignment: Alignment.center,
                 child: Flex(
@@ -77,7 +77,7 @@ class _PhoneDescriptionState extends State<_PhoneDescription> {
                       child: const Text(
                         '數位背包功用多，打造便利生活圈！',
                         style: TextStyle(
-                            color: QppColor.white,
+                            color: QppColors.white,
                             fontSize: 28,
                             fontWeight: FontWeight.bold),
                       ),
@@ -173,19 +173,19 @@ class _DesktopStyleContent extends StatelessWidget {
       type.conetntOfRight ? bg : const SizedBox.shrink(),
       Expanded(
         child: Container(
-          color: QppColor.oxfordBlue,
+          color: QppColors.oxfordBlue,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(type.title,
                   style: const TextStyle(
-                      color: QppColor.white,
+                      color: QppColors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               Text(type.directions,
-                  style: const TextStyle(color: QppColor.white, fontSize: 18))
+                  style: const TextStyle(color: QppColors.white, fontSize: 18))
             ],
           ),
         ),
@@ -208,19 +208,19 @@ class _MobileStyleContent extends StatelessWidget {
       _Bg(ScreenStyle.mobile, type: type, isHovered: isHovered, flex: 2),
       Expanded(
         child: Container(
-          color: QppColor.oxfordBlue,
+          color: QppColors.oxfordBlue,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(type.title,
                   style: const TextStyle(
-                      color: QppColor.white,
+                      color: QppColors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               Text(type.directions,
-                  style: const TextStyle(color: QppColor.white, fontSize: 18),
+                  style: const TextStyle(color: QppColors.white, fontSize: 18),
                   textAlign: TextAlign.center)
             ],
           ),

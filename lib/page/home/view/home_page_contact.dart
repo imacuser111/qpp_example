@@ -46,7 +46,7 @@ class _TitleContent extends StatelessWidget {
         const Text(
           '將您的服務整合至QPP數位背包發揮最大效益！',
           style: TextStyle(
-              color: QppColor.white, fontSize: 40, fontWeight: FontWeight.bold),
+              color: QppColors.white, fontSize: 40, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 30),
         LayoutBuilder(builder: (context, constraints) {
@@ -69,7 +69,7 @@ class _TitleContent extends StatelessWidget {
                           : CrossAxisAlignment.center,
                       children: const [
                         _ShadowText('立即申請合作廠商「官方帳號」',
-                            textColor: QppColor.canaryYellow),
+                            textColor: QppColors.canaryYellow),
                         _LinkText(),
                       ]),
                 ),
@@ -130,14 +130,14 @@ class _LinkTextState extends State<_LinkText> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: QppColor.mayaBlue
+                  color: QppColors.mayaBlue
                       .withOpacity(isHovered ? 1 : 0), // Text colour here
                   width: 3, // Underline width
                 ),
               ),
             ),
             child: const _ShadowText('info@qpptec.com',
-                textColor: QppColor.mayaBlue),
+                textColor: QppColors.mayaBlue),
           ),
         );
       },
@@ -219,12 +219,12 @@ class _BenefitItem extends StatelessWidget {
       SvgPicture.asset('assets/desktop_bg_area03_box.svg'),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(type.title,
-            style: const TextStyle(color: QppColor.canaryYellow, fontSize: 24)),
+            style: const TextStyle(color: QppColors.canaryYellow, fontSize: 24)),
         const SizedBox(height: 17),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 280),
           child: Text(type.directions,
-              style: const TextStyle(color: QppColor.white, fontSize: 18)),
+              style: const TextStyle(color: QppColors.white, fontSize: 18)),
         ),
       ]),
     ]);

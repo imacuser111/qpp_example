@@ -78,10 +78,10 @@ class _Info extends StatelessWidget {
         const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('快鏈科技', style: TextStyle(color: QppColor.white, fontSize: 16)),
+            Text('快鏈科技', style: TextStyle(color: QppColors.white, fontSize: 16)),
             SizedBox(height: 20),
             Text('統一編號：83527156',
-                style: TextStyle(color: QppColor.white, fontSize: 14)),
+                style: TextStyle(color: QppColors.white, fontSize: 14)),
             SizedBox(height: 5),
             _InfoLinkText('客服信箱：'),
             SizedBox(height: 5),
@@ -103,7 +103,7 @@ class _InfoLinkText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(text, style: const TextStyle(color: QppColor.white, fontSize: 14)),
+        Text(text, style: const TextStyle(color: QppColors.white, fontSize: 14)),
         const CUnderlineText.link(
             text: 'info@qpptec.com', link: ServerConst.mailUrl),
       ],
@@ -177,7 +177,7 @@ class _TitleWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textStyle = TextStyle(color: QppColor.white, fontSize: 16);
+    const textStyle = TextStyle(color: QppColors.white, fontSize: 16);
 
     return Wrap(
       spacing: 161,
@@ -237,11 +237,11 @@ class _CompanyName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 45,
-      color: QppColor.white,
+      color: QppColors.white,
       child: const Center(
         child: Text(
           '©2019 HOLY BUSINESS CO., LTD',
-          style: TextStyle(color: QppColor.white, fontSize: 12),
+          style: TextStyle(color: QppColors.white, fontSize: 12),
         ),
       ),
     );

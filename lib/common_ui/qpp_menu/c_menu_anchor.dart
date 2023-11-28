@@ -48,7 +48,7 @@ class CMenuAnchor extends StatelessWidget {
                   : null,
               builder: (event) {
                 final Color color =
-                    event is PointerEnterEvent ? QppColor.canaryYellow : QppColor.white;
+                    event is PointerEnterEvent ? QppColors.canaryYellow : QppColors.white;
                 final image = e.image;
                 final isShowImage = image != null;
 

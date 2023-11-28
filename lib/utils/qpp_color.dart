@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// QPP 顏色定義
-abstract final class QppColor {
+abstract final class QppColors {
   static const Color darkPastelBlue = Color(0xff7193b7);
   static const Color pastelBlue = Color(0xffb4c7dc);
   static const Color white = Color(0xffffffff);

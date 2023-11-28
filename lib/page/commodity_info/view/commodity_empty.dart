@@ -26,7 +26,7 @@ class EmptyInfo extends StatelessWidget {
                   child: Text(
                     context.tr(QppLocales.qppState9),
                     style: const TextStyle(
-                        fontSize: 16, color: QppColor.babyBlueEyes),
+                        fontSize: 16, color: QppColors.babyBlueEyes),
                   ),
                 )
               ],
@@ -45,7 +45,7 @@ class EmptyInfo extends StatelessWidget {
                   child: Text(
                     context.tr(QppLocales.qppState9),
                     style: const TextStyle(
-                        fontSize: 16, color: QppColor.babyBlueEyes),
+                        fontSize: 16, color: QppColors.babyBlueEyes),
                   ),
                 )
               ],

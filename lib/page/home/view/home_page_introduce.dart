@@ -83,7 +83,7 @@ class _Info extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 context.tr(QppLocales.homeSection1Title),
-                style: const TextStyle(fontSize: 44, color: QppColor.white),
+                style: const TextStyle(fontSize: 44, color: QppColors.white),
               )
             ],
           ),

@@ -32,7 +32,7 @@ class QRCodeDialog extends StatelessWidget {
             const SizedBox(height: 36),
             CTimerText(
               timerText,
-              style: const TextStyle(fontSize: 20, color: QppColor.white),
+              style: const TextStyle(fontSize: 20, color: QppColors.white),
               interval: 600,
             )
           ],

@@ -35,8 +35,8 @@ enum CDialogActionStyle {
     return switch (this) {
       CDialogActionStyle.confirm ||
       CDialogActionStyle.cancel =>
-        QppColor.platinum,
-      CDialogActionStyle.logout => QppColor.mayaBlue
+        QppColors.platinum,
+      CDialogActionStyle.logout => QppColors.mayaBlue
     };
   }
 
@@ -44,8 +44,8 @@ enum CDialogActionStyle {
     return switch (this) {
       CDialogActionStyle.confirm ||
       CDialogActionStyle.cancel =>
-        QppColor.darkPastelBlue,
-      CDialogActionStyle.logout => QppColor.mayaBlue
+        QppColors.darkPastelBlue,
+      CDialogActionStyle.logout => QppColors.mayaBlue
     };
   }
 }
@@ -86,7 +86,7 @@ class CActionsDialog extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: height, maxWidth: width),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: QppColor.prussianBlue,
+        color: QppColors.prussianBlue,
       ),
       child: Column(
         crossAxisAlignment: isDesktopPlatform
@@ -97,7 +97,7 @@ class CActionsDialog extends StatelessWidget {
             text: text,
             style: TextStyle(
               fontSize: isDesktopPlatform ? 24 : 20,
-              color: QppColor.white,
+              color: QppColors.white,
             ),
             alignment:
                 isDesktopPlatform ? Alignment.centerLeft : Alignment.center,
@@ -105,14 +105,14 @@ class CActionsDialog extends StatelessWidget {
           ),
           SizedBox(height: isDesktopPlatform ? 16 : 17),
           isDesktopPlatform
-              ? UnconstrainedBox(child: Container(height: 1, width: width, color: QppColor.white))
+              ? UnconstrainedBox(child: Container(height: 1, width: width, color: QppColors.white))
               : const SizedBox.shrink(),
           SizedBox(height: isDesktopPlatform ? 16 : 0),
           Text(
             subText,
             style: TextStyle(
               fontSize: isDesktopPlatform ? 16 : 14,
-              color: QppColor.pastelBlue,
+              color: QppColors.pastelBlue,
             ),
           ),
           SizedBox(height: isDesktopPlatform ? 28 : 41),
