@@ -15,7 +15,10 @@ class NFTItemInfo extends StatelessWidget {
     return const Column(children: [
       // 資料區 上半部
       CommodityBodyTop(),
-      BtnArrowUpDown(size: 50),
+      NFTSectionItemTitle(
+        iconPath: 'assets/desktop-icon-commodity-nft-describe.svg',
+        title: '',
+      )
       // 資料區下半部
       // Container(
       //     constraints: const BoxConstraints(maxWidth: 1280),
@@ -43,36 +46,37 @@ class NFTSectionItemTitle extends StatelessWidget {
   final String iconPath;
   // title
   final String title;
+
   const NFTSectionItemTitle(
       {super.key, required this.iconPath, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 44.0,
-      padding: const EdgeInsets.only(left: 60.0, right: 60.0),
-      decoration: const BoxDecoration(color: QppColor.stPatricksBlue),
-      child: Row(
-        children: [
-          Image.asset(
-            iconPath,
-            width: 28.0,
-            height: 28.0,
-          ),
-          const SizedBox(
-            width: 16,
-          ),
-          Text(title),
-          const Expanded(child: SizedBox()),
-          // 上/下箭頭
-          GestureDetector(
-            child: Image.asset(
-              '',
-              width: 20.0,
-              height: 20.0,
+    final arrowKey = GlobalKey<StateClickArrow>();
+    return GestureDetector(
+      onTap: () {
+        arrowKey.currentState?.rotate();
+      },
+      child: Container(
+        height: 44.0,
+        padding: const EdgeInsets.only(left: 60.0, right: 60.0),
+        decoration: const BoxDecoration(color: QppColor.stPatricksBlue),
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              iconPath,
+              width: 28.0,
+              height: 28.0,
             ),
-          )
-        ],
+            const SizedBox(
+              width: 16,
+            ),
+            Text(title),
+            const Expanded(child: SizedBox()),
+            // 上/下箭頭
+            BtnArrowUpDown(key: arrowKey, size: 20),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+const String _arrowUp = 'desktop-icon-list-selection-arrow-up';
+const String _arrowDown = 'desktop-icon-list-selection-arrow-down';
+
 /// 點擊變換上下箭頭元件
 /// 預設為向上, 若要預設向下請使用 [ClickArrow.defaultDown]
 class BtnArrowUpDown extends StatefulWidget {
@@ -11,35 +14,33 @@ class BtnArrowUpDown extends StatefulWidget {
   /// Called when state change between expanded/compress
   final Function(bool val)? callback;
 
-  const BtnArrowUpDown({Key? key, required this.size, this.callback})
+  /// 外部傳入點擊事件
+  final Function()? onTap;
+
+  const BtnArrowUpDown(
+      {Key? key, required this.size, this.callback, this.onTap})
       : showUp = true,
         super(key: key);
   const BtnArrowUpDown.defaultDown(
-      {Key? key, required this.size, this.callback})
+      {Key? key, required this.size, this.callback, this.onTap})
       : showUp = false,
         super(key: key);
 
   String get _arrowPath {
-    return showUp
-        ? 'desktop-icon-list-selection-arrow-up'
-        : 'desktop-icon-list-selection-arrow-down';
+    return showUp ? _arrowUp : _arrowDown;
   }
 
   @override
-  State<StatefulWidget> createState() => _StateClickArrow();
+  StateClickArrow createState() => StateClickArrow();
 }
 
-class _StateClickArrow extends State<BtnArrowUpDown>
+class StateClickArrow extends State<BtnArrowUpDown>
     with TickerProviderStateMixin {
-  // desktop-icon-list-selection-arrow-down
-  // desktop-icon-list-selection-arrow-up
   late bool _isUp;
 
-  void _onTapLink() {
+  void _onTap() {
     setState(() {
-      _isUp ? _animationController.forward() : _animationController.reverse();
-      widget.callback?.call(_isUp);
-      _isUp = !_isUp;
+      rotate();
     });
   }
 
@@ -53,13 +54,15 @@ class _StateClickArrow extends State<BtnArrowUpDown>
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
     _animation =
-        Tween<double>(begin: 0, end: 0.5).animate(_animationController);
+        // 若預設為往下箭頭, 結束位置反轉
+        Tween<double>(begin: 0, end: widget._arrowPath == _arrowUp ? 0.5 : -0.5)
+            .animate(_animationController);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _onTapLink,
+      onTap: widget.onTap ?? _onTap,
       child: RotationTransition(
         turns: _animation,
         child: SvgPicture.asset(
@@ -69,5 +72,14 @@ class _StateClickArrow extends State<BtnArrowUpDown>
         ),
       ),
     );
+  }
+
+  /// 旋轉
+  rotate() {
+    setState(() {
+      _isUp ? _animationController.forward() : _animationController.reverse();
+      _isUp = !_isUp;
+      widget.callback?.call(_isUp);
+    });
   }
 }
