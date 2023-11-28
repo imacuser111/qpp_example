@@ -40,7 +40,7 @@ class CDialog extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: height, maxWidth: width),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: QppColor.prussianBlue,
+        color: QppColors.prussianBlue,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +49,7 @@ class CDialog extends StatelessWidget {
             text: text,
             style: TextStyle(
               fontSize: isDesktopPlatform ? 36 : 20,
-              color: QppColor.mayaBlue,
+              color: QppColors.mayaBlue,
             ),
           ),
           SizedBox(height: isDesktopPlatform ? 32 : 17),
@@ -57,7 +57,7 @@ class CDialog extends StatelessWidget {
             subText,
             style: TextStyle(
               fontSize: isDesktopPlatform ? 20 : 14,
-              color: isDesktopPlatform ? QppColor.white : QppColor.pastelBlue,
+              color: isDesktopPlatform ? QppColors.white : QppColors.pastelBlue,
             ),
           ),
           SizedBox(height: isDesktopPlatform ? 36 : 28),

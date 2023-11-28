@@ -30,7 +30,7 @@ class OpenQppDialog extends StatelessWidget {
           const SizedBox(height: 36),
           CTimerText(
             timerText,
-            style: const TextStyle(fontSize: 14, color: QppColor.pastelBlue),
+            style: const TextStyle(fontSize: 14, color: QppColors.pastelBlue),
             interval: 600,
           )
         ],

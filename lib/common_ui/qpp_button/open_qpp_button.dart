@@ -17,7 +17,7 @@ class OpenQppButton extends StatelessWidget {
       height: 48,
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          color: QppColor.mayaBlue),
+          color: QppColors.mayaBlue),
       child: GestureDetector(
         onTap: () {
           ServerConst.appStoreUrl.launchURL();
@@ -28,7 +28,7 @@ class OpenQppButton extends StatelessWidget {
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: QppColor.stPatricksBlue),
+                color: QppColors.stPatricksBlue),
           ),
         ),
       ),

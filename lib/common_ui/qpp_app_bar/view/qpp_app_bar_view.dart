@@ -24,7 +24,7 @@ AppBar qppAppBar(ScreenStyle screenStyle) {
     toolbarHeight: screenStyle.isDesktopStyle
         ? kToolbarDesktopHeight
         : kToolbarMobileHeight,
-    backgroundColor: QppColor.barMask,
+    backgroundColor: QppColors.barMask,
     title: screenStyle.isDesktopStyle
         ? const _QppAppBarTitle(ScreenStyle.desktop)
         : const _QppAppBarTitle(ScreenStyle.mobile),
@@ -166,8 +166,8 @@ class _MenuBtns extends StatelessWidget {
                       e.value,
                       style: TextStyle(
                           color: event is PointerEnterEvent
-                              ? QppColor.canaryYellow
-                              : QppColor.white,
+                              ? QppColors.canaryYellow
+                              : QppColors.white,
                           fontSize: 16),
                     ),
                   ),

@@ -104,7 +104,7 @@ BoxDecoration _circleDecorBorder() {
   return BoxDecoration(
     shape: BoxShape.circle,
     // TODO: 確認框線顏色
-    border: Border.all(color: QppColor.oxfordBlue, width: 1.0),
+    border: Border.all(color: QppColors.oxfordBlue, width: 1.0),
   );
 }
 
@@ -121,7 +121,7 @@ BoxDecoration _rectDecorBorder() {
   return BoxDecoration(
       shape: BoxShape.rectangle,
       // TODO: 確認框線顏色
-      border: Border.all(color: QppColor.oxfordBlue, width: 1.0),
+      border: Border.all(color: QppColors.oxfordBlue, width: 1.0),
       borderRadius: const BorderRadius.all(Radius.circular(8.0)));
 }
 

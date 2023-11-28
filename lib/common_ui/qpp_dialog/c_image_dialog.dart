@@ -37,7 +37,7 @@ class CImageDialog extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: height, maxWidth: width),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: QppColor.prussianBlue,
+        color: QppColors.prussianBlue,
       ),
       child: Column(
         children: [
@@ -51,7 +51,7 @@ class CImageDialog extends StatelessWidget {
                 text,
                 style: TextStyle(
                   fontSize: isDesktopPlatform ? 36 : 20,
-                  color: QppColor.mayaBlue,
+                  color: QppColors.mayaBlue,
                 ),
               ),
             ],
@@ -61,7 +61,7 @@ class CImageDialog extends StatelessWidget {
             subText,
             style: TextStyle(
               fontSize: isDesktopPlatform ? 20 : 14,
-              color: isDesktopPlatform ? QppColor.white : QppColor.pastelBlue,
+              color: isDesktopPlatform ? QppColors.white : QppColors.pastelBlue,
             ),
             textAlign: TextAlign.center,
             maxLines: 2, // 沒有設定這行就不會自動換行，待研究
