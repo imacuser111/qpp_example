@@ -52,7 +52,7 @@ class ErrorPage extends StatelessWidget {
                           Text(
                             context.tr(QppLocales.homeSection1Title),
                             style: const TextStyle(
-                                fontSize: 40, color: QppColor.white),
+                                fontSize: 40, color: QppColors.white),
                           )
                         ],
                       ),
@@ -95,7 +95,7 @@ class _Content extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 324, maxWidth: 1280),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(12)),
-        color: QppColor.oxfordBlue,
+        color: QppColors.oxfordBlue,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 23),
@@ -112,7 +112,7 @@ class _Content extends StatelessWidget {
                 flex: isDesktopStyle ? 725 : 0,
                 child: Text(
                   text,
-                  style: const TextStyle(fontSize: 16, color: QppColor.platinum),
+                  style: const TextStyle(fontSize: 16, color: QppColors.platinum),
                 ),
               ),
               isDesktopStyle ? const Spacer(flex: 147) : const SizedBox(height: 48),

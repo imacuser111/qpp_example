@@ -67,7 +67,7 @@ class _Left extends StatelessWidget {
         const Text(
           '數位背包輕鬆創建物品，管理介面簡單',
           style: TextStyle(
-              color: QppColor.oxfordBlue,
+              color: QppColors.oxfordBlue,
               fontSize: 28,
               fontWeight: FontWeight.bold),
         ),
@@ -147,7 +147,7 @@ class _FeatureInfoItemState extends State<_FeatureInfoItem> {
                 children: [
                   Text(widget.type.title,
                       style: TextStyle(
-                          color: isHover ? QppColor.skyBlue : QppColor.ashGray,
+                          color: isHover ? QppColors.skyBlue : QppColors.ashGray,
                           fontSize: 24,
                           fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
@@ -155,7 +155,7 @@ class _FeatureInfoItemState extends State<_FeatureInfoItem> {
                       textAlign:
                           isDesktopStyle ? TextAlign.start : TextAlign.center,
                       style: TextStyle(
-                          color: isHover ? QppColor.black : QppColor.ashGray,
+                          color: isHover ? QppColors.black : QppColors.ashGray,
                           fontSize: 16)),
                 ],
               ),

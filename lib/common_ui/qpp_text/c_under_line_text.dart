@@ -67,11 +67,11 @@ class _UnderlineText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        color: QppColor.white,
+        color: QppColors.white,
         fontSize: fontSize,
         decoration: TextDecoration.underline,
         decorationThickness: 2,
-        decorationColor: QppColor.white.withOpacity(isShowUnderline ? 1 : 0),
+        decorationColor: QppColors.white.withOpacity(isShowUnderline ? 1 : 0),
       ),
     );
   }

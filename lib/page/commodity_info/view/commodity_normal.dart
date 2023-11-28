@@ -91,7 +91,7 @@ class ItemInfoRow extends InfoRow {
                 context.tr(QppLocales.commodityInfoCategory),
                 textAlign: TextAlign.start,
                 style:
-                    const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+                    const TextStyle(fontSize: 18, color: QppColors.babyBlueEyes),
               ),
             ),
             SvgPicture.asset(
@@ -106,7 +106,7 @@ class ItemInfoRow extends InfoRow {
             Text(
               data.categoryName,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+              style: const TextStyle(fontSize: 18, color: QppColors.platinum),
             ),
             // 間隔
             const SizedBox(
@@ -117,7 +117,7 @@ class ItemInfoRow extends InfoRow {
               data.id.toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  fontSize: 18, color: QppColor.mediumAquamarine),
+                  fontSize: 18, color: QppColors.mediumAquamarine),
             ),
           ],
         );
@@ -148,7 +148,7 @@ class CreatorInfoRow extends InfoRow {
                 context.tr(QppLocales.commodityInfoCreator),
                 textAlign: TextAlign.start,
                 style:
-                    const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
+                    const TextStyle(fontSize: 18, color: QppColors.babyBlueEyes),
               ),
             ),
             // 若為官方帳號, 顯示 icon
@@ -167,7 +167,7 @@ class CreatorInfoRow extends InfoRow {
                 "${data.displayID}  ${data.displayName}",
                 textAlign: TextAlign.start,
                 style:
-                    const TextStyle(fontSize: 18, color: QppColor.indianYellow),
+                    const TextStyle(fontSize: 18, color: QppColors.indianYellow),
               ),
             ),
             // 物件左右翻轉, 或用 RotatedBox
@@ -211,7 +211,7 @@ class ItemIntroLinkRow extends InfoRow {
                   context.tr(QppLocales.commodityInfoTitle),
                   textAlign: TextAlign.start,
                   style: const TextStyle(
-                      fontSize: 18, color: QppColor.babyBlueEyes),
+                      fontSize: 18, color: QppColors.babyBlueEyes),
                 ),
               ),
               // intro link
@@ -255,7 +255,7 @@ class ItemDescriptionRow extends InfoRow {
                   context.tr(QppLocales.commodityInfoInfo),
                   textAlign: TextAlign.start,
                   style: const TextStyle(
-                      fontSize: 18, color: QppColor.babyBlueEyes),
+                      fontSize: 18, color: QppColors.babyBlueEyes),
                 ),
               ),
               // intro link
@@ -287,9 +287,9 @@ class InfoLinkReadMoreText extends StatelessWidget {
       trimMode: TrimMode.Line,
       trimExpandedText: '',
       trimCollapsedText: context.tr('commodity_info_more'),
-      moreStyle: const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
-      style: const TextStyle(fontSize: 18, color: QppColor.platinum),
-      linkTextStyle: const TextStyle(fontSize: 18, color: QppColor.mayaBlue),
+      moreStyle: const TextStyle(fontSize: 18, color: QppColors.babyBlueEyes),
+      style: const TextStyle(fontSize: 18, color: QppColors.platinum),
+      linkTextStyle: const TextStyle(fontSize: 18, color: QppColors.mayaBlue),
       onLinkPressed: (String url) {
         // 打開連結
         url.launchURL();

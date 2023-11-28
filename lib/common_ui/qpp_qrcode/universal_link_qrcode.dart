@@ -22,7 +22,7 @@ class UniversalLinkQRCode extends StatelessWidget {
             child: QPPQRCode(url: url, size: size)),
         const SizedBox(height: 16),
         Text(context.tr('vendor_login_scan_via_qpp'),
-            style: const TextStyle(color: QppColor.canaryYellow, fontSize: 16)),
+            style: const TextStyle(color: QppColors.canaryYellow, fontSize: 16)),
       ],
     );
   }

@@ -97,7 +97,7 @@ class _UserInformationOuterFrameState extends State<UserInformationOuterFrame> {
                       Text(
                         context.tr(QppLocales.commodityInfoLaunchQPP),
                         style: const TextStyle(
-                            fontSize: 16, color: QppColor.platinum),
+                            fontSize: 16, color: QppColors.platinum),
                       ),
                       const SizedBox(height: 24),
                       const OpenQppButton(),
@@ -210,7 +210,7 @@ class _InformationDescriptionWidget extends ConsumerWidget {
 
     return Container(
       width: double.infinity,
-      color: QppColor.oxfordBlue,
+      color: QppColors.oxfordBlue,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 60),
         child: ReadMoreText(
@@ -222,10 +222,10 @@ class _InformationDescriptionWidget extends ConsumerWidget {
           trimExpandedText: '',
           trimCollapsedText: context.tr('commodity_info_more'),
           moreStyle:
-              const TextStyle(fontSize: 18, color: QppColor.babyBlueEyes),
-          style: const TextStyle(fontSize: 18, color: QppColor.platinum),
+              const TextStyle(fontSize: 18, color: QppColors.babyBlueEyes),
+          style: const TextStyle(fontSize: 18, color: QppColors.platinum),
           linkTextStyle:
-              const TextStyle(fontSize: 18, color: QppColor.mayaBlue),
+              const TextStyle(fontSize: 18, color: QppColors.mayaBlue),
           onLinkPressed: (String url) {
             url.launchURL();
           },

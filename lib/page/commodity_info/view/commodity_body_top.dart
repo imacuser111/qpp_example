@@ -37,7 +37,7 @@ class CommodityBodyTop extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: Text(
                 itemInfoState.data!.name,
-                style: const TextStyle(fontSize: 20, color: QppColor.white),
+                style: const TextStyle(fontSize: 20, color: QppColors.white),
               ),
             );
           } else if (nftMetaState.isCompleted) {
@@ -46,7 +46,7 @@ class CommodityBodyTop extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: Text(
                 nftMetaState.data!.name,
-                style: const TextStyle(fontSize: 20, color: QppColor.white),
+                style: const TextStyle(fontSize: 20, color: QppColors.white),
               ),
             );
           } else {
