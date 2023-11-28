@@ -60,7 +60,7 @@ class NFTSectionItemTitle extends StatelessWidget {
       child: Container(
         height: 44.0,
         padding: const EdgeInsets.only(left: 60.0, right: 60.0),
-        decoration: const BoxDecoration(color: QppColor.stPatricksBlue),
+        decoration: const BoxDecoration(color: QppColors.stPatricksBlue),
         child: Row(
           children: [
             SvgPicture.asset(
