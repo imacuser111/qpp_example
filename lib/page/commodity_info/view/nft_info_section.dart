@@ -13,6 +13,80 @@ import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/utils/qpp_text_styles.dart';
 import 'dart:ui' as ui;
 
+import 'package:url_launcher/url_launcher.dart';
+
+class NFTSectionDescription extends StatefulWidget {
+  final QppNFT nft;
+
+  const NFTSectionDescription({Key? key, required this.nft}) : super(key: key);
+
+  @override
+  StateDescription createState() => StateDescription();
+}
+
+final arrowKey = GlobalKey<StateClickArrow>();
+
+class StateDescription extends State<NFTSectionDescription> {
+  bool expanded = true;
+
+  double inf = double.infinity;
+  double zero = 0;
+  double open = 1;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      NFTInfoSectionItemTitle(
+        iconPath: 'assets/desktop-icon-commodity-nft-describe.svg',
+        title: 'Description',
+        tt: () {
+          arrowKey.currentState?.rotate();
+          setState(() {
+            open == 0 ? 1 : 0;
+            // expanded = !expanded;
+          });
+        },
+      ),
+      // 發行者
+      AnimatedScale(
+        scale: open,
+        duration: const Duration(seconds: 1),
+        child: DescriptionContent(nft: widget.nft),
+      ),
+      // AnimatedContainer(
+      //     curve: Curves.fastOutSlowIn,
+      //     duration: const Duration(seconds: 2),
+      //     child: expanded
+      //         ? DescriptionContent(nft: widget.nft)
+      //         : const SizedBox.shrink()),
+    ]);
+  }
+}
+
+class DescriptionContent extends StatelessWidget {
+  final QppNFT nft;
+
+  const DescriptionContent({super.key, required this.nft});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const NFTInfoRowPublisher(),
+        // 連結
+        NFTInfoRowIntroLink(data: nft.externalUrl),
+        // 說明
+        NFTInfoRowDescription(data: nft.description)
+      ],
+    );
+  }
+}
+
 /// NFT Section title 元件
 class NFTInfoSectionItemTitle extends StatelessWidget {
   // icon 路徑
@@ -20,15 +94,19 @@ class NFTInfoSectionItemTitle extends StatelessWidget {
   // title
   final String title;
 
+  final Function()? tt;
+
   const NFTInfoSectionItemTitle(
-      {super.key, required this.iconPath, required this.title});
+      {Key? key, required this.iconPath, required this.title, this.tt})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final arrowKey = GlobalKey<StateClickArrow>();
+    // final arrowKey = GlobalKey<StateClickArrow>();
     return GestureDetector(
       onTap: () {
-        arrowKey.currentState?.rotate();
+        // arrowKey.currentState?.rotate();
+        tt?.call();
       },
       child: Container(
         height: 44.0,
@@ -55,28 +133,6 @@ class NFTInfoSectionItemTitle extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class NFTSectionDescription extends StatelessWidget {
-  final QppNFT nft;
-
-  const NFTSectionDescription({Key? key, required this.nft}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      const NFTInfoSectionItemTitle(
-        iconPath: 'assets/desktop-icon-commodity-nft-describe.svg',
-        title: 'Description',
-      ),
-      // 發行者
-      const NFTInfoRowPublisher(),
-      // 連結
-      NFTInfoRowIntroLink(data: nft.externalUrl),
-      // 說明
-      NFTInfoRowDescription(data: nft.description)
-    ]);
   }
 }
 
