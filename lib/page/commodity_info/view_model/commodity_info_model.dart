@@ -6,19 +6,27 @@ import 'package:qpp_example/api/client/response/multi_language_item_data.dart';
 import 'package:qpp_example/api/client/response/multi_language_item_description_select.dart';
 import 'package:qpp_example/api/client/response/multi_language_item_intro_link_select.dart';
 import 'package:qpp_example/api/client/response/user_select_info.dart';
+import 'package:qpp_example/api/local/api/local_api.dart';
+import 'package:qpp_example/api/local/response/base_local_response.dart';
+import 'package:qpp_example/api/local/response/get_vote_info.dart';
 import 'package:qpp_example/api/nft/nft_meta_api.dart';
 import 'package:qpp_example/extension/string/text.dart';
+import 'package:qpp_example/model/enum/item/item_category.dart';
 import 'package:qpp_example/model/item_img_data.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/nft/qpp_nft.dart';
 import 'package:qpp_example/model/qpp_item.dart';
 import 'package:qpp_example/model/qpp_user.dart';
+import 'package:qpp_example/model/vote/qpp_vote.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
 
 /// 物品資訊頁 model
 class CommodityInfoModel extends ChangeNotifier {
   /// 物品資訊
   ApiResponse<QppItem> itemSelectInfoState = ApiResponse.initial();
+
+  /// 問券資訊
+  ApiResponse<QppVote> voteDataState = ApiResponse.initial();
 
   /// NFT 物品資訊
   ApiResponse<QppNFT> nftMetaDataState = ApiResponse.initial();
@@ -81,11 +89,18 @@ class CommodityInfoModel extends ChangeNotifier {
       if (itemSelectResponse.errorCode == "OK") {
         ItemData itemData = itemSelectResponse.getItem(0);
         QppItem item = QppItem.create(itemData);
-        itemSelectInfoState = ApiResponse.completed(item);
+
+        if (item.category == ItemCategory.questionnaire) {
+          // 取問券資料
+          getQuestionnaire(item);
+        } else {
+          // 非問券的物品,通知成功
+          itemSelectInfoState = ApiResponse.completed(item);
+        }
         // 取物品資訊成功後, 取得創建者資料
-        int? creatorId = itemSelectInfoState.data?.creatorId;
-        getUserInfo(creatorId!);
-        getItemImage(creatorId);
+        int? creatorId = item.creatorId;
+        getUserInfo(creatorId);
+        getItemImage(item.id, creatorId);
       } else {
         itemSelectInfoState = ApiResponse.error(itemSelectResponse.errorCode);
         print('取得物品資訊錯誤 SERVER_ERROR_CODE: ${itemSelectResponse.errorCode}');
@@ -183,13 +198,35 @@ class CommodityInfoModel extends ChangeNotifier {
   }
 
   /// 取得物品圖片
-  getItemImage(int creatorID) {
-    var itemData = itemSelectInfoState.data!;
+  getItemImage(int itemId, int creatorID) {
     var timeUTC = DateTime.now().millisecondsSinceEpoch;
-    String itemPhotoUrl = QppImageUtils.getItemImageURL(creatorID, itemData.id,
-        timeStamp: timeUTC);
+    String itemPhotoUrl =
+        QppImageUtils.getItemImageURL(creatorID, itemId, timeStamp: timeUTC);
 
     itemPhotoState = ApiResponse.completed(ItemImgData(itemPhotoUrl));
     notifyListeners();
+  }
+
+  /// 取得投票資訊
+  getQuestionnaire(QppItem item) {
+    voteDataState = ApiResponse.loading();
+    notifyListeners();
+    final request = GetVoteInfoRequest().createBody(item.id.toString());
+    LocalApi.client.postGetVoteInfo(request).then((getVoteInfoResponse) {
+      if (getVoteInfoResponse.isSuccess) {
+        // 取資料成功
+        QppVote vote = getVoteInfoResponse.getVoteData(item);
+        voteDataState = ApiResponse.completed(vote);
+      } else {
+        // 取資料失敗
+        voteDataState =
+            ApiResponse.error(getVoteInfoResponse.errorInfo.errorMessage);
+      }
+      notifyListeners();
+    }).catchError((onError) {
+      // 取資料失敗
+      voteDataState = ApiResponse.error(onError.toString());
+      notifyListeners();
+    });
   }
 }

@@ -4,6 +4,7 @@ import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/common_ui/qpp_image/item_image.dart';
 import 'package:qpp_example/model/nft/qpp_nft.dart';
 import 'package:qpp_example/model/qpp_item.dart';
+import 'package:qpp_example/model/vote/qpp_vote.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_info_body.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 
@@ -27,16 +28,22 @@ class CommodityBodyTop extends StatelessWidget {
         const Expanded(child: SizedBox()),
         // 物品名稱
         Consumer(builder: (context, ref, _) {
+          // 一般物品
           ApiResponse<QppItem> itemInfoState =
               ref.watch(itemSelectInfoProvider).itemSelectInfoState;
+          // 問券
+          ApiResponse<QppVote> voteItemInfoState =
+              ref.watch(itemSelectInfoProvider).voteDataState;
+          // NFT 物品
           ApiResponse<QppNFT> nftMetaState =
               ref.watch(itemSelectInfoProvider).nftMetaDataState;
-          if (itemInfoState.isCompleted) {
+
+          if (itemInfoState.isCompleted || voteItemInfoState.isCompleted) {
             return Container(
               margin: const EdgeInsets.only(bottom: 26),
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: Text(
-                itemInfoState.data!.name,
+                itemInfoState.data?.name ?? voteItemInfoState.data!.itemName,
                 style: const TextStyle(fontSize: 20, color: QppColors.white),
               ),
             );
