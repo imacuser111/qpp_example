@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/api/core/api_response.dart';
 import 'package:qpp_example/common_ui/qpp_text/info_row_link_read_more_text.dart';
+import 'package:qpp_example/constants/server_const.dart';
+import 'package:qpp_example/extension/string/url.dart';
 import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/model/item_multi_language_data.dart';
 import 'package:qpp_example/model/qpp_item.dart';
@@ -108,42 +110,55 @@ class InfoRowCreator extends InfoRow {
   Widget getContent(data) {
     if (data is QppUser) {
       return Builder(builder: (context) {
-        return Row(
-          children: [
-            SizedBox(
-              width: 120,
-              child: Text(
-                context.tr(QppLocales.commodityInfoCreator),
-                textAlign: TextAlign.start,
-                style: QPPTextStyles.web_16pt_body_category_text_L,
-              ),
-            ),
-            // 若為官方帳號, 顯示 icon
-            data.isOfficial
-                ? Container(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: SvgPicture.asset(
-                      'assets/${data.officialIconPath}',
-                      width: 20,
+        return SelectionContainer.disabled(
+          child: MouseRegion(
+            // 滑鼠移進來時會改變游標圖案
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () {
+                // TODO: host, isTesting, language....
+                '${ServerConst.routerHost}/app/information?phoneNumber=${data.displayID}&testing=true'
+                    .launchURL();
+              },
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: Text(
+                      context.tr(QppLocales.commodityInfoCreator),
+                      textAlign: TextAlign.start,
+                      style: QPPTextStyles.web_16pt_body_category_text_L,
                     ),
-                  )
-                : const SizedBox.shrink(),
-            // id + name
-            Expanded(
-              child: Text(
-                "${data.displayID}  ${data.displayName}",
-                textAlign: TextAlign.start,
-                style: QPPTextStyles.web_16pt_body_Indian_yellow_L,
+                  ),
+                  // 若為官方帳號, 顯示 icon
+                  data.isOfficial
+                      ? Container(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: SvgPicture.asset(
+                            'assets/${data.officialIconPath}',
+                            width: 20,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                  // id + name
+                  Expanded(
+                    child: Text(
+                      "${data.displayID}  ${data.displayName}",
+                      textAlign: TextAlign.start,
+                      style: QPPTextStyles.web_16pt_body_Indian_yellow_L,
+                    ),
+                  ),
+                  // 物件左右翻轉, 或用 RotatedBox
+                  Directionality(
+                      textDirection: ui.TextDirection.rtl,
+                      child: SvgPicture.asset(
+                        'assets/mobile-icon-actionbar-back-normal.svg',
+                        matchTextDirection: true,
+                      )),
+                ],
               ),
             ),
-            // 物件左右翻轉, 或用 RotatedBox
-            Directionality(
-                textDirection: ui.TextDirection.rtl,
-                child: SvgPicture.asset(
-                  'assets/mobile-icon-actionbar-back-normal.svg',
-                  matchTextDirection: true,
-                )),
-          ],
+          ),
         );
       });
     }

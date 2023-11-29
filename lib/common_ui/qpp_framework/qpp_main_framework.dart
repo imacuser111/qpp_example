@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view/qpp_app_bar_view.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
+import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 /// 主框架
@@ -10,11 +13,16 @@ class MainFramework extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _MainScaffold(child: child),
-        const FullScreenMenuBtnPage(),
-      ],
+    // 設定頁籤上方顯示內容
+    return Title(
+      title: context.tr(QppLocales.homeWebtitle),
+      color: QppColors.platinum,
+      child: Stack(
+        children: [
+          _MainScaffold(child: child),
+          const FullScreenMenuBtnPage(),
+        ],
+      ),
     );
   }
 }
