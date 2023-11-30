@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qpp_example/extension/string/url.dart';
-import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 
 /// 客製化底線Text
 ///
@@ -8,23 +8,26 @@ import 'package:qpp_example/utils/qpp_color.dart';
 /// - 鼠標移過去會顯示底線
 /// - 若需使用連結初始化請用CUnderlineText.link
 class CUnderlineText extends StatefulWidget {
-  const CUnderlineText(
-      {super.key, required this.text, this.fontSize = 14, required this.onTap})
-      : link = '',
+  const CUnderlineText({
+    super.key,
+    required this.text,
+    this.style = QppTextStyles.web_14pt_body_s_white_L,
+    required this.onTap,
+  })  : link = '',
         isNewTab = false;
 
-  const CUnderlineText.link(
-      {super.key,
-      required this.text,
-      required this.link,
-      this.isNewTab = false,
-      this.fontSize = 14})
-      : onTap = null;
+  const CUnderlineText.link({
+    super.key,
+    required this.text,
+    this.style = QppTextStyles.web_14pt_body_s_white_L,
+    required this.link,
+    this.isNewTab = false,
+  }) : onTap = null;
 
   final String text;
+  final TextStyle style;
   final String link;
   final bool isNewTab; // 是否打開新頁面
-  final double fontSize;
   final Function? onTap;
 
   @override
@@ -45,7 +48,7 @@ class _CUnderlineText extends State<CUnderlineText> {
       }),
       child: _UnderlineText(
           text: widget.text,
-          fontSize: widget.fontSize,
+          style: widget.style,
           isShowUnderline: isHovered),
     );
   }
@@ -53,13 +56,14 @@ class _CUnderlineText extends State<CUnderlineText> {
 
 /// 底線Text
 class _UnderlineText extends StatelessWidget {
-  const _UnderlineText(
-      {required this.text,
-      required this.fontSize,
-      required this.isShowUnderline});
+  const _UnderlineText({
+    required this.text,
+    required this.style,
+    required this.isShowUnderline,
+  });
 
   final String text;
-  final double fontSize;
+  final TextStyle style;
   final bool isShowUnderline;
 
   @override
@@ -67,11 +71,11 @@ class _UnderlineText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        color: QppColors.white,
-        fontSize: fontSize,
+        color: style.color,
+        fontSize: style.fontSize,
         decoration: TextDecoration.underline,
         decorationThickness: 2,
-        decorationColor: QppColors.white.withOpacity(isShowUnderline ? 1 : 0),
+        decorationColor: style.color?.withOpacity(isShowUnderline ? 1 : 0),
       ),
     );
   }

@@ -56,6 +56,8 @@ dependencies:
       url: https://github.com/imacuser111/qpp_easy_localiztion_generator.git
   shared_preferences: ^2.2.2
   sprintf: ^7.0.0
+  auto_size_text: ^3.0.0
+  flutter_html: ^3.0.0-beta.2
   # easy_localization_generator: ^0.3.2
 
 # 解決有衝突的套件

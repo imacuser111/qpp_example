@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:qpp_example/api/local/response/base_local_response.dart';
-import 'package:qpp_example/common_view_model/auth_service/model/login_info.dart';
 
 /// 認證登入 token
 class CheckLoginTokenRequest {

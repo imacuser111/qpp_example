@@ -18,9 +18,9 @@ class InfoRowLinkReadMoreText extends StatelessWidget {
       trimMode: TrimMode.Line,
       trimExpandedText: '',
       trimCollapsedText: context.tr('commodity_info_more'),
-      moreStyle: QPPTextStyles.web_16pt_body_category_text_L,
-      style: QPPTextStyles.web_16pt_body_platinum_L,
-      linkTextStyle: QPPTextStyles.web_16pt_body_linktext_L,
+      moreStyle: QppTextStyles.web_16pt_body_category_text_L,
+      style: QppTextStyles.web_16pt_body_platinum_L,
+      linkTextStyle: QppTextStyles.web_16pt_body_linktext_L,
       onLinkPressed: (String url) {
         // 打開連結
         url.launchURL();

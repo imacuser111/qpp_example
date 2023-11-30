@@ -26,10 +26,10 @@ class UserInformationChangeNotifier extends ChangeNotifier {
   String bgImage = "";
 
   /// 頭像錯誤
-  bool avaterIsError = true;
+  bool avaterIsError = false;
 
   /// 背景圖錯誤
-  bool bgImageIsError = true;
+  bool bgImageIsError = false;
 
   /// 現在時間(撈取圖片使用)
   final nowTimestamp = DateTime.timestamp();
@@ -47,10 +47,12 @@ class UserInformationChangeNotifier extends ChangeNotifier {
   String _getUserImage({QppImageStyle style = QppImageStyle.avatar}) {
     bool isAvater = style == QppImageStyle.avatar;
 
-    return QppImageUtils.getUserImageURL(userID,
-        imageStyle:
-            isAvater ? QppImageStyle.avatar : QppImageStyle.backgroundImage,
-        timestamp: nowTimestamp.millisecondsSinceEpoch);
+    return QppImageUtils.getUserImageURL(
+      userID,
+      imageStyle:
+          isAvater ? QppImageStyle.avatar : QppImageStyle.backgroundImage,
+      timestamp: nowTimestamp.millisecondsSinceEpoch,
+    );
   }
 
   /// 取得用戶資訊
@@ -70,11 +72,14 @@ class UserInformationChangeNotifier extends ChangeNotifier {
     });
   }
 
-  /// 圖片錯誤(翻轉)
-  void imageErrorToggle({QppImageStyle style = QppImageStyle.avatar}) {
+  /// 設定圖片狀態
+  void setImageState({
+    QppImageStyle style = QppImageStyle.avatar,
+    required bool isSuccess,
+  }) {
     style == QppImageStyle.avatar
-        ? avaterIsError = !avaterIsError
-        : bgImageIsError = !bgImageIsError;
+        ? avaterIsError = !isSuccess
+        : bgImageIsError = !isSuccess;
     notifyListeners();
   }
 }

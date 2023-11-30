@@ -21,8 +21,11 @@ class ServerConst {
   /// 使用條款網址
   static const termsOfUseUrl = "https://www.qpptec.com/term?lang=%s";
 
+  /// 信箱顯示字串
+  static const mailStr = 'info@qpptec.com';
+
   /// 信箱
-  static const mailUrl = 'mailto:info@qpptec.com';
+  static const mailUrl = 'mailto:$mailStr';
 
   /// 跨境燃料費 url
   static const crossBorderFueCostUrl =
