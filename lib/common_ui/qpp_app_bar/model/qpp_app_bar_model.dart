@@ -17,12 +17,12 @@ enum MainMenu {
   /// 聯絡我們
   contact;
 
-  String get value {
+  String get text {
     return switch (this) {
-      MainMenu.introduce => '產品介紹',
-      MainMenu.feature => '產品特色',
-      MainMenu.description => '使用說明',
-      MainMenu.contact => '聯絡我們'
+      MainMenu.introduce => QppLocales.menuProductIntro,
+      MainMenu.feature => QppLocales.menuProductFeature,
+      MainMenu.description => QppLocales.menuUsageInstruction,
+      MainMenu.contact => QppLocales.menuContactUS,
     };
   }
 

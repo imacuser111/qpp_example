@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +16,17 @@ import 'package:qpp_example/go_router/router.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/model/enum/language.dart';
 import 'package:qpp_example/constants/qpp_contanst.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 import 'package:qpp_example/utils/screen.dart';
 import 'package:qpp_example/utils/shared_Prefs.dart';
 
 AppBar qppAppBar(ScreenStyle screenStyle) {
   return AppBar(
     automaticallyImplyLeading: false, // 關閉返回按鈕
-    toolbarHeight: screenStyle.isDesktopStyle
-        ? kToolbarDesktopHeight
-        : kToolbarMobileHeight,
+    toolbarHeight:
+        screenStyle.isDesktop ? kToolbarDesktopHeight : kToolbarMobileHeight,
     backgroundColor: QppColors.barMask,
-    title: screenStyle.isDesktopStyle
+    title: screenStyle.isDesktop
         ? const _QppAppBarTitle(ScreenStyle.desktop)
         : const _QppAppBarTitle(ScreenStyle.mobile),
     titleSpacing: 0,
@@ -44,7 +45,7 @@ class _QppAppBarTitle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // debugPrint(toString());
 
-    final bool isDesktopStyle = screenStyle.isDesktopStyle;
+    final bool isDesktopStyle = screenStyle.isDesktop;
 
     final bool isOpenAppBarMenuBtnPage =
         ref.watch(isOpenAppBarMenuBtnPageProvider);
@@ -118,13 +119,13 @@ class _Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDesktopStyle = screenStyle.isDesktopStyle;
+    final bool isDesktopStyle = screenStyle.isDesktop;
 
     return IconButton(
-        icon: Image.asset(
-          'assets/desktop-pic-qpp-logo-01.png',
-          width: isDesktopStyle ? 148 : 89,
-          scale: 46 / 148,
+        icon: SvgPicture.asset(
+          'assets/desktop-pic-qpp-logo-01.svg',
+          width: isDesktopStyle ? 147.2 : 89,
+          height: isDesktopStyle ? 44.4 : 27.4,
         ),
         onPressed: () => showLogoutDialog(context)
         // context.canPop()
@@ -162,13 +163,18 @@ class _MenuBtns extends StatelessWidget {
                             duration: const Duration(seconds: 1));
                       }
                     }.throttleWithTimeout(timeout: 2000),
-                    child: Text(
-                      e.value,
-                      style: TextStyle(
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 120),
+                      child: AutoSizeText(
+                        context.tr(e.text),
+                        style: TextStyle(
                           color: event is PointerEnterEvent
                               ? QppColors.canaryYellow
                               : QppColors.white,
-                          fontSize: 16),
+                          fontSize: 18,
+                        ),
+                        maxLines: 2,
+                      ),
                     ),
                   ),
                 ),
@@ -258,7 +264,7 @@ class _UserInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint(toString());
 
-    final isDesktopStyle = screenStyle.isDesktopStyle;
+    final isDesktopStyle = screenStyle.isDesktop;
 
     // 控制器狀態Provider
     final StateProvider<bool> isOpenControllerProvider =
@@ -289,11 +295,8 @@ class _UserInfo extends StatelessWidget {
                       ? const SizedBox(width: 8)
                       : const SizedBox.shrink(),
                   isDesktopStyle
-                      ? Text(
-                          loginInfo?.uid ?? "",
-                          style: const TextStyle(
-                              fontSize: 14, color: Colors.white),
-                        )
+                      ? Text(loginInfo?.uid ?? "",
+                          style: QppTextStyles.mobile_14pt_body_white_L)
                       : const SizedBox.shrink(),
                   isDesktopStyle
                       ? Row(children: [
@@ -325,7 +328,7 @@ class LanguageDropdownMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     // debugPrint(toString());
 
-    final isDesktopStyle = screenStyle.isDesktopStyle;
+    final isDesktopStyle = screenStyle.isDesktop;
 
     // 控制器狀態Provider
     final StateProvider<bool> isOpenControllerProvider =
@@ -406,7 +409,7 @@ class MouseRegionCustomWidget extends ConsumerWidget {
         notifier.onEnter();
 
         // TODO: 測試登入用記得砍掉
-        ref.watch(authServiceProvider.notifier).getLoginToken('');
+        // ref.watch(authServiceProvider.notifier).getLoginToken('');
       },
       onExit: (event) {
         onExit != null ? onExit!(event) : ();
@@ -479,8 +482,8 @@ class FullScreenMenuBtnPage extends ConsumerWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(25),
                               child: Text(
-                                e.value,
-                                style: const TextStyle(color: Colors.white),
+                                context.tr(e.text),
+                                style: QppTextStyles.web_20pt_title_m_white_C,
                               ),
                             ),
                           ),

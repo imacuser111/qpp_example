@@ -14,7 +14,11 @@ UniversalLinkParamData _$UniversalLinkParamDataFromJson(
       json['commodityID'] as String?,
       json['lang'] as String?,
       json['metadataID'] as String?,
-    );
+    )
+      ..vendorID = json['vendorID'] as String?
+      ..vendorToken = json['vendorToken'] as String?
+      ..serial = json['serial'] as String?
+      ..openExternalBrowser = json['openExternalBrowser'] as String?;
 
 Map<String, dynamic> _$UniversalLinkParamDataToJson(
         UniversalLinkParamData instance) =>

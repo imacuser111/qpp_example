@@ -1,13 +1,16 @@
 import 'package:qpp_example/constants/server_const.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
+import 'package:qpp_example/utils/screen.dart';
 
+/// 應用程式商店類型
 enum PlayStoreType {
   google,
   apple;
 
   String get image {
     return switch (this) {
-      PlayStoreType.google => 'btn-google.png',
-      PlayStoreType.apple => 'btn-apple.png'
+      PlayStoreType.google => 'assets/desktop-pic-platform-googleplay.webp',
+      PlayStoreType.apple => 'assets/desktop-pic-platform-appstore.webp'
     };
   }
 
@@ -31,47 +34,57 @@ enum HomePageFeatureInfoType {
   voucher,
 
   /// 更多
-  more
-}
+  more;
 
-/// 特色資訊類型 - 參數值
-extension HomePageFeatureInfoTypeValues on HomePageFeatureInfoType {
   String get title {
     switch (this) {
       case HomePageFeatureInfoType.virtual:
-        return '遊戲虛寶自由移轉';
+        return QppLocales.homeSection2Item1Title;
       case HomePageFeatureInfoType.identification:
-        return '安心保存會員卡';
+        return QppLocales.homeSection2Item2Title;
       case HomePageFeatureInfoType.voucher:
-        return '票券暢行無阻礙';
+        return QppLocales.homeSection2Item3Title;
       case HomePageFeatureInfoType.more:
-        return '更多豐富功能等你挖掘';
+        return QppLocales.homeSection2Item4Title;
     }
   }
 
   String get directions {
     switch (this) {
       case HomePageFeatureInfoType.virtual:
-        return '合作夥伴的遊戲虛寶，將可任你移轉給他人兌換使用，不再被遊戲限制給束縛住！';
+        return QppLocales.homeSection2Item1P;
       case HomePageFeatureInfoType.identification:
-        return '透過最先進的資料儲存技術，QPP 可快速發行各類數位會員卡，取代紙本會員卡保存不易的問題！';
+        return QppLocales.homeSection2Item2P;
       case HomePageFeatureInfoType.voucher:
-        return '門票、折價劵不怕弄丟，通通存進QPP數位背包內，一鍵使用輕鬆享受！';
+        return QppLocales.homeSection2Item3P;
       case HomePageFeatureInfoType.more:
-        return 'QPP的目標是成為全球最大的虛實整合平台。還可透過先進 SDK 串接，還可解鎖更多獨家功能！';
+        return QppLocales.homeSection2Item4P;
     }
   }
 
   String get image {
     switch (this) {
       case HomePageFeatureInfoType.virtual:
-        return 'desktop_icon_area01_01_pressed.svg';
+        return 'assets/desktop-icon-area-01-01-normal.svg';
       case HomePageFeatureInfoType.identification:
-        return 'desktop_icon_area01_02_nomal.svg';
+        return 'assets/desktop-icon-area-01-02-nomal.svg';
       case HomePageFeatureInfoType.voucher:
-        return 'desktop_icon_area01_03_normal.svg';
+        return 'assets/desktop-icon-area-01-03-normal.svg';
       case HomePageFeatureInfoType.more:
-        return 'desktop_icon_area01_04_normal.svg';
+        return 'assets/desktop-icon-area-01-04-normal.svg';
+    }
+  }
+
+  String get highlightImage {
+    switch (this) {
+      case HomePageFeatureInfoType.virtual:
+        return 'assets/desktop-icon-area-01-01-pressed.svg';
+      case HomePageFeatureInfoType.identification:
+        return 'assets/desktop-icon-area-01-02-pressed.svg';
+      case HomePageFeatureInfoType.voucher:
+        return 'assets/desktop-icon-area-01-03-pressed.svg';
+      case HomePageFeatureInfoType.more:
+        return 'assets/desktop-icon-area-01-04-pressed.svg';
     }
   }
 }
@@ -85,41 +98,40 @@ enum HomePageDescriptionType {
   directory,
 
   /// 討論區
-  forum
-}
+  forum;
 
-/// 使用說明類型 - 參數值
-extension HomePageDescriptionValues on HomePageDescriptionType {
   String get title {
     switch (this) {
       case HomePageDescriptionType.phone:
-        return '手機門號就是QPP帳號';
+        return QppLocales.homeSection4Brik1Title;
       case HomePageDescriptionType.directory:
-        return '一鍵匯入通訊錄名單';
+        return QppLocales.homeSection4Brik2Title;
       case HomePageDescriptionType.forum:
-        return '輕鬆交流的討論區';
+        return QppLocales.homeSection4Brik3Title;
     }
   }
 
   String get directions {
     switch (this) {
       case HomePageDescriptionType.phone:
-        return '物品移轉不需要對方有用過QPP即可輕鬆發送，系統會發簡訊通知對方有物品轉入，透過簡訊登入QPP即可使用物品，無縫接軌省去繁瑣註冊流程。';
+        return QppLocales.homeSection4Brik1P;
       case HomePageDescriptionType.directory:
-        return '只要將手機聯絡人一鍵匯入，就能把好友拉進你的QPP 生活圈，一起討論話題、交換物品、甚至領取更多獎勵，樂趣更多好處也更多！';
+        return QppLocales.homeSection4Brik2P;
       case HomePageDescriptionType.forum:
-        return '每位用戶都擁有專屬的個人討論專頁，可以輕鬆發起話題並與人交流。不論是生活情報、購物好康、還是八卦話題，都能在 QPP 上找到同伴！';
+        return QppLocales.homeSection4Brik3P;
     }
   }
 
-  String get image {
+  String image(ScreenStyle screenStyle) {
+    final isDesktopStyle = screenStyle.isDesktop;
+
     switch (this) {
       case HomePageDescriptionType.phone:
-        return 'desktop_pic_area02_01.webp';
+        return 'assets/${isDesktopStyle ? 'desktop-pic-area-02-01' : 'mobile-pic-area-02-01'}.webp';
       case HomePageDescriptionType.directory:
-        return 'desktop_pic_area02_02.webp';
+        return 'assets/${isDesktopStyle ? 'desktop-pic-area-02-02' : 'mobile-pic-area-02-02'}.webp';
       case HomePageDescriptionType.forum:
-        return 'desktop_pic_area02_03.webp';
+        return 'assets/${isDesktopStyle ? 'desktop-pic-area-02-03' : 'mobile-pic-area-02-03'}.webp';
     }
   }
 
@@ -134,30 +146,31 @@ extension HomePageDescriptionValues on HomePageDescriptionType {
   }
 }
 
-/// 使用說明類型
-enum HomePageContactType { first, second, third }
+/// 聯絡我們類型
+enum HomePageContactType {
+  first,
+  second,
+  third;
 
-/// 使用說明類型 - 參數值
-extension HomePageContactTypeValues on HomePageContactType {
   String get title {
     switch (this) {
       case HomePageContactType.first:
-        return '數位物品大量創建發送';
+        return QppLocales.homeDigibagList1Name;
       case HomePageContactType.second:
-        return '告別帳號密碼的時代';
+        return QppLocales.homeDigibagList2Name;
       case HomePageContactType.third:
-        return '兌換就是那麼簡單';
+        return QppLocales.homeDigibagList3Name;
     }
   }
 
   String get directions {
     switch (this) {
       case HomePageContactType.first:
-        return '輕鬆將您創建的數位物品發送給大量用戶。';
+        return QppLocales.homeDigibagList1P;
       case HomePageContactType.second:
-        return '讓用戶在高安全環境下登入您的服務。';
+        return QppLocales.homeDigibagList2P;
       case HomePageContactType.third:
-        return '從此用戶不用輸入亂碼來兌換虛擬商品或優惠。';
+        return QppLocales.homeDigibagList3P;
     }
   }
 

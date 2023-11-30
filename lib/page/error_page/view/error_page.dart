@@ -7,6 +7,7 @@ import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/page/error_page/model/error_page_model.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/constants/qpp_contanst.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 // -----------------------------------------------------------------------------
@@ -24,7 +25,7 @@ class ErrorPage extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final bool isDesktopStyle =
-              screenWidthWithoutContext().determineScreenStyle().isDesktopStyle;
+              screenWidthWithoutContext().determineScreenStyle().isDesktop;
 
           final bool isDesktopPlatform = context.isDesktopPlatform;
 
@@ -51,15 +52,17 @@ class ErrorPage extends StatelessWidget {
                           const SizedBox(width: 12),
                           Text(
                             context.tr(QppLocales.homeSection1Title),
-                            style: const TextStyle(
-                                fontSize: 40, color: QppColors.white),
+                            style:
+                                QppTextStyles.web_40pt_Display_m_bold_white_L,
                           )
                         ],
                       ),
                       const SizedBox(height: 48),
                       isDesktopStyle
-                          ? _Content.desktop(type.getContentTr(context, isDesktopPlatform))
-                          : _Content.mobile(type.getContentTr(context, isDesktopPlatform)),
+                          ? _Content.desktop(
+                              type.getContentTr(context, isDesktopPlatform))
+                          : _Content.mobile(
+                              type.getContentTr(context, isDesktopPlatform)),
                       const SizedBox(height: 48),
                       UniversalLinkQRCode(url: url)
                     ],
@@ -89,7 +92,7 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint(toString());
 
-    final bool isDesktopStyle = screenStyle.isDesktopStyle;
+    final bool isDesktopStyle = screenStyle.isDesktop;
 
     return Container(
       constraints: const BoxConstraints(minHeight: 324, maxWidth: 1280),
@@ -102,20 +105,24 @@ class _Content extends StatelessWidget {
         child: Flex(
             direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
             children: [
-              isDesktopStyle ? const Spacer(flex: 145) : const SizedBox(height: 36),
+              isDesktopStyle
+                  ? const Spacer(flex: 145)
+                  : const SizedBox(height: 36),
               SvgPicture.asset(
                 'assets/desktop-image-error.svg',
                 width: isDesktopStyle ? 184 : 120,
               ),
-              isDesktopStyle ? const Spacer(flex: 79) : const SizedBox(height: 36),
+              isDesktopStyle
+                  ? const Spacer(flex: 79)
+                  : const SizedBox(height: 36),
               Flexible(
                 flex: isDesktopStyle ? 725 : 0,
-                child: Text(
-                  text,
-                  style: const TextStyle(fontSize: 16, color: QppColors.platinum),
-                ),
+                child:
+                    Text(text, style: QppTextStyles.web_16pt_body_platinum_L),
               ),
-              isDesktopStyle ? const Spacer(flex: 147) : const SizedBox(height: 48),
+              isDesktopStyle
+                  ? const Spacer(flex: 147)
+                  : const SizedBox(height: 48),
             ]),
       ),
     );

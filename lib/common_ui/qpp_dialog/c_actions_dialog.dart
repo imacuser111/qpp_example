@@ -1,54 +1,9 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:qpp_example/common_ui/qpp_button/dialog_action_button.dart';
 import 'package:qpp_example/common_ui/qpp_dialog/c_dialog.dart';
-import 'package:qpp_example/common_ui/qpp_dialog/c_image_dialog.dart';
 import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
-
-/// 客製化對話框動作
-class CDialogAction {
-  const CDialogAction({required this.style, required this.callback});
-
-  final CDialogActionStyle style;
-  final void Function()? callback;
-}
-
-enum CDialogActionStyle {
-  /// 確定
-  confirm,
-
-  /// 取消
-  cancel,
-
-  /// 登出
-  logout;
-
-  String text(BuildContext context) {
-    return switch (this) {
-      CDialogActionStyle.confirm => context.tr('alert_confirm'),
-      CDialogActionStyle.cancel => context.tr('alert_cancel'),
-      CDialogActionStyle.logout => context.tr('alert_logout')
-    };
-  }
-
-  Color get textColor {
-    return switch (this) {
-      CDialogActionStyle.confirm ||
-      CDialogActionStyle.cancel =>
-        QppColors.platinum,
-      CDialogActionStyle.logout => QppColors.mayaBlue
-    };
-  }
-
-  Color get borderColor {
-    return switch (this) {
-      CDialogActionStyle.confirm ||
-      CDialogActionStyle.cancel =>
-        QppColors.darkPastelBlue,
-      CDialogActionStyle.logout => QppColors.mayaBlue
-    };
-  }
-}
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 
 /// 客製化動作對話框
 ///
@@ -95,25 +50,25 @@ class CActionsDialog extends StatelessWidget {
         children: [
           CDialogTitle(
             text: text,
-            style: TextStyle(
-              fontSize: isDesktopPlatform ? 24 : 20,
-              color: QppColors.white,
-            ),
+            style: isDesktopPlatform
+                ? QppTextStyles.web_24pt_title_L_white_L
+                : QppTextStyles.web_20pt_title_m_white_C,
             alignment:
                 isDesktopPlatform ? Alignment.centerLeft : Alignment.center,
             isShowCloseButton: isDesktopPlatform,
           ),
           SizedBox(height: isDesktopPlatform ? 16 : 17),
           isDesktopPlatform
-              ? UnconstrainedBox(child: Container(height: 1, width: width, color: QppColors.white))
+              ? UnconstrainedBox(
+                  child: Container(
+                      height: 1, width: width, color: QppColors.white))
               : const SizedBox.shrink(),
           SizedBox(height: isDesktopPlatform ? 16 : 0),
           Text(
             subText,
-            style: TextStyle(
-              fontSize: isDesktopPlatform ? 16 : 14,
-              color: QppColors.pastelBlue,
-            ),
+            style: isDesktopPlatform
+                ? QppTextStyles.mobile_16pt_title_pastel_blue
+                : QppTextStyles.mobile_14pt_body_pastel_blue_L,
           ),
           SizedBox(height: isDesktopPlatform ? 28 : 41),
           Row(

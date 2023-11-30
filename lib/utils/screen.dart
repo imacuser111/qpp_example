@@ -7,9 +7,9 @@ enum ScreenStyle {
   tablet,
   desktop;
 
-  bool get isDesktopStyle {
-    return this == ScreenStyle.desktop;
-  }
+  bool get isDesktop => this == ScreenStyle.desktop;
+
+  bool get isMobile => this == ScreenStyle.mobile;
 }
 
 extension BoxConstraintsExtension on BoxConstraints {
