@@ -49,14 +49,19 @@ class CommodityInfoModel extends ChangeNotifier {
   /// 開始取得物品資訊
   loadData(String id) {
     debugPrint('開始取得物品資訊...');
-    // 是否為 NFT 物品
-    if (id.isNFTId) {
-      getNFTMetaData(id);
+    if (id.isNullOrEmpty) {
+      itemSelectInfoState = ApiResponse.error('無物品ID');
+      notifyListeners();
     } else {
-      // 一般物品 取物品資訊及多語系說明/連結
-      getNormalItemInfo(id);
-      getMultiLanguageItemDescription(id);
-      getMultiLanguageItemIntroLink(id);
+      // 是否為 NFT 物品
+      if (id.isNFTId) {
+        getNFTMetaData(id);
+      } else {
+        // 一般物品 取物品資訊及多語系說明/連結
+        getNormalItemInfo(id);
+        getMultiLanguageItemDescription(id);
+        getMultiLanguageItemIntroLink(id);
+      }
     }
   }
 
