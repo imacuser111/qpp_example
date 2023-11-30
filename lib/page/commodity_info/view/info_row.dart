@@ -18,7 +18,9 @@ import 'package:qpp_example/utils/qpp_text_styles.dart';
 /// 資訊顯示抽象類
 /// 物品資訊 Row
 abstract class InfoRow extends ConsumerWidget {
-  const InfoRow({super.key});
+  final bool isDesktop;
+  const InfoRow.desktop({super.key}) : isDesktop = true;
+  const InfoRow.mobile({super.key}) : isDesktop = false;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +29,7 @@ abstract class InfoRow extends ConsumerWidget {
 
     return response.isCompleted
         ? Padding(
-            padding: const EdgeInsets.fromLTRB(60, 14, 60, 14),
+            padding: _rowPadding(),
             child: getContent(data),
           )
         : const SizedBox.shrink();
@@ -36,11 +38,22 @@ abstract class InfoRow extends ConsumerWidget {
   ApiResponse getResponse(WidgetRef ref);
 
   Widget getContent(dynamic data);
+
+  _rowPadding() {
+    return isDesktop
+        ? const EdgeInsets.fromLTRB(60, 14, 60, 14)
+        : const EdgeInsets.fromLTRB(14, 10, 14, 10);
+  }
+
+  double get _titleWidth {
+    return isDesktop ? 120 : 90;
+  }
 }
 
 /// 物品資訊
 class InfoRowInfo extends InfoRow {
-  const InfoRowInfo({super.key});
+  const InfoRowInfo.desktop({super.key}) : super.desktop();
+  const InfoRowInfo.mobile({super.key}) : super.mobile();
 
   @override
   ApiResponse getResponse(WidgetRef ref) {
@@ -54,7 +67,7 @@ class InfoRowInfo extends InfoRow {
         return Row(
           children: [
             Container(
-              constraints: const BoxConstraints(maxWidth: 120),
+              constraints: BoxConstraints(maxWidth: _titleWidth),
               width: double.infinity,
               child: Text(
                 context.tr(QppLocales.commodityInfoCategory),
@@ -96,10 +109,11 @@ class InfoRowInfo extends InfoRow {
 
 /// 創建者資訊
 class InfoRowCreator extends InfoRow {
-  final bool isCreator;
+  // final bool isCreator;
 
   /// 若為一般物品, 顯示創建者
-  const InfoRowCreator({super.key}) : isCreator = true;
+  const InfoRowCreator.desktop({super.key}) : super.desktop();
+  const InfoRowCreator.mobile({super.key}) : super.mobile();
 
   @override
   ApiResponse getResponse(WidgetRef ref) {
@@ -123,7 +137,7 @@ class InfoRowCreator extends InfoRow {
               child: Row(
                 children: [
                   SizedBox(
-                    width: 120,
+                    width: _titleWidth,
                     child: Text(
                       context.tr(QppLocales.commodityInfoCreator),
                       textAlign: TextAlign.start,
@@ -144,7 +158,9 @@ class InfoRowCreator extends InfoRow {
                   Expanded(
                     child: Text(
                       "${data.displayID}  ${data.displayName}",
+                      maxLines: 1,
                       textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
                       style: QPPTextStyles.web_16pt_body_Indian_yellow_L,
                     ),
                   ),
@@ -168,7 +184,8 @@ class InfoRowCreator extends InfoRow {
 
 /// 物品連結資訊(多語系)
 class InfoRowIntroLink extends InfoRow {
-  const InfoRowIntroLink({super.key});
+  const InfoRowIntroLink.desktop({super.key}) : super.desktop();
+  const InfoRowIntroLink.mobile({super.key}) : super.mobile();
 
   @override
   ApiResponse getResponse(WidgetRef ref) {
@@ -187,7 +204,7 @@ class InfoRowIntroLink extends InfoRow {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 120,
+                width: _titleWidth,
                 child: Text(
                   context.tr(QppLocales.commodityInfoTitle),
                   textAlign: TextAlign.start,
@@ -211,7 +228,8 @@ class InfoRowIntroLink extends InfoRow {
 
 /// 物品說明資訊(多語系)
 class InfoRowDescription extends InfoRow {
-  const InfoRowDescription({super.key});
+  const InfoRowDescription.desktop({super.key}) : super.desktop();
+  const InfoRowDescription.mobile({super.key}) : super.mobile();
 
   @override
   ApiResponse getResponse(WidgetRef ref) {
@@ -230,7 +248,7 @@ class InfoRowDescription extends InfoRow {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 120,
+                width: _titleWidth,
                 child: Text(
                   context.tr(QppLocales.commodityInfoInfo),
                   textAlign: TextAlign.start,

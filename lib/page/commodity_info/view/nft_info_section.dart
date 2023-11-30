@@ -141,7 +141,7 @@ class NFTInfoSectionItemTitle extends StatelessWidget {
 /// 發行者資訊
 class NFTInfoRowPublisher extends InfoRow {
   /// 顯示發行者
-  const NFTInfoRowPublisher({super.key});
+  const NFTInfoRowPublisher({super.key}) : super.desktop();
 
   @override
   ApiResponse getResponse(WidgetRef ref) {

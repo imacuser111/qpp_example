@@ -21,17 +21,25 @@ class NormalItemInfo extends StatelessWidget {
       Container(
           constraints: const BoxConstraints(maxWidth: 1280),
           width: double.infinity,
-          padding: const EdgeInsets.only(bottom: 20),
-          child: const Column(
+          padding: EdgeInsets.only(bottom: 20, top: isDesktop ? 0 : 10),
+          child: Column(
             children: [
               // 類別欄位
-              InfoRowInfo(),
+              isDesktop
+                  ? const InfoRowInfo.desktop()
+                  : const InfoRowInfo.mobile(),
               // 創建者欄位
-              InfoRowCreator(),
+              isDesktop
+                  ? const InfoRowCreator.desktop()
+                  : const InfoRowCreator.mobile(),
               // 連結欄位
-              InfoRowIntroLink(),
+              isDesktop
+                  ? const InfoRowIntroLink.desktop()
+                  : const InfoRowIntroLink.mobile(),
               // 說明欄位
-              InfoRowDescription(),
+              isDesktop
+                  ? const InfoRowDescription.desktop()
+                  : const InfoRowDescription.mobile(),
             ],
           )),
     ]);
