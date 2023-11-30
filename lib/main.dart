@@ -29,7 +29,6 @@ void main() async {
       supportedLocales: QppLocales.supportedLocales,
       // 預設語系
       startLocale: startLocale,
-      // const Locale('zh', 'TW'),
       // 當前語系缺少翻譯時, 使用此語系
       fallbackLocale: const Locale('zh', 'TW'),
       path: 'assets/langs/langs.csv',
@@ -39,20 +38,15 @@ void main() async {
   );
 }
 
+/// 取語系參數
 Locale get startLocale {
-  // String lang = Uri.base.queryParameters['lang'] ?? "";
-  // if (lang.isNotEmpty) {
-  //   var keys = lang.split('_');
-  //   return Locale(keys[0], keys[1]);
-  // }
+  String lang = Uri.base.queryParameters['lang'] ?? "";
+  if (lang.isNotEmpty) {
+    var keys = lang.split('_');
+    return Locale(keys[0], keys[1]);
+  }
   return const Locale('zh', 'TW');
 }
-
-// initSetting() {
-//   var url = Uri.base;
-//   var params = url.queryParameters;
-//   print('object');
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -132,7 +132,7 @@ class InfoRowCreator extends InfoRow {
               onTap: () {
                 // TODO: host, isTesting, language....
                 '${ServerConst.routerHost}/app/information?phoneNumber=${data.displayID}&testing=true'
-                    .launchURL();
+                    .launchURL(isNewTab: false);
               },
               child: Row(
                 children: [
