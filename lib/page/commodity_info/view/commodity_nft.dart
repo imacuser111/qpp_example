@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_body_top.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_info_body.dart';
+import 'package:qpp_example/page/commodity_info/view/mobile_info_divider.dart';
 import 'package:qpp_example/page/commodity_info/view/nft_info_section.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 
@@ -16,6 +17,10 @@ class NFTItemInfo extends StatelessWidget {
     return Column(children: [
       // 資料區 上半部
       const CommodityBodyTop(),
+      // 若為 Mobile 版面, 要顯示黑色分隔線
+      MobileInfoDivider(
+        isMobile: !isDesktop,
+      ),
       // 資料區下半部
       Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
