@@ -1,0 +1,25 @@
+<svg width="180" height="185" viewBox="0 0 180 185" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient x1="50%" y1=".581%" x2="50%" y2="100%" id="voubz9wp4b">
+            <stop stop-color="#56DFF9" offset="0%"/>
+            <stop stop-color="#289CDD" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="23ni12jdjc">
+            <stop stop-color="#203D80" offset="0%"/>
+            <stop stop-color="#0F214B" offset="100%"/>
+        </linearGradient>
+        <filter x="-18.3%" y="-18.9%" width="136.5%" height="138%" filterUnits="objectBoundingBox" id="tyr9xvdh4a">
+            <feOffset dy="12" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="25" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0" in="shadowBlurOuter1" result="shadowMatrixOuter1"/>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    <g filter="url(#tyr9xvdh4a)" fill="none" fill-rule="evenodd">
+        <path d="M89.86 127.377C53.58 114.5 48 92.813 48 50.1L89.86 34l41.86 16.1c0 42.713-5.58 64.4-41.86 77.277z" fill="url(#voubz9wp4b)"/>
+        <path stroke="#1B3267" fill="url(#23ni12jdjc)" stroke-linecap="round" stroke-linejoin="round" d="m89.83 90.575-12.938 6.8 2.473-14.403-10.465-10.2 14.461-2.103 6.47-13.102 6.465 13.102 14.464 2.102-10.465 10.201 2.47 14.403z"/>
+    </g>
+</svg>

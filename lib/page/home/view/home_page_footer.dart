@@ -1,10 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view/qpp_app_bar_view.dart';
 import 'package:qpp_example/common_ui/qpp_text/c_under_line_text.dart';
 import 'package:qpp_example/constants/server_const.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 /// 首頁 - 頁尾
@@ -30,9 +33,9 @@ class _FooterInfo extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
       child: LayoutBuilder(builder: (context, constraints) {
-        final bool isDesktopStyle = constraints.screenStyle.isDesktopStyle;
+        final bool isDesktopStyle = constraints.screenStyle.isDesktop;
 
         return Flex(
           direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
@@ -65,27 +68,36 @@ class _Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktopStyle = screenStyle.isDesktopStyle;
+    final isDesktopStyle = screenStyle.isDesktop;
 
     return Flex(
       direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SvgPicture.asset(isDesktopStyle
-            ? 'assets/desktop_pic_qpp_logo_03.svg'
-            : 'assets/mobile-pic-qpp-logo-03.svg'),
+        SvgPicture.asset('assets/desktop-pic-qpp-logo-03.svg'),
         const SizedBox(height: 30, width: 30),
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('快鏈科技', style: TextStyle(color: QppColors.white, fontSize: 16)),
-            SizedBox(height: 20),
-            Text('統一編號：83527156',
-                style: TextStyle(color: QppColors.white, fontSize: 14)),
-            SizedBox(height: 5),
-            _InfoLinkText('客服信箱：'),
-            SizedBox(height: 5),
-            _InfoLinkText('商務合作信箱：')
+            Text(
+              context.tr(QppLocales.footerCompanyName),
+              style: QppTextStyles.mobile_16pt_title_white_bold_L,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              '${context.tr(QppLocales.footerTaxID)}：83527156',
+              style: QppTextStyles.mobile_14pt_body_white_L,
+            ),
+            const SizedBox(height: 4),
+            _InfoMailLinkText(
+              '${context.tr(QppLocales.footerCustomerServiceEmail)}：',
+              screenStyle: screenStyle,
+            ),
+            const SizedBox(height: 4),
+            _InfoMailLinkText(
+              '${context.tr(QppLocales.footerBusinessProposalEmail)}：',
+              screenStyle: screenStyle,
+            )
           ],
         ),
       ],
@@ -93,19 +105,22 @@ class _Info extends StatelessWidget {
   }
 }
 
-/// 資訊連結Text
-class _InfoLinkText extends StatelessWidget {
-  const _InfoLinkText(this.text);
+/// 資訊信箱連結Text
+class _InfoMailLinkText extends StatelessWidget {
+  const _InfoMailLinkText(this.text, {required this.screenStyle});
 
   final String text;
+  final ScreenStyle screenStyle;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(text, style: const TextStyle(color: QppColors.white, fontSize: 14)),
+        Text(text, style: QppTextStyles.web_14pt_body_s_white_L),
         const CUnderlineText.link(
-            text: 'info@qpptec.com', link: ServerConst.mailUrl),
+          text: ServerConst.mailStr,
+          link: ServerConst.mailUrl,
+        ),
       ],
     );
   }
@@ -151,8 +166,8 @@ class _MenuButton extends StatelessWidget {
           .map(
             (e) => MouseRegionCustomWidget(
               builder: (event) => CUnderlineText(
-                text: e.value,
-                fontSize: 16,
+                text: context.tr(e.text),
+                style: QppTextStyles.mobile_16pt_title_white_bold_L,
                 onTap: () {
                   BuildContext? currentContext = e.currentContext;
 
@@ -177,14 +192,14 @@ class _TitleWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textStyle = TextStyle(color: QppColors.white, fontSize: 16);
+    const textStyle = QppTextStyles.mobile_16pt_title_white_bold_L;
 
     return Wrap(
       spacing: 161,
       runSpacing: runSpacing,
-      children: const [
-        Text('條款', style: textStyle),
-        Text('下載', style: textStyle)
+      children: [
+        Text(context.tr(QppLocales.footerTerms), style: textStyle),
+        Text(context.tr(QppLocales.footerDownload), style: textStyle)
       ],
     );
   }
@@ -198,31 +213,31 @@ class _Links extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double fontSize = 12;
+    const TextStyle style = QppTextStyles.web_12pt_caption_white_L;
 
     return Wrap(
       spacing: 135,
       runSpacing: runSpacing,
-      children: const [
+      children: [
         CUnderlineText.link(
-            text: '隱私權政策',
+            text: context.tr(QppLocales.footerPrivacyPolicy),
             link: ServerConst.privacyPolicyUrl,
-            fontSize: fontSize,
+            style: style,
             isNewTab: true),
-        CUnderlineText.link(
+        const CUnderlineText.link(
             text: 'Apple Store',
             link: ServerConst.appleStoreUrl,
-            fontSize: fontSize,
+            style: style,
             isNewTab: true),
         CUnderlineText.link(
-            text: '使用者條款',
+            text: context.tr(QppLocales.footerTermsOfService),
             link: ServerConst.termsOfUseUrl,
-            fontSize: fontSize,
+            style: style,
             isNewTab: true),
-        CUnderlineText.link(
+        const CUnderlineText.link(
             text: 'Google Play',
             link: ServerConst.googlePlayStoreUrl,
-            fontSize: fontSize,
+            style: style,
             isNewTab: true),
       ],
     );
@@ -237,11 +252,11 @@ class _CompanyName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 45,
-      color: QppColors.white,
+      color: QppColors.oxfordBlue,
       child: const Center(
         child: Text(
           '©2019 HOLY BUSINESS CO., LTD',
-          style: TextStyle(color: QppColors.white, fontSize: 12),
+          style: QppTextStyles.web_12pt_caption_white_L,
         ),
       ),
     );

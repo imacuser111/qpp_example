@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:qpp_example/common_ui/qpp_button/open_qpp_button.dart';
 import 'package:qpp_example/common_ui/qpp_dialog/c_dialog.dart';
 import 'package:qpp_example/common_ui/qpp_text/c_timer_text.dart';
-import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 
 /// 開啟QPP對話框
+///
+/// 參考: https://app.zeplin.io/project/65372215fc0b981fe82c00f0/screen/6541c1ae5d02e7233efb71d8
 class OpenQppDialog extends StatelessWidget {
   const OpenQppDialog({
     super.key,
@@ -30,7 +32,7 @@ class OpenQppDialog extends StatelessWidget {
           const SizedBox(height: 36),
           CTimerText(
             timerText,
-            style: const TextStyle(fontSize: 14, color: QppColors.pastelBlue),
+            style: QppTextStyles.mobile_14pt_body_pastel_blue_C,
             interval: 600,
           )
         ],

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 
 /// 客製化對話框
 ///
@@ -47,18 +48,16 @@ class CDialog extends StatelessWidget {
         children: [
           CDialogTitle(
             text: text,
-            style: TextStyle(
-              fontSize: isDesktopPlatform ? 36 : 20,
-              color: QppColors.mayaBlue,
-            ),
+            style: isDesktopPlatform
+                ? QppTextStyles.web_36pt_Display_s_maya_blue_C
+                : QppTextStyles.mobile_20pt_title_L_maya_blue_L,
           ),
           SizedBox(height: isDesktopPlatform ? 32 : 17),
           Text(
             subText,
-            style: TextStyle(
-              fontSize: isDesktopPlatform ? 20 : 14,
-              color: isDesktopPlatform ? QppColors.white : QppColors.pastelBlue,
-            ),
+            style: isDesktopPlatform
+                ? QppTextStyles.web_20pt_title_m_white_C
+                : QppTextStyles.mobile_14pt_body_pastel_blue_L,
           ),
           SizedBox(height: isDesktopPlatform ? 36 : 28),
           child,

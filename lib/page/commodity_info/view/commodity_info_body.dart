@@ -47,7 +47,7 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
   void didChangeDependencies() {
     size = MediaQuery.of(context).size;
     // 是否為桌面版面
-    isDesktopStyle = size?.width.determineScreenStyle().isDesktopStyle ?? false;
+    isDesktopStyle = size?.width.determineScreenStyle().isDesktop ?? false;
     super.didChangeDependencies();
   }
 

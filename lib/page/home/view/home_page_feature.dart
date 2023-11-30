@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/page/home/model/home_page_model.dart';
-import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 /// 首頁 - 特色
@@ -14,20 +16,23 @@ class HomePageFeature extends StatelessWidget {
       builder: (context, constraints) {
         /// 螢幕樣式
         final ScreenStyle screenStyle = constraints.screenStyle;
-        final bool isDesktopStyle = screenStyle.isDesktopStyle;
+        final bool isDesktopStyle = screenStyle.isDesktop;
         final int flex = isDesktopStyle ? 1 : 0;
-        final double topAndBottomSpacing = isDesktopStyle ? 200 : 100;
-        const double leftAndRightSpacing = 20;
+        final double topAndBottomSpacing = isDesktopStyle ? 200 : 80;
+        const double leftAndRightSpacing = 24;
 
         return Container(
+          width: constraints.maxWidth,
           padding: EdgeInsets.only(
               top: topAndBottomSpacing,
               bottom: topAndBottomSpacing,
               left: leftAndRightSpacing,
               right: leftAndRightSpacing),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/area1-bg-xl.jpg'),
+              image: AssetImage(
+                'assets/${isDesktopStyle ? 'desktop-bg-area-01' : 'mobile-bg-area-01'}.webp',
+              ),
               fit: BoxFit.cover,
             ),
           ),
@@ -43,8 +48,8 @@ class HomePageFeature extends StatelessWidget {
               Expanded(
                 flex: flex,
                 child: isDesktopStyle
-                    ? const _FeatureInfo(ScreenStyle.desktop)
-                    : const _FeatureInfo(ScreenStyle.mobile),
+                    ? const _FeatureInfo.desktop()
+                    : const _FeatureInfo.mobile(),
               ),
             ],
           ),
@@ -62,17 +67,19 @@ class _Left extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktopStyle = screenStyle.isDesktop;
+
     return Column(
       children: [
-        const Text(
-          '數位背包輕鬆創建物品，管理介面簡單',
-          style: TextStyle(
-              color: QppColors.oxfordBlue,
-              fontSize: 28,
-              fontWeight: FontWeight.bold),
+        Text(
+          context.tr(QppLocales.homeSection2Title),
+          style: isDesktopStyle
+              ? QppTextStyles.web_36pt_Display_s_dark_oxford_blue_L
+              : QppTextStyles.web_24pt_title_L_black_C,
+          textAlign: TextAlign.center,
         ),
-        screenStyle.isDesktopStyle
-            ? Image.asset('assets/area1-KV.png')
+        isDesktopStyle
+            ? Image.asset('assets/desktop-pic-area-01.webp')
             : const SizedBox(),
       ],
     );
@@ -81,7 +88,8 @@ class _Left extends StatelessWidget {
 
 /// 特色資訊
 class _FeatureInfo extends StatelessWidget {
-  const _FeatureInfo(this.screenStyle);
+  const _FeatureInfo.desktop() : screenStyle = ScreenStyle.desktop;
+  const _FeatureInfo.mobile() : screenStyle = ScreenStyle.mobile;
 
   final ScreenStyle screenStyle;
 
@@ -122,7 +130,7 @@ class _FeatureInfoItemState extends State<_FeatureInfoItem> {
   Widget build(BuildContext context) {
     // debugPrint(toString());
 
-    final isDesktopStyle = widget.screenStyle.isDesktopStyle;
+    final isDesktopStyle = widget.screenStyle.isDesktop;
     final flex = isDesktopStyle ? 1 : 0;
 
     return MouseRegion(
@@ -130,14 +138,20 @@ class _FeatureInfoItemState extends State<_FeatureInfoItem> {
       onExit: (event) => updateHover(false),
       child: Padding(
         padding: EdgeInsets.only(
-            bottom: widget.type == HomePageFeatureInfoType.more ? 0 : 20),
+            bottom: widget.type == HomePageFeatureInfoType.more
+                ? 0
+                : isDesktopStyle
+                    ? 50
+                    : 44),
         child: Flex(
           direction: isDesktopStyle ? Axis.horizontal : Axis.vertical,
           children: [
-            // TODO: 滑動變色
-            SvgPicture.asset('assets/${widget.type.image}',
-                width: 50, height: 50),
-            const SizedBox(height: 20, width: 20),
+            SvgPicture.asset(
+              isHover ? widget.type.highlightImage : widget.type.image,
+              width: 50,
+              height: 50,
+            ),
+            const SizedBox(height: 16, width: 27),
             Expanded(
               flex: flex,
               child: Column(
@@ -145,18 +159,30 @@ class _FeatureInfoItemState extends State<_FeatureInfoItem> {
                     ? CrossAxisAlignment.start
                     : CrossAxisAlignment.center,
                 children: [
-                  Text(widget.type.title,
-                      style: TextStyle(
-                          color: isHover ? QppColors.skyBlue : QppColors.ashGray,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  Text(widget.type.directions,
-                      textAlign:
-                          isDesktopStyle ? TextAlign.start : TextAlign.center,
-                      style: TextStyle(
-                          color: isHover ? QppColors.black : QppColors.ashGray,
-                          fontSize: 16)),
+                  Text(
+                    context.tr(widget.type.title),
+                    style: isHover
+                        ? isDesktopStyle
+                            ? QppTextStyles.web_24pt_title_L_skyblue_L
+                            : QppTextStyles.mobile_18pt_title_m_bold_sky_blue_C
+                        : isDesktopStyle
+                            ? QppTextStyles.web_24pt_title_L_ash_gray_L
+                            : QppTextStyles
+                                .mobile_18pt_title_m_ash_gray_medium_C,
+                  ),
+                  SizedBox(height: isDesktopStyle ? 12 : 16),
+                  Text(
+                    context.tr(widget.type.directions),
+                    textAlign:
+                        isDesktopStyle ? TextAlign.start : TextAlign.center,
+                    style: isHover
+                        ? isDesktopStyle
+                            ? QppTextStyles.web_16pt_body_black_L
+                            : QppTextStyles.mobile_14pt_body_ash_black_C
+                        : isDesktopStyle
+                            ? QppTextStyles.web_16pt_body_ash_gray_L
+                            : QppTextStyles.mobile_14pt_body_ash_gray_C,
+                  ),
                 ],
               ),
             )

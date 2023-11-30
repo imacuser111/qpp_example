@@ -11,6 +11,7 @@ import 'package:qpp_example/page/user_information/view_model/user_information_vi
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/constants/qpp_contanst.dart';
 import 'package:qpp_example/utils/qpp_image_utils.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 import 'package:qpp_example/utils/screen.dart';
 
 /// 用戶資訊頁
@@ -60,7 +61,7 @@ class _UserInformationOuterFrameState extends State<UserInformationOuterFrame> {
                 child: LayoutBuilder(builder: (context, constraints) {
                   final bool isDesktopStyle = screenWidthWithoutContext()
                       .determineScreenStyle()
-                      .isDesktopStyle;
+                      .isDesktop;
 
                   return Container(
                     constraints: const BoxConstraints(maxWidth: 1280),
@@ -76,9 +77,11 @@ class _UserInformationOuterFrameState extends State<UserInformationOuterFrame> {
                       child: Column(
                         children: [
                           isDesktopStyle
-                              ? const _AvatarWidget(ScreenStyle.desktop)
-                              : const _AvatarWidget(ScreenStyle.mobile),
-                          const _InformationDescriptionWidget(),
+                              ? const _AvatarWidget.desktop()
+                              : const _AvatarWidget.mobile(),
+                          isDesktopStyle
+                              ? const _InformationDescriptionWidget.desktop()
+                              : const _InformationDescriptionWidget.mobile(),
                         ],
                       ),
                     ),
@@ -96,8 +99,7 @@ class _UserInformationOuterFrameState extends State<UserInformationOuterFrame> {
                     children: [
                       Text(
                         context.tr(QppLocales.commodityInfoLaunchQPP),
-                        style: const TextStyle(
-                            fontSize: 16, color: QppColors.platinum),
+                        style: QppTextStyles.web_16pt_body_platinum_L,
                       ),
                       const SizedBox(height: 24),
                       const OpenQppButton(),
@@ -112,7 +114,8 @@ class _UserInformationOuterFrameState extends State<UserInformationOuterFrame> {
 
 // 頭像Widget
 class _AvatarWidget extends ConsumerWidget {
-  const _AvatarWidget(this.screenStyle);
+  const _AvatarWidget.desktop() : screenStyle = ScreenStyle.desktop;
+  const _AvatarWidget.mobile() : screenStyle = ScreenStyle.mobile;
 
   final ScreenStyle screenStyle;
 
@@ -143,7 +146,7 @@ class _AvatarWidget extends ConsumerWidget {
                         as ImageProvider
                     : NetworkImage(userInformation.bgImage),
                 onError: (exception, stackTrace) => userInformation
-                    .imageErrorToggle(style: QppImageStyle.backgroundImage),
+                    .setImageState(style: QppImageStyle.backgroundImage, isSuccess: false),
               ),
             ),
             child: Stack(
@@ -167,26 +170,19 @@ class _AvatarWidget extends ConsumerWidget {
                                   as ImageProvider
                               : NetworkImage(userInformation.avaterImage),
                           onBackgroundImageError: (exception, stackTrace) =>
-                              userInformation.imageErrorToggle(),
+                              userInformation.setImageState(isSuccess: false),
                         ),
                       ),
-                      SizedBox(height: isDesktopStyle ? 20 : 12),
+                      SizedBox(height: isDesktopStyle ? 29 : 12),
                       Text(
                         context.tr(qppUser?.displayName ??
                             QppLocales.errorPageNickname),
-                        style: const TextStyle(
-                          color: Colors.amber,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: QppTextStyles.web_20pt_title_m_Indian_yellow_C,
                       ),
+                      SizedBox(height: isDesktopStyle ? 6 : 2),
                       Text(
                         userID.toString(),
-                        style: const TextStyle(
-                          color: Colors.amber,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: QppTextStyles.mobile_14pt_body_Indian_yellow_L,
                       ),
                     ],
                   ),
@@ -199,11 +195,28 @@ class _AvatarWidget extends ConsumerWidget {
 
 /// 資訊說明Widget
 class _InformationDescriptionWidget extends ConsumerWidget {
-  const _InformationDescriptionWidget();
+  const _InformationDescriptionWidget.desktop()
+      : screenStyle = ScreenStyle.desktop;
+  const _InformationDescriptionWidget.mobile()
+      : screenStyle = ScreenStyle.mobile;
+
+  final ScreenStyle screenStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint('InformationDescriptionWidget build');
+    debugPrint(toString());
+
+    final isDesktopStyle = screenStyle.isDesktop;
+
+    final moreStyle = isDesktopStyle
+        ? QppTextStyles.web_16pt_body_category_text_L
+        : QppTextStyles.mobile_14pt_body_category_text_L;
+    final textStyle = isDesktopStyle
+        ? QppTextStyles.web_16pt_body_platinum_L
+        : QppTextStyles.mobile_14pt_body_platinum_L;
+    final linkTextStyle = isDesktopStyle
+        ? QppTextStyles.web_16pt_body_linktext_L
+        : QppTextStyles.mobile_14pt_body_linktext_L;
 
     final response =
         ref.watch(userInformationProvider.select((value) => value.infoState));
@@ -221,11 +234,9 @@ class _InformationDescriptionWidget extends ConsumerWidget {
           trimMode: TrimMode.Line,
           trimExpandedText: '',
           trimCollapsedText: context.tr('commodity_info_more'),
-          moreStyle:
-              const TextStyle(fontSize: 18, color: QppColors.babyBlueEyes),
-          style: const TextStyle(fontSize: 18, color: QppColors.platinum),
-          linkTextStyle:
-              const TextStyle(fontSize: 18, color: QppColors.mayaBlue),
+          moreStyle: moreStyle,
+          style: textStyle,
+          linkTextStyle: linkTextStyle,
           onLinkPressed: (String url) {
             url.launchURL();
           },

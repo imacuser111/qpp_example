@@ -46,9 +46,13 @@ class _MainScaffold extends StatelessWidget {
         appBar: qppAppBar(screenStyle),
         body: Container(
           height: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/desktop-bg-kv.webp'),
+              image: AssetImage(
+                screenStyle.isDesktop
+                    ? 'assets/desktop_bg_kv.png'
+                    : 'assets/mobile-bg-kv.webp',
+              ),
               fit: BoxFit.cover,
             ),
           ),

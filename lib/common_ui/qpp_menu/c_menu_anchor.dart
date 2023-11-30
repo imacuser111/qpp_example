@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 import '../qpp_app_bar/view/qpp_app_bar_view.dart';
 
 /// 客製化選單資料
@@ -28,8 +29,7 @@ class CMenuAnchor extends StatelessWidget {
   // 控制器狀態Provider
   final StateProvider<bool> isOpenControllerProvider;
   final Widget Function(BuildContext, MenuController, Widget?)? builder;
-  final void Function(BuildContext context, CMeunAnchorData e)
-      onTap;
+  final void Function(BuildContext context, CMeunAnchorData e) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +47,9 @@ class CMenuAnchor extends StatelessWidget {
                   ? isOpenNotifier.state = false
                   : null,
               builder: (event) {
-                final Color color =
-                    event is PointerEnterEvent ? QppColors.canaryYellow : QppColors.white;
+                final Color color = event is PointerEnterEvent
+                    ? QppColors.canaryYellow
+                    : QppColors.white;
                 final image = e.image;
                 final isShowImage = image != null;
 
@@ -66,13 +67,19 @@ class CMenuAnchor extends StatelessWidget {
                     child: Row(
                       children: [
                         isShowImage
-                            ? SvgPicture.asset(image, colorFilter: ColorFilter.mode(color, BlendMode.srcIn),)
+                            ? SvgPicture.asset(
+                                image,
+                                colorFilter:
+                                    ColorFilter.mode(color, BlendMode.srcIn),
+                              )
                             : const SizedBox.shrink(),
                         isShowImage
                             ? const SizedBox(width: 6)
                             : const SizedBox.shrink(),
                         Text(context.tr(e.title),
-                            style: TextStyle(color: color)),
+                            style: event is PointerEnterEvent
+                                ? QppTextStyles.mobile_14pt_body_canary_yellow_L
+                                : QppTextStyles.mobile_14pt_body_white_L),
                       ],
                     ),
                   ),

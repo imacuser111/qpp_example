@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-import 'package:qpp_example/utils/qpp_color.dart';
+import 'package:qpp_example/utils/qpp_text_styles.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// UniversalLink QRCode(物品資訊頁、個人資訊頁...等)
@@ -19,26 +19,26 @@ class UniversalLinkQRCode extends StatelessWidget {
             decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(6))),
-            child: QPPQRCode(url: url, size: size)),
+            child: QPPQRCode(data: url, size: size)),
         const SizedBox(height: 16),
         Text(context.tr('vendor_login_scan_via_qpp'),
-            style: const TextStyle(color: QppColors.canaryYellow, fontSize: 16)),
+            style: QppTextStyles.web_16pt_body_canary_yellow_C),
       ],
     );
   }
 }
 
 class QPPQRCode extends StatelessWidget {
-  const QPPQRCode({super.key, required this.url, required this.size});
+  const QPPQRCode({super.key, required this.data, required this.size});
 
-  final String url;
+  final String data;
   final double size;
 
   @override
   Widget build(BuildContext context) {
     return QrImageView(
-      data: url,
-      embeddedImage: const Svg('assets/desktop-icon-dialog-delete-normal.svg'),
+      data: data,
+      embeddedImage: const Svg('assets/pic-qrcode.svg'),
       size: size,
       padding: const EdgeInsets.all(11),
     );

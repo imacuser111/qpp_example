@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 
-abstract class QPPTextStyles {
+abstract class QppTextStyles {
   static const TextStyle web_44pt_Display_L_white_L = TextStyle(
     color: QppColors.white,
     fontSize: 44,
@@ -275,6 +275,10 @@ abstract class QPPTextStyles {
   );
   static const TextStyle web_16pt_body_category_text_L = TextStyle(
     color: QppColors.babyBlueEyes,
+    fontSize: 16,
+  );
+  static const TextStyle web_16pt_body_black_L = TextStyle(
+    color: QppColors.black,
     fontSize: 16,
   );
   static const TextStyle web_16pt_body_ash_gray_L = TextStyle(

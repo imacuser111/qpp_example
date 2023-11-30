@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:easy_localization_generator/easy_localization_generator.dart';
 part 'qpp_locales.g.dart';
 
+// build_runner: flutter pub run build_runner build --delete-conflicting-outputs
 @SheetLocalization(
   // Google Sheet URL 上擷取的 ID
   docId: '1ZLwcuLfsAr3VNAfdj9jya5diioRryaxIpLB0zfrKw9k',
@@ -11,6 +12,8 @@ part 'qpp_locales.g.dart';
   outDir: 'assets/langs',
   // 生成檔案的名稱
   outName: 'langs.csv',
+
+  immediateTranslationEnabled: false,
 )
 
 /// 多語系取用

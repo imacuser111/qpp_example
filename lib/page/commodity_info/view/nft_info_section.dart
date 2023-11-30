@@ -13,8 +13,6 @@ import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/utils/qpp_text_styles.dart';
 import 'dart:ui' as ui;
 
-import 'package:url_launcher/url_launcher.dart';
-
 class NFTSectionDescription extends StatefulWidget {
   final QppNFT nft;
 
@@ -124,7 +122,7 @@ class NFTInfoSectionItemTitle extends StatelessWidget {
             ),
             Text(
               title,
-              style: QPPTextStyles.web_18pt_title_s_pastel_blue_L,
+              style: QppTextStyles.web_18pt_title_s_pastel_blue_L,
             ),
             const Expanded(child: SizedBox()),
             // 上/下箭頭
@@ -158,7 +156,7 @@ class NFTInfoRowPublisher extends InfoRow {
             child: Text(
               context.tr(QppLocales.commodityInfoPublisher),
               textAlign: TextAlign.start,
-              style: QPPTextStyles.web_16pt_body_category_text_L,
+              style: QppTextStyles.web_16pt_body_category_text_L,
             ),
           ),
           // 若為官方帳號, 顯示 icon
@@ -176,7 +174,7 @@ class NFTInfoRowPublisher extends InfoRow {
             child: Text(
               "${data.displayID}  ${data.displayName}",
               textAlign: TextAlign.start,
-              style: QPPTextStyles.web_16pt_body_Indian_yellow_L,
+              style: QppTextStyles.web_16pt_body_Indian_yellow_L,
             ),
           ),
           // 物件左右翻轉, 或用 RotatedBox
@@ -226,7 +224,7 @@ class NFTInfoRowIntroLink extends NFTInfoRow {
             child: Text(
               context.tr(QppLocales.commodityInfoTitle),
               textAlign: TextAlign.start,
-              style: QPPTextStyles.web_16pt_body_category_text_L,
+              style: QppTextStyles.web_16pt_body_category_text_L,
             ),
           ),
           // intro link
@@ -257,7 +255,7 @@ class NFTInfoRowDescription extends NFTInfoRow {
             child: Text(
               context.tr(QppLocales.commodityInfoInfo),
               textAlign: TextAlign.start,
-              style: QPPTextStyles.web_16pt_body_category_text_L,
+              style: QppTextStyles.web_16pt_body_category_text_L,
             ),
           ),
           // intro link
