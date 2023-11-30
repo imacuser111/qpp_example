@@ -34,6 +34,9 @@ void main() async {
       path: 'assets/langs/langs.csv',
       assetLoader: CsvAssetLoader(),
       child: const ProviderScope(child: MyApp()),
+      errorWidget: (message) {
+        return const ProviderScope(child: MyApp());
+      },
     ),
   );
 }
@@ -43,7 +46,7 @@ Locale get startLocale {
   String lang = Uri.base.queryParameters['lang'] ?? "";
   if (lang.isNotEmpty) {
     var keys = lang.split('_');
-    return Locale(keys[0], keys[1]);
+    return Locale(keys[0], keys[1].toUpperCase());
   }
   return const Locale('zh', 'TW');
 }
