@@ -127,7 +127,8 @@ class _Logo extends StatelessWidget {
           width: isDesktopStyle ? 147.2 : 89,
           height: isDesktopStyle ? 44.4 : 27.4,
         ),
-        onPressed: () => showLogoutDialog(context)
+        onPressed: () => context.goNamed(QppGoRouter.appCommodityInfo)
+        // showLogoutDialog(context)
         // context.canPop()
         //     ? context.goNamed(QppGoRouter.app)
         //     : context.goNamed(QppGoRouter.home), // 要在修改，現在只有error畫面會跳到home

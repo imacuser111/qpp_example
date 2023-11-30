@@ -262,9 +262,13 @@ class _PlayStoreButtons extends StatelessWidget {
       mainAxisAlignment:
           isDesktopStyle ? MainAxisAlignment.start : MainAxisAlignment.center,
       children: [
-        const _PlayStoreButton.google(),
+        isDesktopStyle
+            ? const _PlayStoreButton.desktop(type: PlayStoreType.google)
+            : const _PlayStoreButton.mobile(type: PlayStoreType.google),
         SizedBox(width: isDesktopStyle ? 14 : 12),
-        const _PlayStoreButton.apple()
+        isDesktopStyle
+            ? const _PlayStoreButton.desktop(type: PlayStoreType.apple)
+            : const _PlayStoreButton.mobile(type: PlayStoreType.apple),
       ],
     );
   }
@@ -274,9 +278,12 @@ class _PlayStoreButtons extends StatelessWidget {
 /// 應用程式商店按鈕
 // -----------------------------------------------------------------------------
 class _PlayStoreButton extends StatefulWidget {
-  const _PlayStoreButton.apple({super.key}) : type = PlayStoreType.apple;
-  const _PlayStoreButton.google({super.key}) : type = PlayStoreType.google;
+  const _PlayStoreButton.desktop({required this.type})
+      : screenStyle = ScreenStyle.desktop;
+  const _PlayStoreButton.mobile({required this.type})
+      : screenStyle = ScreenStyle.mobile;
 
+  final ScreenStyle screenStyle;
   final PlayStoreType type;
 
   @override
@@ -301,12 +308,19 @@ class _PlayStoreButtonState extends State<_PlayStoreButton>
 
   @override
   Widget build(BuildContext context) {
+    final isDesktopStyle = widget.screenStyle.isDesktop;
+
     return Transform.scale(
       scale: isHover ? 1.05 : 1.0,
       child: InkWell(
         child: Stack(
           children: [
-            Image.asset(widget.type.image, fit: BoxFit.cover),
+            Image.asset(
+              widget.type.image,
+              fit: BoxFit.cover,
+              width: isDesktopStyle ? 174 : 157,
+              height: isDesktopStyle ? 52 : 47,
+            ),
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               left: isHover ? 175 : -125,
