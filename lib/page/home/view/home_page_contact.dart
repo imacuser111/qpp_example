@@ -36,14 +36,14 @@ class HomePageContact extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          padding: EdgeInsets.symmetric(
-            vertical: isDesktopStyle ? 152 : 72,
-            horizontal: 41,
-          ),
+          padding: EdgeInsets.symmetric(vertical: isDesktopStyle ? 152 : 72),
           child: Column(
             children: [
-              _titleContent(contactScreenStyle),
-              SizedBox(height: isDesktopStyle ? 45 : 36),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 36),
+                child: _titleContent(contactScreenStyle),
+              ),
+              SizedBox(height: isDesktopStyle ? 45 : 60),
               _benefit(contactScreenStyle)
             ],
           ));
@@ -236,7 +236,7 @@ class _Benefit extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (screenStyle) {
       case ScreenStyle.desktop:
-        const double space = 70;
+        const double space = 64;
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -278,7 +278,9 @@ class _Benefit extends StatelessWidget {
         return Column(
           children: types
               .map((e) => Padding(
-                    padding: const EdgeInsets.only(top: 24),
+                    padding: EdgeInsets.only(
+                      top: e == HomePageContactType.first ? 0 : 67,
+                    ),
                     child: _BenefitItem(e, screenStyle: screenStyle),
                   ))
               .toList(),
@@ -299,7 +301,12 @@ class _BenefitItem extends StatelessWidget {
     final bool isDesktopStyle = screenStyle.isDesktop;
 
     return Stack(alignment: Alignment.center, children: [
-      SizedBox(child: SvgPicture.asset('assets/desktop_bg_area03_box.svg')),
+      Container(
+        constraints: BoxConstraints(maxHeight: isDesktopStyle ? 307 : 230),
+        child: SizedBox(
+          child: SvgPicture.asset('assets/desktop_bg_area03_box.svg'),
+        ),
+      ),
       Container(
         constraints: BoxConstraints(maxWidth: isDesktopStyle ? 280 : 235),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

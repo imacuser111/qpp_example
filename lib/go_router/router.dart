@@ -85,17 +85,19 @@ class QppGoRouter {
             _getRouters(home) +
             [
               GoRoute(
-                  path: app,
-                  name: app,
-                  builder: (context, state) =>
-                      const MainFramework(child: HomePage()),
-                  routes: appRouters + _getRouters(app))
+                path: app,
+                name: app,
+                builder: (context, state) =>
+                    const MainFramework(child: HomePage()),
+                routes: appRouters + _getRouters(app),
+              )
             ],
       ),
     ],
     errorBuilder: (context, state) {
       return MainFramework(
-          child: ErrorPage(type: ErrorPageType.urlIsWrong, url: state.fullURL));
+        child: ErrorPage(type: ErrorPageType.urlIsWrong, url: state.fullURL),
+      );
     },
   );
 
