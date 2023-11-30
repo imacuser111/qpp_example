@@ -43,7 +43,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
       theme: ThemeData(useMaterial3: true),
       routerConfig: QppGoRouter.router,
       locale: context.locale,

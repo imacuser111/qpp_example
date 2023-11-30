@@ -8,9 +8,11 @@ import 'package:qpp_example/constants/server_const.dart';
 import 'package:qpp_example/extension/build_context.dart';
 import 'package:qpp_example/model/nft/qpp_nft.dart';
 import 'package:qpp_example/model/qpp_item.dart';
+import 'package:qpp_example/model/vote/qpp_vote.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_empty.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_nft.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_normal.dart';
+import 'package:qpp_example/page/commodity_info/view/commodity_vote.dart';
 import 'package:qpp_example/page/commodity_info/view_model/commodity_info_model.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
 import 'package:qpp_example/utils/screen.dart';
@@ -108,7 +110,7 @@ class InfoCard extends StatelessWidget {
           margin: isDesktop
               ? const EdgeInsets.fromLTRB(60, 100, 60, 40)
               : const EdgeInsets.fromLTRB(24, 24, 24, 24),
-          color: QppColors.prussianBlue,
+          color: QppColors.oxfordBlue,
           shape: RoundedRectangleBorder(
             // 圓角參數
             borderRadius: BorderRadius.circular(8),
@@ -123,6 +125,9 @@ class InfoCard extends StatelessWidget {
               // NFT 物品資料狀態通知
               ApiResponse<QppNFT> nftMetaState =
                   ref.watch(itemSelectInfoProvider).nftMetaDataState;
+              // 問券 物品資料狀態通知
+              ApiResponse<QppVote> voteDataState =
+                  ref.watch(itemSelectInfoProvider).voteDataState;
 
               if (itemInfoState.isCompleted) {
                 // 有取得物品資料
@@ -134,6 +139,9 @@ class InfoCard extends StatelessWidget {
                 return isDesktop
                     ? const NFTItemInfo.desktop()
                     : const NFTItemInfo.mobile();
+              } else if (voteDataState.isCompleted) {
+                // 取得票券資料
+                return const VoteItemInfo();
               } else {
                 // 沒有取得物品資料
                 return isDesktop
