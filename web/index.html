@@ -46,9 +46,9 @@
         // Download main.dart.js
         _flutter.loader.loadEntrypoint({
           // disable pwa
-          // serviceWorker: {
-          //   serviceWorkerVersion: serviceWorkerVersion,
-          // },
+          serviceWorker: {
+            serviceWorkerVersion: serviceWorkerVersion,
+          },
           onEntrypointLoaded: function (engineInitializer) {
             // 修改渲染模式, 加速載入中文
             // https://docs.flutter.dev/platform-integration/web/renderers
