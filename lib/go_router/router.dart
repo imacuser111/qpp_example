@@ -1,13 +1,18 @@
+import 'dart:html';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qpp_example/common_ui/qpp_framework/qpp_main_framework.dart';
 import 'package:qpp_example/constants/server_const.dart';
+import 'package:qpp_example/localization/qpp_locales.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_info_body.dart';
 import 'package:qpp_example/page/error_page/model/error_page_model.dart';
 import 'package:qpp_example/page/error_page/view/error_page.dart';
 import 'package:qpp_example/page/home/view/home_page.dart';
 import 'package:qpp_example/page/user_information/view/user_information.dart';
 import 'package:qpp_example/universal_link/universal_link_data.dart';
+import 'package:qpp_example/utils/display_url.dart';
 
 /// QPP路由
 class QppGoRouter {
@@ -69,6 +74,21 @@ class QppGoRouter {
 
   // static const String appMembershipFetch = '$app/$membershipFetch';
 
+  /// 取語系參數
+  static Locale get getLocaleFromPath {
+    String lang = Uri.base.queryParameters['lang'] ?? "";
+    if (lang.isNotEmpty && lang.contains('_')) {
+      var keys = lang.split('_');
+      // 檢查是否有支援
+      Locale locale = Locale(keys[0], keys[1].toUpperCase());
+      if (QppLocales.supportedLocales.contains(locale)) {
+        debugPrint('Set Locale $lang');
+        return locale;
+      }
+    }
+    return const Locale('zh', 'TW');
+  }
+
   // -----------------------------------------------------------------------------
   /// The route configuration.
   // -----------------------------------------------------------------------------
@@ -79,8 +99,14 @@ class QppGoRouter {
         // 首頁
         path: home,
         name: home,
-        builder: (BuildContext context, GoRouterState state) =>
-            const MainFramework(child: HomePage()),
+        builder: (BuildContext context, GoRouterState state) {
+          Locale locale = getLocaleFromPath;
+          // context 設定 locale
+          context.setLocale(locale);
+          // 更新網址列
+          DisplayUrl.updateParam('lang', locale.toString());
+          return const MainFramework(child: HomePage());
+        },
         routes: homeRouters +
             _getRouters(home) +
             [

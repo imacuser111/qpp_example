@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -13,6 +14,7 @@ import 'package:qpp_example/extension/throttle_debounce.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/model/qpp_app_bar_model.dart';
 import 'package:qpp_example/common_ui/qpp_app_bar/view_model/qpp_app_bar_view_model.dart';
 import 'package:qpp_example/go_router/router.dart';
+import 'package:qpp_example/utils/display_url.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 import 'package:qpp_example/model/enum/language.dart';
 import 'package:qpp_example/constants/qpp_contanst.dart';
@@ -122,17 +124,17 @@ class _Logo extends StatelessWidget {
     final bool isDesktopStyle = screenStyle.isDesktop;
 
     return IconButton(
-        icon: SvgPicture.asset(
-          'assets/desktop-pic-qpp-logo-01.svg',
-          width: isDesktopStyle ? 147.2 : 89,
-          height: isDesktopStyle ? 44.4 : 27.4,
-        ),
-        onPressed: () => 
-        // showLogoutDialog(context)
-        context.canPop()
-            ? context.goNamed(QppGoRouter.app)
-            : context.goNamed(QppGoRouter.home), // 要在修改，現在只有error畫面會跳到home
-        );
+      icon: SvgPicture.asset(
+        'assets/desktop-pic-qpp-logo-01.svg',
+        width: isDesktopStyle ? 147.2 : 89,
+        height: isDesktopStyle ? 44.4 : 27.4,
+      ),
+      onPressed: () =>
+          // showLogoutDialog(context)
+          context.canPop()
+              ? context.goNamed(QppGoRouter.app)
+              : context.goNamed(QppGoRouter.home), // 要在修改，現在只有error畫面會跳到home
+    );
   }
 }
 
@@ -372,7 +374,11 @@ class LanguageDropdownMenu extends StatelessWidget {
       },
       isOpenControllerProvider: isOpenControllerProvider,
       onTap: (BuildContext context, CMeunAnchorData e) {
-        context.setLocale((e as Language).locale);
+        var locale = (e as Language).locale;
+        // context 設定 locale
+        context.setLocale(locale);
+        // 更新網址列
+        DisplayUrl.updateParam('lang', locale.toString());
       },
     );
   }
