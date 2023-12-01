@@ -59,8 +59,14 @@ class _CommodityInfoPageState extends State<CommodityInfoPage> {
     UniversalLinkParamData universalLinkParamData =
         UniversalLinkParamData.fromJson(widget.routerState.uri.queryParameters);
     // 物品 ID or NFT Token ID
-    commodityID = universalLinkParamData.commodityID ??
-        universalLinkParamData.metadataID!;
+    if (universalLinkParamData.commodityID != null) {
+      commodityID = universalLinkParamData.commodityID!;
+    } else if (universalLinkParamData.metadataID != null) {
+      commodityID = universalLinkParamData.metadataID!;
+    } else {
+      commodityID = '-1';
+    }
+
     // model 初始化
     itemSelectInfoProvider = ChangeNotifierProvider<CommodityInfoModel>((ref) {
       // 開始取資料
