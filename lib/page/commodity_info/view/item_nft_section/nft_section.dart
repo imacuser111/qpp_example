@@ -14,16 +14,17 @@ abstract class NFTSection<T> extends StatefulWidget {
 /// NFTStateSection 抽象類
 abstract class StateSection extends State<NFTSection>
     with TickerProviderStateMixin {
+  // 控制 Section Title 右邊的上下箭頭(指向正確的那個箭頭)
   final arrowKey = GlobalKey<StateClickArrow>();
   late bool expanded;
-
   late final Animation<double> _animation;
-  late final Animation<double> _scale;
+  late final Animation<double> _curve;
   late final AnimationController _scaleAnimationController;
 
   @override
   void initState() {
     super.initState();
+    // 是否展開
     expanded = true;
 
     // 動畫控制器
@@ -32,19 +33,19 @@ abstract class StateSection extends State<NFTSection>
       duration: const Duration(milliseconds: 300),
     );
     // 設定動畫
-    _scale = CurvedAnimation(
+    _curve = CurvedAnimation(
         parent: _scaleAnimationController,
         curve: Curves.easeInOut,
         reverseCurve: Curves.easeInOut);
     // 動畫變化範圍
-    _animation = Tween(begin: 1.0, end: 0.0).animate(_scale);
+    _animation = Tween(begin: 1.0, end: 0.0).animate(_curve);
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       NFTInfoSectionItemTitle(
-        key: arrowKey,
+        arrowKey: arrowKey,
         // section icon 圖片路徑 'assets/desktop-icon-commodity-nft-describe.svg'
         iconPath: sectionTitleIconPath,
         // section title
@@ -87,10 +88,17 @@ class NFTInfoSectionItemTitle extends StatelessWidget {
   // title
   final String title;
 
+  final GlobalKey arrowKey;
+
   final Function()? onTap;
 
   const NFTInfoSectionItemTitle(
-      {super.key, required this.iconPath, required this.title, this.onTap});
+      {Key? key,
+      required this.arrowKey,
+      required this.iconPath,
+      required this.title,
+      this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +126,7 @@ class NFTInfoSectionItemTitle extends StatelessWidget {
             ),
             const Expanded(child: SizedBox()),
             // 上/下箭頭
-            BtnArrowUpDown(key: key, size: 20),
+            BtnArrowUpDown(key: arrowKey, size: 20),
           ],
         ),
       ),
