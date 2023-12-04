@@ -43,6 +43,16 @@ abstract class StateSection extends State<NFTSection>
 
   @override
   Widget build(BuildContext context) {
+    // 無資料
+    if (widget.data == null) {
+      return const SizedBox.shrink();
+    }
+    // QPP Trait List 為空陣列
+    if (widget.data is List) {
+      if ((widget.data as List).isEmpty) {
+        return const SizedBox.shrink();
+      }
+    }
     return Column(children: [
       NFTInfoSectionItemTitle(
         arrowKey: arrowKey,
