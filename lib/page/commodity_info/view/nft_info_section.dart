@@ -24,16 +24,34 @@ class NFTSectionDescription extends StatefulWidget {
 
 final arrowKey = GlobalKey<StateClickArrow>();
 
-class StateDescription extends State<NFTSectionDescription> {
+class StateDescription extends State<NFTSectionDescription>
+    with TickerProviderStateMixin {
   bool expanded = true;
 
   double inf = double.infinity;
-  double zero = 0;
-  double open = 1;
+  late bool open;
+
+  late final Animation<double> _animation;
+  late final Animation<double> _scale;
+  late final AnimationController _scaleAnimationController;
 
   @override
   void initState() {
     super.initState();
+    open = true;
+
+    // 動畫控制器
+    _scaleAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    // 設定動畫
+    _scale = CurvedAnimation(
+        parent: _scaleAnimationController,
+        curve: Curves.easeInOut,
+        reverseCurve: Curves.easeInOut);
+    // 動畫變化範圍
+    _animation = Tween(begin: 1.0, end: 0.0).animate(_scale);
   }
 
   @override
@@ -45,27 +63,25 @@ class StateDescription extends State<NFTSectionDescription> {
         tt: () {
           arrowKey.currentState?.rotate();
           setState(() {
-            open == 0 ? 1 : 0;
-            // expanded = !expanded;
+            // forward 啟動動畫, reverse 動畫倒轉
+            open
+                ? _scaleAnimationController.forward()
+                : _scaleAnimationController.reverse();
+            open = !open;
           });
         },
       ),
-      // 發行者
-      AnimatedScale(
-        scale: open,
-        duration: const Duration(seconds: 1),
+      // size 動畫, 參考 https://github.com/YYFlutter/flutter-article/blob/master/article/animation%26motion/Flutter动画SizeTransition详解.md
+      SizeTransition(
+        sizeFactor: _animation,
+        axis: Axis.vertical,
         child: DescriptionContent(nft: widget.nft),
       ),
-      // AnimatedContainer(
-      //     curve: Curves.fastOutSlowIn,
-      //     duration: const Duration(seconds: 2),
-      //     child: expanded
-      //         ? DescriptionContent(nft: widget.nft)
-      //         : const SizedBox.shrink()),
     ]);
   }
 }
 
+/// 發行者
 class DescriptionContent extends StatelessWidget {
   final QppNFT nft;
 
@@ -100,10 +116,8 @@ class NFTInfoSectionItemTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final arrowKey = GlobalKey<StateClickArrow>();
     return GestureDetector(
       onTap: () {
-        // arrowKey.currentState?.rotate();
         tt?.call();
       },
       child: Container(
