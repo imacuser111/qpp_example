@@ -124,6 +124,7 @@ class InfoRowCreator extends InfoRow {
   Widget getContent(data) {
     if (data is QppUser) {
       return Builder(builder: (context) {
+        // 關掉 SelectionArea 游標功能
         return SelectionContainer.disabled(
           child: MouseRegion(
             // 滑鼠移進來時會改變游標圖案

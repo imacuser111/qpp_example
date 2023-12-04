@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_body_top.dart';
 import 'package:qpp_example/page/commodity_info/view/commodity_info_body.dart';
 import 'package:qpp_example/page/commodity_info/view/mobile_info_divider.dart';
-import 'package:qpp_example/page/commodity_info/view/nft_info_section.dart';
+import 'package:qpp_example/page/commodity_info/view/item_nft_section/nft_info_section.dart';
 import 'package:qpp_example/utils/qpp_color.dart';
 
 /// NFT 物品資訊
@@ -34,7 +34,7 @@ class NFTItemInfo extends StatelessWidget {
               child: Column(
                 children: [
                   NFTSectionDescription(
-                    nft: nft!,
+                    data: nft!,
                   ),
                   // // 類別欄位
                   // ItemInfoRow(),
